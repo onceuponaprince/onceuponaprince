@@ -3,7 +3,7 @@ type: campaign
 campaign: command-centre
 title: "AI Command Centre"
 product_name: "BorAI"
-status: planning
+status: in-progress
 date_opened: 
 date_shipped: 
 thesis_one_liner: "Building a startup should feel like playing a game — and the act of playing it should produce the narrative that sells it."

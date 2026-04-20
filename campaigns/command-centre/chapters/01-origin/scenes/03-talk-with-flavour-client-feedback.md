@@ -3,15 +3,15 @@ campaign: "[[command-centre]]"
 chapter: "01-origin"
 scene: 03
 title: "Talk with Flavour — client feedback loop"
-status: in-progress
+status: concluded
 date_opened: 2026-04-20
-date_concluded: 
+date_concluded: 2026-04-20
 characters:
   - "[[nathan]]"
   - "[[general-business-archetype]]"
   - "[[restaurant-owner-archetype]]"
 artifact_format: essay
-artifact_file: 
+artifact_file: "[[03-when-the-clients-corrections-become-the-product]]"
 tags:
   - client-work
   - landing-page
