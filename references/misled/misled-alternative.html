@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISLED — Y2K Vaporwave OS Guidelines</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            pink: '#ff71ce',
+                            cyan: '#01cdfe',
+                            violet: '#b967ff',
+                            gold: '#FFB800',
+                            void: '#0D0015',
+                            chrome: '#C8C8D4'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Space Mono"', 'monospace'],
+                        display: ['"Bebas Neue"', 'sans-serif'],
+                        body: ['"DM Sans"', 'sans-serif'],
+                        syne: ['"Syne"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background-color: #0d0015;
+        }
+
+        /* Win95 Shared UI Components */
+        .win95-container {
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-bottom: 2px solid #808080;
+            border-right: 2px solid #808080;
+            background-color: #c0c0c0;
+        }
+        .win95-inner {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-bottom: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+        }
+        .win95-button {
+            padding: 0.25rem 0.75rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-bottom: 2px solid #808080;
+            border-right: 2px solid #808080;
+            background-color: #c0c0c0;
+            cursor: pointer;
+            color: black;
+            outline: none;
+        }
+        .win95-button:active, .win95-button.active {
+            border-top: 2px solid #808080;
+            border-left: 2px solid #808080;
+            border-bottom: 2px solid #ffffff;
+            border-right: 2px solid #ffffff;
+            background-color: #dfdfdf;
+        }
+        .win95-header {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: bold;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .win95-close-btn {
+            width: 14px; 
+            height: 14px; 
+            background: #c0c0c0;
+            border-top: 1px solid #ffffff; 
+            border-left: 1px solid #ffffff;
+            border-bottom: 1px solid #808080; 
+            border-right: 1px solid #808080;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: black; 
+            font-size: 10px; 
+            font-family: sans-serif;
+            cursor: pointer;
+            margin-left: 3px;
+        }
+
+        /* 3D Vaporwave Environment */
+        .perspective-grid {
+            background-image: 
+              linear-gradient(to right, cyan 1px, transparent 1px),
+              linear-gradient(to bottom, cyan 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(70deg);
+            transform-origin: top center;
+            animation: grid-scroll 4s linear infinite;
+        }
+        @keyframes grid-scroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
+        .crt-scanlines {
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.12) 4px);
+            pointer-events: none;
+        }
+
+        /* Utilities */
+        .blend-screen { mix-blend-mode: screen; }
+        .blend-multiply { mix-blend-mode: multiply; }
+        
+        /* Custom scrollbar for guideline windows */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #dfdfdf; border-left: 1px solid #808080; }
+        ::-webkit-scrollbar-thumb { background: #c0c0c0; border-top: 1px solid #fff; border-left: 1px solid #fff; border-bottom: 1px solid #808080; border-right: 1px solid #808080; }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col font-body select-none">
+
+    <div class="win95-container flex items-center justify-between px-2 py-1 z-50 shadow-md">
+        <div class="flex items-center gap-4">
+            <div class="w-7 h-7 bg-black rounded-full border-2 border-gray-400 flex items-center justify-center overflow-hidden">
+                <img src="misled_sigil.jpg" alt="Sigil" class="w-[120%] h-[120%] object-cover blend-screen" />
+            </div>
+            <div class="flex space-x-1 hidden md:flex">
+                <button class="win95-button">COLLECT (Skates)</button>
+                <button class="win95-button">APPAREL</button>
+                <button class="win95-button active">DIGITAL ASSETS</button>
+                <button class="win95-button">CULTURE</button>
+                <button class="win95-button">ACADEMY</button>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-2 pr-2">
+            <span class="text-xs font-mono text-black hidden sm:inline">Visitor Counter</span>
+            <div class="bg-black text-brand-gold font-mono text-sm px-2 win95-inner tracking-widest shadow-[0_0_8px_#FFB800]">
+                0356.5
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-grow relative bg-gradient-to-b from-[#87CEEB] via-[#ffb6c1] to-[#3a005c] overflow-hidden">
+        
+        <div class="absolute bottom-[35%] left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-gradient-to-b from-yellow-300 via-brand-pink to-brand-violet rounded-full blur-[2px] opacity-90 shadow-[0_0_60px_#ff71ce]"></div>
+
+        <div class="absolute bottom-0 w-full h-[50%] border-t border-brand-cyan opacity-80 perspective-grid"></div>
+        
+        <div class="absolute inset-0 crt-scanlines z-[100]"></div>
+
+        <div class="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center justify-center drop-shadow-2xl">
+            <div class="w-full h-full bg-gradient-to-r from-brand-violet via-brand-void to-brand-violet rounded-full border border-brand-pink flex items-center justify-center opacity-95 shadow-[0_0_50px_rgba(255,113,206,0.6)] px-12 py-4">
+                <img src="misled_logo.jpg" alt="MISLED Logo" class="h-28 md:h-40 object-contain blend-screen drop-shadow-[0_0_20px_#FFB800] animate-pulse" />
+            </div>
+            <div class="w-80 h-20 bg-gradient-to-b from-[#c0c0c0] to-gray-800 mt-4 border-t border-white" style="transform: perspective(500px) rotateX(55deg);"></div>
+        </div>
+
+        <div class="absolute top-12 left-4 md:left-12 win95-container w-80 z-30 shadow-2xl flex flex-col max-h-[65vh]">
+            <div class="win95-header">
+                <span>BRAND_IDENTITY.TXT</span>
+                <div class="flex">
+                    <div class="win95-close-btn">_</div>
+                    <div class="win95-close-btn">□</div>
+                    <div class="win95-close-btn font-bold">X</div>
+                </div>
+            </div>
+            <div class="p-4 bg-white text-black overflow-y-auto font-mono text-xs win95-inner m-1">
+                <div class="flex justify-center mb-4 border-b-2 border-dashed border-gray-400 pb-4">
+                    <img src="misled_sigil.jpg" alt="Sigil" class="w-24 h-24 blend-multiply filter contrast-125" />
+                </div>
+                <h2 class="text-sm font-bold mb-2 text-brand-violet">> 01 / BRAND STORY</h2>
+                <p class="mb-4 leading-relaxed">MISLED lives in the friction between digital nostalgia and raw street authenticity. Merging Y2K cybernetics with vaporwave aesthetics. The brand rejects corporate polish — it looks glitched, felt, and real.</p>
+                
+                <h2 class="text-sm font-bold mb-2 text-brand-violet">> 02 / VISUAL TEXTURE</h2>
+                <ul class="list-none space-y-2 mb-2">
+                    <li><span class="text-brand-cyan">📺 CRT SCANLINES</span><br/>4-8% horizontal multiply overlay.</li>
+                    <li><span class="text-brand-cyan">📐 PERSPECTIVE GRID</span><br/>Cyan vanishing-point grid at 15% opacity.</li>
+                    <li><span class="text-brand-cyan">📼 VHS GRAIN</span><br/>Analogue noise grain over all digital assets.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="absolute top-20 right-4 md:right-12 win95-container w-[340px] z-30 shadow-2xl flex flex-col">
+            <div class="win95-header !bg-brand-pink">
+                <span>DESIGN_SYSTEM.EXE</span>
+                <div class="flex">
+                    <div class="win95-close-btn">_</div>
+                    <div class="win95-close-btn">□</div>
+                    <div class="win95-close-btn font-bold">X</div>
+                </div>
+            </div>
+            <div class="p-3 text-black font-body text-sm m-1">
+                <h3 class="font-bold border-b-2 border-gray-500 mb-2 pb-1 font-mono text-xs">> TYPOGRAPHY</h3>
+                <div class="mb-3 win95-inner bg-white p-2">
+                    <div class="font-display text-3xl tracking-widest text-brand-pink leading-none">BEBAS NEUE</div>
+                    <div class="font-mono text-[9px] text-gray-500 mb-2">DISPLAY / HERO / ALL-CAPS</div>
+                    
+                    <div class="font-syne text-xl font-extrabold text-brand-gold leading-none">SYNE (800)</div>
+                    <div class="font-mono text-[9px] text-gray-500 mb-2">ALTERNATE DISPLAY</div>
+                    
+                    <div class="font-body text-base font-bold leading-tight">DM Sans / Space Grotesk</div>
+                    <div class="font-mono text-[9px] text-gray-500">BODY / SUBHEADINGS</div>
+                </div>
+
+                <h3 class="font-bold border-b-2 border-gray-500 mb-2 pb-1 font-mono text-xs">> PALETTE</h3>
+                <div class="grid grid-cols-5 gap-1 h-10 mb-1 win95-inner p-1 bg-white">
+                    <div class="bg-brand-pink border border-black" title="Holo Pink"></div>
+                    <div class="bg-brand-cyan border border-black" title="Cyber Cyan"></div>
+                    <div class="bg-brand-violet border border-black" title="Astral Violet"></div>
+                    <div class="bg-brand-gold border border-black" title="Acid Gold"></div>
+                    <div class="bg-brand-void border border-black" title="Void Black"></div>
+                </div>
+                <div class="font-mono text-[9px] text-center font-bold">PINK | CYAN | VIOLET | GOLD | VOID</div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-32 left-[35%] win95-container w-48 z-40 shadow-[4px_4px_0px_rgba(0,0,0,0.5)]">
+            <div class="win95-header">
+                <span>Error</span>
+                <div class="flex">
+                    <div class="win95-close-btn font-bold">X</div>
+                </div>
+            </div>
+            <div class="p-3 flex items-center gap-3 win95-inner m-1 bg-[#c0c0c0]">
+                <div class="text-red-600 text-3xl font-bold bg-white rounded-full w-8 h-8 flex items-center justify-center border border-gray-500">!</div>
+                <div class="text-xs font-mono text-black leading-tight">Netscape 4.0<br/>Not Supported</div>
+            </div>
+        </div>
+
+        <div class="absolute top-8 left-[35%] win95-container z-30 shadow-xl p-1">
+            <div class="bg-white px-4 py-1 win95-inner text-sm font-bold text-blue-800 italic">
+                AOL Keyword: MISLED
+            </div>
+        </div>
+
+        <div class="absolute bottom-24 right-[25%] win95-container z-30 shadow-xl p-1 transform rotate-[-5deg]">
+            <div class="bg-yellow-400 border-2 border-black border-dashed px-6 py-2 text-black font-black italic tracking-widest text-sm">
+                🚧 UNDER CONSTRUCTION 🚧
+            </div>
+        </div>
+
+    </div>
+
+    <div class="win95-container w-full relative z-50">
+        <div class="flex h-12">
+            <div class="w-1/6 grid grid-cols-5 grid-rows-2 gap-[1px] bg-gray-400 border-r-2 border-r-[#808080]">
+                <div class="bg-cyan-200"></div><div class="bg-yellow-200"></div><div class="bg-pink-200"></div><div class="bg-blue-200"></div><div class="bg-cyan-200"></div>
+                <div class="bg-blue-200"></div><div class="bg-cyan-200"></div><div class="bg-yellow-200"></div><div class="bg-pink-200"></div><div class="bg-pink-200"></div>
+            </div>
+            
+            <div class="flex-grow flex flex-col items-center justify-center bg-pink-100 font-mono text-[10px] md:text-[11px] leading-tight text-black win95-inner">
+                <p>CARBON FIBER HYBRID CORE | <span class="font-bold text-yellow-600">ACID GOLD</span> ADINKRA FOIL</p>
+                <p>TRUCKS: POLISHED DARK CHROME (VIBRANIUM ANODIZED) | WHEELS: 54mm (M-SPEAR HUB)</p>
+            </div>
+
+            <div class="w-1/6 grid grid-cols-5 grid-rows-2 gap-[1px] bg-gray-400 border-l-2 border-l-[#ffffff]">
+                <div class="bg-purple-200"></div><div class="bg-cyan-200"></div><div class="bg-pink-200"></div><div class="bg-yellow-200"></div><div class="bg-blue-200"></div>
+                <div class="bg-cyan-200"></div><div class="bg-pink-200"></div><div class="bg-blue-200"></div><div class="bg-purple-200"></div><div class="bg-cyan-200"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
