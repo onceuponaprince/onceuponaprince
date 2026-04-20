@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talk with Flavour — Style Directions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1A1A1A; overflow-x: hidden; }
+    .selector-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 16px 32px;
+    }
+    .selector-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .selector-title { color: #FFF; font-size: 14px; font-weight: 600; font-family: 'DM Sans', system-ui; }
+    .selector-sub { color: rgba(255,255,255,0.4); font-size: 12px; margin-top: 2px; font-family: 'DM Sans', system-ui; }
+    .selector-desc {
+      max-width: 1200px; margin: 8px auto 0; font-size: 12px;
+      color: rgba(255,255,255,0.35); font-family: 'DM Sans', system-ui; font-style: italic;
+    }
+    .tab-buttons { display: flex; gap: 8px; }
+    .tab-btn {
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6);
+      border: none; padding: 10px 20px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', system-ui; transition: all 0.2s ease;
+    }
+    .tab-btn.active { background: #D4A853; color: #0A0A0A; }
+    .tab-btn:hover:not(.active) { background: rgba(255,255,255,0.14); }
+    .mockup { display: none; min-height: 100vh; }
+    .mockup.active { display: block; }
+    .mockup-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 24px 48px; max-width: 1200px; margin: 0 auto;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; font-size: 14px; }
+    .nav-links span { cursor: pointer; transition: opacity 0.2s; }
+    .nav-links span:hover { opacity: 0.7; }
+    .nav-cta {
+      padding: 10px 24px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); }
+    .hero {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; flex-direction: column;
+    }
+    .hero h1 { margin: 0; white-space: pre-line; }
+    .hero p { margin-top: 28px; margin-bottom: 40px; line-height: 1.7; }
+    .hero-buttons { display: flex; gap: 16px; align-items: center; }
+    .hero-buttons button { border: none; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+    .hero-buttons button:hover { transform: translateY(-2px); }
+    .video-placeholder {
+      width: 100%; aspect-ratio: 16/7; display: flex;
+      align-items: center; justify-content: center; position: relative; overflow: hidden;
+    }
+    .play-btn {
+      width: 80px; height: 80px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .play-btn:hover { transform: scale(1.08); }
+    .play-arrow {
+      width: 0; height: 0; border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent; margin-left: 4px;
+    }
+    .video-label {
+      position: absolute; bottom: 20px; left: 24px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+    }
+    .stats-bar {
+      display: flex; justify-content: center; padding: 40px 0;
+    }
+    .stat { text-align: center; }
+    .stat-number { letter-spacing: -0.02em; }
+    .stat-label {
+      font-size: 12px; margin-top: 6px; letter-spacing: 0.08em;
+      text-transform: uppercase; font-weight: 500;
+    }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .feature-card { transition: all 0.2s ease; }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-card h3 { margin-top: 0; margin-bottom: 12px; }
+    .feature-card p { margin: 0; font-size: 14px; line-height: 1.7; }
+    .cta-section { text-align: center; }
+    .cta-section h2 { margin-top: 0; margin-bottom: 16px; }
+    .cta-section p { margin: 0 auto 32px; line-height: 1.7; }
+    .cta-section button { border: none; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+    .cta-section button:hover { transform: translateY(-2px); }
+    .footer {
+      max-width: 1200px; margin: 0 auto; padding: 40px 48px;
+      display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+    }
+    @media (max-width: 768px) {
+      .selector-inner { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .mockup-nav { padding: 20px 24px; }
+      .nav-links { gap: 16px; font-size: 12px; flex-wrap: wrap; }
+      .hero { padding-left: 24px !important; padding-right: 24px !important; }
+      .hero h1 { font-size: 36px !important; }
+      .features-grid { grid-template-columns: 1fr; }
+      .stats-bar { flex-direction: column; gap: 24px; align-items: center; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; }
+      .cta-section > div { padding: 48px 24px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Selector Bar -->
+<div class="selector-bar">
+  <div class="selector-inner">
+    <div>
+      <div class="selector-title">Talk with Flavour — Style Directions</div>
+      <div class="selector-sub">Pick the direction that feels most like your brand</div>
+    </div>
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchTab('cinematic')">Cinematic &amp; Bold</button>
+      <button class="tab-btn" onclick="switchTab('fresh')">Fresh &amp; Street</button>
+      <button class="tab-btn" onclick="switchTab('editorial')">Editorial &amp; Refined</button>
+    </div>
+  </div>
+  <div class="selector-desc" id="style-desc">Premium filmmaker. Dark, moody, high-contrast. Appeals to upscale restaurants wanting aspirational content.</div>
+</div>
+
+<!-- CINEMATIC -->
+<div class="mockup active" id="cinematic" style="background:#0A0A0A;font-family:'DM Sans',system-ui;color:#F5F0E8;">
+  <nav class="mockup-nav" style="border-bottom:1px solid #2A2520;">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:700;">Talk with Flavour<span style="color:#D4A853;">.</span></div>
+    <div class="nav-links" style="color:#A09880;">
+      <span>The Series</span><span>Work</span><span>About</span>
+      <button class="nav-cta" style="background:#D4A853;color:#0A0A0A;border-radius:4px;">Book Your Shoot</button>
+    </div>
+  </nav>
+  <section class="hero" style="padding:100px 48px 80px;align-items:flex-start;text-align:left;">
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#D4A853;margin-bottom:24px;">Video Production for Restaurants</div>
+    <h1 style="font-family:'Playfair Display',Georgia,serif;font-size:72px;font-weight:700;line-height:1.08;max-width:650px;letter-spacing:-0.02em;">Your restaurant deserves<br>to be <span style="color:#D4A853;font-style:italic;">seen</span>.</h1>
+    <p style="font-size:18px;color:#A09880;max-width:480px;">Cinematic video content that turns viewers into diners. From first frame to first booking.</p>
+    <div class="hero-buttons">
+      <button style="background:#D4A853;color:#0A0A0A;padding:14px 32px;border-radius:6px;font-size:15px;font-family:'DM Sans',system-ui;">Book Your Shoot</button>
+      <button style="background:transparent;color:#D4A853;padding:14px 32px;border-radius:6px;font-size:15px;border:1.5px solid #D4A853;font-family:'DM Sans',system-ui;">Watch the Reel</button>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="video-placeholder" style="border-radius:8px;background:linear-gradient(135deg,#1A1510 0%,#2A2015 50%,#1A1510 100%);border:1px solid #2A2520;">
+      <div class="play-btn" style="background:rgba(212,168,83,0.15);border:2px solid #D4A853;"><div class="play-arrow" style="border-left:22px solid #D4A853;"></div></div>
+      <div class="video-label" style="color:#6B6355;">SHOWREEL • 2:34</div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="stats-bar" style="gap:60px;border-top:1px solid #2A2520;border-bottom:1px solid #2A2520;">
+      <div class="stat"><div class="stat-number" style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#D4A853;">50+</div><div class="stat-label" style="color:#A09880;">Restaurants Featured</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#D4A853;">2M+</div><div class="stat-label" style="color:#A09880;">Views Generated</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#D4A853;">35%</div><div class="stat-label" style="color:#A09880;">Avg. Footfall Increase</div></div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="margin-bottom:60px;"><div style="font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#D4A853;margin-bottom:16px;">What We Do</div><h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;letter-spacing:-0.02em;">Three ways to work with us</h2></div>
+    <div class="features-grid">
+      <div class="feature-card" style="background:#1A1A1A;border:1px solid #2A2520;border-radius:8px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">🎬</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600;">The Series</h3>
+        <p style="color:#A09880;">A spotlight episode featuring your restaurant — your story, your dishes, your atmosphere. Published to an audience that's already hungry.</p>
+      </div>
+      <div class="feature-card" style="background:#1A1A1A;border:1px solid #2A2520;border-radius:8px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">📈</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600;">Footfall, Not Just Views</h3>
+        <p style="color:#A09880;">Every video is engineered to drive real people through your door. We track the impact so you see the ROI.</p>
+      </div>
+      <div class="feature-card" style="background:#1A1A1A;border:1px solid #2A2520;border-radius:8px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">✨</div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600;">Full Production</h3>
+        <p style="color:#A09880;">From pre-production planning to final edit. Cinematic quality, delivered on time, no hassle.</p>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section" style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="background:linear-gradient(135deg,#1A1510 0%,#0A0A0A 100%);border-radius:10px;padding:80px 60px;border:1px solid #2A2520;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:34px;font-weight:700;">Ready to fill your restaurant?</h2>
+      <p style="font-size:16px;color:#A09880;max-width:440px;">Book a call and let's talk about putting your restaurant in front of the right audience.</p>
+      <button style="background:#D4A853;color:#0A0A0A;padding:16px 40px;border-radius:6px;font-size:15px;font-family:'DM Sans',system-ui;">Book Your Shoot</button>
+    </div>
+  </section>
+  <footer class="footer" style="border-top:1px solid #2A2520;color:#6B6355;">
+    <span style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;color:#F5F0E8;">Talk with Flavour<span style="color:#D4A853;">.</span></span>
+    <span>© 2026 Talk with Flavour. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- FRESH -->
+<div class="mockup" id="fresh" style="background:#FFFBF5;font-family:'Instrument Sans',system-ui;color:#1A1A1A;">
+  <nav class="mockup-nav" style="border-bottom:1px solid #EEE8DD;">
+    <div style="font-family:'Space Grotesk',system-ui;font-size:22px;font-weight:700;">Talk with Flavour</div>
+    <div class="nav-links" style="color:#666655;">
+      <span>The Series</span><span>Work</span><span>About</span>
+      <button class="nav-cta" style="background:#E8432A;color:#FFF;border-radius:8px;">Let's Talk</button>
+    </div>
+  </nav>
+  <section class="hero" style="padding:100px 48px 80px;align-items:flex-start;text-align:left;">
+    <h1 style="font-family:'Space Grotesk',system-ui;font-size:64px;font-weight:700;line-height:1.08;max-width:650px;letter-spacing:-0.03em;">Videos that <span style="color:#E8432A;">fill tables</span>.</h1>
+    <p style="font-size:18px;color:#666655;max-width:480px;">You make incredible food. We make the videos that get people through your door. Simple.</p>
+    <div class="hero-buttons">
+      <button style="background:#E8432A;color:#FFF;padding:14px 32px;border-radius:10px;font-size:15px;font-family:'Instrument Sans',system-ui;">Let's Talk</button>
+      <button style="background:transparent;color:#1A1A1A;padding:14px 32px;border-radius:10px;font-size:15px;border:1.5px solid #EEE8DD;font-family:'Instrument Sans',system-ui;">See Our Work</button>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="video-placeholder" style="border-radius:16px;background:linear-gradient(135deg,#FFF0E0 0%,#FFE0C8 50%,#FFF0E0 100%);border:1px solid #EEE8DD;">
+      <div class="play-btn" style="background:rgba(232,67,42,0.1);border:2px solid #E8432A;"><div class="play-arrow" style="border-left:22px solid #E8432A;"></div></div>
+      <div class="video-label" style="color:#999988;">SHOWREEL • 2:34</div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="stats-bar" style="gap:60px;border-top:1px solid #EEE8DD;border-bottom:1px solid #EEE8DD;">
+      <div class="stat"><div class="stat-number" style="font-family:'Space Grotesk',system-ui;font-size:36px;font-weight:700;">50+</div><div class="stat-label" style="color:#666655;">Restaurants Featured</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Space Grotesk',system-ui;font-size:36px;font-weight:700;">2M+</div><div class="stat-label" style="color:#666655;">Views Generated</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Space Grotesk',system-ui;font-size:36px;font-weight:700;">35%</div><div class="stat-label" style="color:#666655;">Avg. Footfall Increase</div></div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="margin-bottom:60px;"><div style="font-size:11px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#E8432A;margin-bottom:16px;">What We Do</div><h2 style="font-family:'Space Grotesk',system-ui;font-size:36px;font-weight:700;letter-spacing:-0.02em;">Here's how it works</h2></div>
+    <div class="features-grid">
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #EEE8DD;border-radius:16px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">📹</div>
+        <h3 style="font-family:'Space Grotesk',system-ui;font-size:20px;font-weight:600;">Get Featured</h3>
+        <p style="color:#666655;">Your spot gets a dedicated episode in our series. We bring the cameras, the story, and the audience.</p>
+      </div>
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #EEE8DD;border-radius:16px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">🔥</div>
+        <h3 style="font-family:'Space Grotesk',system-ui;font-size:20px;font-weight:600;">Real Results</h3>
+        <p style="color:#666655;">We don't just make pretty videos. We make videos that convert scrollers into diners. Measurable.</p>
+      </div>
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #EEE8DD;border-radius:16px;padding:36px 32px;">
+        <div style="font-size:32px;margin-bottom:20px;">🤙</div>
+        <h3 style="font-family:'Space Grotesk',system-ui;font-size:20px;font-weight:600;">Zero Stress</h3>
+        <p style="color:#666655;">We handle everything. You keep cooking. Show up, be yourself, and we'll make you look incredible.</p>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section" style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="background:#E8432A;border-radius:20px;padding:80px 60px;">
+      <h2 style="font-family:'Space Grotesk',system-ui;font-size:34px;font-weight:700;color:#FFF;">Let's make something incredible.</h2>
+      <p style="font-size:16px;color:rgba(255,255,255,0.8);max-width:440px;">Drop us a message and we'll get back to you within 24 hours. No pressure, just a chat.</p>
+      <button style="background:#FFF;color:#E8432A;padding:16px 40px;border-radius:10px;font-size:15px;font-family:'Instrument Sans',system-ui;">Let's Talk</button>
+    </div>
+  </section>
+  <footer class="footer" style="border-top:1px solid #EEE8DD;color:#999988;">
+    <span style="font-family:'Space Grotesk',system-ui;font-weight:600;font-size:16px;color:#1A1A1A;">Talk with Flavour</span>
+    <span>© 2026 Talk with Flavour. All rights reserved.</span>
+  </footer>
+</div>
+
+<!-- EDITORIAL -->
+<div class="mockup" id="editorial" style="background:#F7F5F0;font-family:'Work Sans',system-ui;color:#1C1C1C;">
+  <nav class="mockup-nav" style="border-bottom:1px solid #D8D4CC;">
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:700;letter-spacing:0.05em;">Talk with Flavour</div>
+    <div class="nav-links" style="color:#5A5A52;">
+      <span>The Series</span><span>Work</span><span>About</span>
+      <button class="nav-cta" style="background:#2D5A3D;color:#FFF;border-radius:2px;letter-spacing:0.08em;text-transform:uppercase;font-size:12px;">Enquire</button>
+    </div>
+  </nav>
+  <section class="hero" style="padding:120px 48px 80px;align-items:center;text-align:center;">
+    <h1 style="font-family:'Cormorant Garamond',Georgia,serif;font-size:62px;font-weight:400;line-height:1.08;max-width:700px;letter-spacing:-0.01em;">The art of bringing<br>people to the table.</h1>
+    <p style="font-size:19px;color:#5A5A52;max-width:520px;">We produce cinematic food and restaurant content that transforms first-time viewers into loyal guests.</p>
+    <div class="hero-buttons">
+      <button style="background:#2D5A3D;color:#FFF;padding:16px 40px;border-radius:2px;font-size:15px;font-family:'Work Sans',system-ui;letter-spacing:0.08em;text-transform:uppercase;">Enquire</button>
+      <button style="background:transparent;color:#1C1C1C;padding:14px 32px;border-radius:2px;font-size:15px;border:1.5px solid #D8D4CC;font-family:'Work Sans',system-ui;letter-spacing:0.06em;text-transform:uppercase;">View Portfolio</button>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="video-placeholder" style="border-radius:4px;background:linear-gradient(135deg,#E8E4DC 0%,#D8D4CC 50%,#E8E4DC 100%);border:1px solid #D8D4CC;">
+      <div class="play-btn" style="background:rgba(45,90,61,0.1);border:2px solid #2D5A3D;"><div class="play-arrow" style="border-left:22px solid #2D5A3D;"></div></div>
+      <div class="video-label" style="color:#8A8A80;">SHOWREEL • 2:34</div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 80px;">
+    <div class="stats-bar" style="gap:80px;border-top:1px solid #D8D4CC;border-bottom:1px solid #D8D4CC;">
+      <div class="stat"><div class="stat-number" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;letter-spacing:0.02em;">50+</div><div class="stat-label" style="color:#5A5A52;">Restaurants Featured</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;letter-spacing:0.02em;">2M+</div><div class="stat-label" style="color:#5A5A52;">Views Generated</div></div>
+      <div class="stat"><div class="stat-number" style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;letter-spacing:0.02em;">35%</div><div class="stat-label" style="color:#5A5A52;">Avg. Footfall Increase</div></div>
+    </div>
+  </section>
+  <section style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="text-align:center;margin-bottom:60px;"><h2 style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;letter-spacing:0.01em;">Our services</h2></div>
+    <div class="features-grid">
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #D8D4CC;border-radius:4px;padding:48px 36px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:20px;color:#2D5A3D;">◆</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:0.02em;">The Series</h3>
+        <p style="color:#5A5A52;">An intimate, beautifully shot profile of your restaurant — the food, the people, the atmosphere — shared with a dedicated and engaged audience.</p>
+      </div>
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #D8D4CC;border-radius:4px;padding:48px 36px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:20px;color:#2D5A3D;">◆</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:0.02em;">Measured Impact</h3>
+        <p style="color:#5A5A52;">Beyond brand awareness. We provide clear metrics connecting our content to increased reservations and footfall at your venue.</p>
+      </div>
+      <div class="feature-card" style="background:#FFFFFF;border:1px solid #D8D4CC;border-radius:4px;padding:48px 36px;text-align:center;">
+        <div style="font-size:18px;margin-bottom:20px;color:#2D5A3D;">◆</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;letter-spacing:0.02em;">Bespoke Production</h3>
+        <p style="color:#5A5A52;">Tailored creative direction for every project. From concept development through to final delivery, handled entirely by our team.</p>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section" style="max-width:1200px;margin:0 auto;padding:0 48px 100px;">
+    <div style="background:#EFECE5;border-radius:4px;padding:80px 60px;border:1px solid #D8D4CC;">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400;">Shall we begin?</h2>
+      <p style="font-size:16px;color:#5A5A52;max-width:440px;">We'd love to learn about your restaurant and discuss how our content can serve your goals.</p>
+      <button style="background:#2D5A3D;color:#FFF;padding:16px 40px;border-radius:2px;font-size:15px;font-family:'Work Sans',system-ui;letter-spacing:0.08em;text-transform:uppercase;">Enquire</button>
+    </div>
+  </section>
+  <footer class="footer" style="border-top:1px solid #D8D4CC;color:#8A8A80;">
+    <span style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;color:#1C1C1C;">Talk with Flavour</span>
+    <span>© 2026 Talk with Flavour. All rights reserved.</span>
+  </footer>
+</div>
+
+<script>
+  const descriptions = {
+    cinematic: "Premium filmmaker. Dark, moody, high-contrast. Appeals to upscale restaurants wanting aspirational content.",
+    fresh: "Energetic, social-first, vibrant. Appeals to casual dining, street food, and trend-driven spots.",
+    editorial: "Magazine-quality, sophisticated, understated. Appeals to fine dining and established restaurants."
+  };
+
+  function switchTab(id) {
+    document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('style-desc').textContent = descriptions[id];
+    const btns = document.querySelectorAll('.tab-btn');
+    const idx = id === 'cinematic' ? 0 : id === 'fresh' ? 1 : 2;
+    btns[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

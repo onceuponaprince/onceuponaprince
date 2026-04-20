@@ -2,6 +2,7 @@
 type: campaign
 campaign: command-centre
 title: "AI Command Centre"
+product_name: "BorAI"
 status: planning
 date_opened: 
 date_shipped: 
@@ -14,6 +15,8 @@ tags:
 ---
 
 # Campaign: AI Command Centre
+
+*Product name: **BorAI**. Lives as a Turborepo at `~/code/BorAI/`; agency client work (e.g. Talk with Flavour) lives alongside as `apps/*`.*
 
 ## Thesis
 

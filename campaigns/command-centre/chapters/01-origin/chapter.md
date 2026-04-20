@@ -29,9 +29,9 @@ Tests the campaign thesis in its weakest form: can one human do this with discip
 ## Scenes
 
 - [x] **[[01-onboarding-yourself]]** — Campaign Book written. *Concluded. Artifact: [[01-build-should-feel-like-play]].*
-- [ ] **[[02-talk-with-flavour-landing-page]]** — First client deliverable through the scene structure. *Open, not started.*
-- [ ] **03 — [next client landing page]** — Second proof point.
-- [ ] **04 — [third client landing page or buffer]** — Third data point.
+- [x] **[[02-talk-with-flavour-landing-page]]** — First paid-client deliverable through the scene structure. Preview URL shipped on Vercel; BorAI monorepo bootstrapped along the way. *Concluded. Artifact: [[02-three-failed-deploys]].*
+- [ ] **[[03-talk-with-flavour-client-feedback]]** — First real feedback loop on the method. Nathan's V1 review triggers a category shift (videographer → media platform); V2 preview ships.
+- [ ] **[[04-misled-ethos-page]]** — Second client deliverable. Misled — London skate + streetwear movement brand. Stage 1 of a three-stage launch (ethos → tease → pre-order).
 - [ ] **05 — Chapter 1 close** — Weekly synthesis.
 
 ## Climax

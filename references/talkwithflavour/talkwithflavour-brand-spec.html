@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>talkwithflavour — Visual Identity Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   TALKWITHFLAVOUR — BRAND IDENTITY SPEC
+   Art direction: food + hospitality founder platform
+   Tone: premium, editorial, specialist, neobrutalist restraint
+   Palette: deep green surfaces, off-white type, lime accent
+   Typography: Instrument Serif (display) + Cabinet Grotesk (body)
+   Density: spacious editorial
+============================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ─── CORE PALETTE ─── */
+  --green-deep:    #0f2318;
+  --green-forest:  #1a3a2a;
+  --green-mid:     #244d37;
+  --green-muted:   #2e5e43;
+  --green-accent:  #4ade80;   /* lime pop — used sparingly */
+  --green-accent2: #86efac;   /* lighter lime for hover */
+  --green-faint:   #3a6b50;
+
+  --cream:        #f5f0e8;
+  --cream-warm:   #ede8df;
+  --cream-faint:  #c8c2b6;
+  --off-white:    #faf8f3;
+
+  --charcoal:     #111810;
+  --near-black:   #0a120e;
+
+  --rule-color:   rgba(245, 240, 232, 0.15);
+  --rule-accent:  rgba(74, 222, 128, 0.4);
+
+  /* ─── SPACING ─── */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem;
+  --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem;
+  --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ─── TYPE SCALE ─── */
+  --text-xs:   clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+  --text-3xl:  clamp(2.5rem, 1rem + 4vw, 5rem);
+  --text-hero: clamp(3rem, 0.5rem + 7vw, 8rem);
+
+  /* ─── FONTS ─── */
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'Cabinet Grotesk', 'DM Sans', sans-serif;
+
+  /* ─── RADIUS ─── */
+  --radius-sm: 2px; --radius-md: 4px; --radius-lg: 6px;
+  --radius-full: 9999px;
+
+  /* ─── SHADOWS ─── */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.5);
+  --shadow-neo: 4px 4px 0px var(--green-accent);
+  --shadow-neo-sm: 2px 2px 0px var(--green-accent);
+
+  /* ─── CONTENT WIDTHS ─── */
+  --content-narrow: 640px;
+  --content-default: 960px;
+  --content-wide: 1200px;
+
+  /* ─── TRANSITIONS ─── */
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--space-16);
+}
+
+body {
+  background: var(--green-deep);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a, button { transition: color var(--transition), background var(--transition), box-shadow var(--transition), opacity var(--transition); }
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; line-height: 1.1; }
+p { text-wrap: pretty; }
+
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+.site-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-4) var(--space-8);
+  border-bottom: 1px solid var(--rule-color);
+  background: rgba(15, 35, 24, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+}
+
+.nav-logo span { color: var(--green-accent); }
+
+.nav-links {
+  display: flex; gap: var(--space-8); list-style: none;
+}
+
+.nav-links a {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  text-decoration: none;
+}
+.nav-links a:hover { color: var(--cream); }
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: calc(var(--space-32) + var(--space-16)) var(--space-8) var(--space-16);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(74,222,128,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(26,58,42,0.6) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+  margin-bottom: var(--space-6);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: block; width: 24px; height: 1px;
+  background: var(--green-accent);
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: var(--text-hero);
+  font-style: italic;
+  line-height: 0.92;
+  color: var(--cream);
+  max-width: 900px;
+  margin-bottom: var(--space-8);
+  position: relative; z-index: 1;
+}
+
+.hero-headline em {
+  font-style: normal;
+  color: var(--green-accent);
+}
+
+.hero-sub {
+  max-width: 460px;
+  font-size: var(--text-base);
+  color: var(--cream-faint);
+  line-height: 1.65;
+  margin-bottom: var(--space-10);
+  position: relative; z-index: 1;
+}
+
+.hero-cta-group {
+  display: flex; align-items: center; gap: var(--space-6);
+  position: relative; z-index: 1;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: var(--green-accent);
+  color: var(--green-deep);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--green-accent);
+  box-shadow: var(--shadow-neo);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--green-accent);
+  box-shadow: 6px 6px 0px var(--green-accent);
+}
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  background: transparent;
+  color: var(--cream-faint);
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--rule-color);
+  cursor: pointer;
+}
+
+.btn-ghost:hover { color: var(--cream); border-color: var(--cream-faint); }
+
+.hero-meta {
+  display: flex; align-items: center; gap: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule-color);
+}
+
+.hero-stat {
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--cream);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+/* ─────────────────────────────────────────
+   LAYOUT CONTAINERS
+───────────────────────────────────────── */
+.container {
+  max-width: var(--content-wide);
+  margin-inline: auto;
+  padding-inline: var(--space-8);
+}
+
+.container--narrow { max-width: var(--content-default); }
+
+section {
+  padding-block: clamp(var(--space-16), 8vw, var(--space-32));
+  border-bottom: 1px solid var(--rule-color);
+}
+
+/* ─────────────────────────────────────────
+   SECTION LABELS
+───────────────────────────────────────── */
+.section-label {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-size: var(--text-xs);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+  margin-bottom: var(--space-12);
+}
+
+.section-label::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: var(--rule-accent);
+  max-width: 120px;
+}
+
+.section-num {
+  opacity: 0.5;
+  font-size: var(--text-xs);
+}
+
+/* ─────────────────────────────────────────
+   COLOR PALETTE SECTION
+───────────────────────────────────────── */
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.swatch {
+  position: relative;
+  overflow: hidden;
+}
+
+.swatch-color {
+  height: 160px;
+  width: 100%;
+  position: relative;
+}
+
+.swatch-color::after {
+  content: '';
+  position: absolute; inset: 0;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.swatch-info {
+  padding: var(--space-4) var(--space-3);
+  background: var(--green-forest);
+  border: 1px solid var(--rule-color);
+  border-top: none;
+}
+
+.swatch-name {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--cream);
+  margin-bottom: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.swatch-hex {
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.swatch-use {
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  line-height: 1.4;
+}
+
+.swatch-tag {
+  display: inline-block;
+  margin-top: var(--space-2);
+  padding: 2px var(--space-2);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.swatch-tag.primary { color: var(--green-accent); border-color: var(--green-accent); }
+.swatch-tag.secondary { color: var(--cream-faint); border-color: var(--rule-color); }
+.swatch-tag.accent { color: #86efac; border-color: #86efac; }
+
+/* ─────────────────────────────────────────
+   TYPOGRAPHY SECTION
+───────────────────────────────────────── */
+.type-specimen {
+  margin-bottom: var(--space-16);
+}
+
+.type-spec-row {
+  display: grid;
+  grid-template-columns: 160px 1fr auto;
+  gap: var(--space-6);
+  align-items: baseline;
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.type-spec-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+}
+
+.type-spec-label small {
+  display: block;
+  color: var(--cream-faint);
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.type-spec-sample { overflow: hidden; }
+
+.type-spec-meta {
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  text-align: right;
+  white-space: nowrap;
+  font-family: monospace;
+}
+
+/* Font specimens */
+.t-hero-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-hero);
+  color: var(--cream);
+  line-height: 0.9;
+}
+
+.t-display-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-3xl);
+  color: var(--cream);
+  line-height: 1;
+}
+
+.t-heading-sans {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-2xl);
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.t-subhead-sans {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  color: var(--cream);
+  letter-spacing: -0.01em;
+}
+
+.t-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--text-base);
+  color: var(--cream-faint);
+  max-width: 65ch;
+  line-height: 1.7;
+}
+
+.t-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────
+   LOGO SECTION
+───────────────────────────────────────── */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.logo-variant {
+  padding: var(--space-12) var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule-color);
+  min-height: 200px;
+  position: relative;
+}
+
+.logo-variant-label {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-4);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+.logo-variant.on-dark { background: var(--green-deep); }
+.logo-variant.on-forest { background: var(--green-forest); }
+.logo-variant.on-light { background: var(--cream); }
+.logo-variant.on-accent { background: var(--green-accent); }
+
+/* SVG Logo */
+.brand-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.brand-mark-wordmark {
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 1.5rem;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.brand-mark-tag {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.brand-mark.on-dark-bg .brand-mark-wordmark { color: var(--cream); }
+.brand-mark.on-dark-bg .brand-mark-tag { color: var(--green-accent); }
+
+.brand-mark.on-light-bg .brand-mark-wordmark { color: var(--green-deep); }
+.brand-mark.on-light-bg .brand-mark-tag { color: var(--green-muted); }
+
+.brand-mark.on-accent-bg .brand-mark-wordmark { color: var(--green-deep); }
+.brand-mark.on-accent-bg .brand-mark-tag { color: var(--green-forest); }
+
+/* ─────────────────────────────────────────
+   LAYOUT / SPACING RULES
+───────────────────────────────────────── */
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.rule-card {
+  padding: var(--space-8) var(--space-6);
+  background: var(--green-forest);
+  border: 1px solid var(--rule-color);
+  position: relative;
+}
+
+.rule-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green-accent);
+  opacity: 0.5;
+}
+
+.rule-card-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-3xl);
+  color: var(--green-faint);
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+
+.rule-card-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--cream);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.rule-card-desc {
+  font-size: var(--text-sm);
+  color: var(--cream-faint);
+  line-height: 1.65;
+}
+
+/* ─────────────────────────────────────────
+   COMPONENT SHOWCASE
+───────────────────────────────────────── */
+.component-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-8);
+  margin-bottom: var(--space-12);
+}
+
+.component-block {
+  padding: var(--space-8) var(--space-6);
+  background: var(--green-forest);
+  border: 1px solid var(--rule-color);
+}
+
+.component-block-title {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--rule-color);
+}
+
+/* Button samples */
+.btn-sample-group {
+  display: flex; flex-wrap: wrap; gap: var(--space-3);
+  align-items: flex-start;
+}
+
+/* Card sample */
+.card-sample {
+  border: 1px solid var(--rule-color);
+  background: var(--green-deep);
+  overflow: hidden;
+}
+
+.card-sample-img {
+  height: 120px;
+  background: var(--green-mid);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--green-faint);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.card-sample-body {
+  padding: var(--space-4) var(--space-4);
+}
+
+.card-sample-tag {
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+  margin-bottom: var(--space-2);
+}
+
+.card-sample-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--cream);
+  margin-bottom: var(--space-2);
+  line-height: 1.2;
+}
+
+.card-sample-desc {
+  font-size: var(--text-sm);
+  color: var(--cream-faint);
+  line-height: 1.6;
+}
+
+/* Badge samples */
+.badge-group { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.badge {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.badge-lime { color: var(--green-accent); border-color: var(--green-accent); background: rgba(74,222,128,0.06); }
+.badge-cream { color: var(--cream-faint); border-color: var(--rule-color); }
+.badge-filled { color: var(--green-deep); background: var(--green-accent); border-color: var(--green-accent); }
+
+/* Form sample */
+.form-sample { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.form-label {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  margin-bottom: var(--space-2);
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--green-deep);
+  border: 1px solid var(--rule-color);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-input:focus {
+  border-color: var(--green-accent);
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.1);
+}
+
+.form-input::placeholder { color: var(--green-faint); }
+
+/* ─────────────────────────────────────────
+   DO / DON'T TABLE
+───────────────────────────────────────── */
+.do-dont-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.do-card, .dont-card {
+  padding: var(--space-8) var(--space-6);
+  border: 1px solid;
+}
+
+.do-card {
+  border-color: rgba(74,222,128,0.3);
+  background: rgba(74,222,128,0.03);
+}
+
+.dont-card {
+  border-color: rgba(200,100,100,0.25);
+  background: rgba(200,100,100,0.03);
+}
+
+.do-card-header, .dont-card-header {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-6);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+
+.do-card-header { color: var(--green-accent); }
+.dont-card-header { color: #f87171; }
+
+.do-dont-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+
+.do-dont-list li {
+  font-size: var(--text-sm);
+  color: var(--cream-faint);
+  line-height: 1.5;
+  padding-left: var(--space-5);
+  position: relative;
+}
+
+.do-dont-list li::before {
+  position: absolute; left: 0; top: 0;
+  font-size: var(--text-sm);
+}
+
+.do-card .do-dont-list li::before { content: '✓'; color: var(--green-accent); }
+.dont-card .do-dont-list li::before { content: '×'; color: #f87171; }
+
+/* ─────────────────────────────────────────
+   MOTION / INTERACTION RULES
+───────────────────────────────────────── */
+.motion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.motion-card {
+  padding: var(--space-6) var(--space-5);
+  background: var(--green-forest);
+  border: 1px solid var(--rule-color);
+}
+
+.motion-card-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--cream);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-2);
+}
+
+.motion-card-val {
+  font-family: monospace;
+  font-size: var(--text-xs);
+  color: var(--green-accent);
+  margin-bottom: var(--space-3);
+}
+
+.motion-card-desc {
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  line-height: 1.55;
+}
+
+/* ─────────────────────────────────────────
+   VOICE & TONE
+───────────────────────────────────────── */
+.voice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-12);
+}
+
+.voice-card {
+  padding: var(--space-6) var(--space-5);
+  background: var(--green-forest);
+  border: 1px solid var(--rule-color);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+
+.voice-label {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-accent);
+}
+
+.voice-example {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-lg);
+  color: var(--cream);
+  line-height: 1.3;
+  border-left: 2px solid var(--green-accent);
+  padding-left: var(--space-4);
+}
+
+.voice-note {
+  font-size: var(--text-xs);
+  color: var(--cream-faint);
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────
+   IG GRID SPEC
+───────────────────────────────────────── */
+.ig-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  max-width: 480px;
+  margin-bottom: var(--space-10);
+}
+
+.ig-tile {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+}
+
+.ig-tile::before {
+  content: '';
+  position: absolute; inset: 0;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* ─────────────────────────────────────────
+   SITE LANDING WIREFRAME SPEC
+───────────────────────────────────────── */
+.wireframe {
+  border: 1px solid var(--rule-color);
+  background: var(--green-forest);
+  padding: var(--space-6);
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-8);
+}
+
+.wireframe-header {
+  background: var(--green-mid);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-1);
+  display: flex; justify-content: space-between; align-items: center;
+  border: 1px solid var(--rule-color);
+}
+
+.wireframe-hero {
+  background: var(--green-deep);
+  padding: var(--space-12) var(--space-6);
+  text-align: left;
+  margin-bottom: var(--space-1);
+  border: 1px solid var(--rule-color);
+  min-height: 180px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+
+.wf-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-faint);
+}
+
+.wf-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--cream);
+  opacity: 0.3;
+  line-height: 1;
+  margin-top: var(--space-2);
+}
+
+.wireframe-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.wireframe-block {
+  background: var(--green-deep);
+  padding: var(--space-6) var(--space-4);
+  border: 1px solid var(--rule-color);
+  min-height: 100px;
+  display: flex; align-items: flex-end;
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+.site-footer {
+  padding: var(--space-12) var(--space-8);
+  border-top: 1px solid var(--rule-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-brand {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: var(--text-sm);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+}
+
+.footer-note {
+  font-size: var(--text-xs);
+  color: var(--green-faint);
+  letter-spacing: 0.05em;
+}
+
+/* ─────────────────────────────────────────
+   SCROLL ANIMATIONS
+───────────────────────────────────────── */
+.fade-in {
+  opacity: 1;
+}
+
+@supports (animation-timeline: scroll()) {
+  .fade-in {
+    opacity: 0;
+    animation: reveal-fade linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+
+@keyframes reveal-fade { to { opacity: 1; } }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .site-nav { padding: var(--space-4); }
+  .nav-links { display: none; }
+  .hero { padding: calc(var(--space-24) + var(--space-8)) var(--space-4) var(--space-10); }
+  .container { padding-inline: var(--space-4); }
+  .hero-cta-group { flex-direction: column; align-items: flex-start; }
+  .hero-meta { gap: var(--space-6); flex-wrap: wrap; }
+  .do-dont-grid { grid-template-columns: 1fr; }
+  .type-spec-row { grid-template-columns: 1fr; gap: var(--space-2); }
+  .type-spec-meta { text-align: left; }
+  .site-footer { flex-direction: column; gap: var(--space-4); text-align: center; }
+  .wireframe-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav" role="navigation" aria-label="Main navigation">
+  <a href="#" class="nav-logo">talk<span>with</span>flavour</a>
+  <ul class="nav-links">
+    <li><a href="#palette">Colour</a></li>
+    <li><a href="#typography">Type</a></li>
+    <li><a href="#logo">Logo</a></li>
+    <li><a href="#layout">Layout</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#voice">Voice</a></li>
+    <li><a href="#digital">Digital</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-label="Brand identity overview">
+  <div>
+    <p class="hero-eyebrow">Visual Identity Specification</p>
+    <h1 class="hero-headline">Talk<em>with</em><br>Flavour.</h1>
+    <p class="hero-sub">A premium, editorial brand platform for food and hospitality founders. Built to feel like the work — not the agency behind it.</p>
+    <div class="hero-cta-group">
+      <a href="#palette" class="btn-primary">Explore the spec</a>
+      <a href="#logo" class="btn-ghost">View logo variants →</a>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <span class="hero-stat-num">v1.0</span>
+      <span class="hero-stat-label">Brand release</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">2026</span>
+      <span class="hero-stat-label">Identity year</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">6</span>
+      <span class="hero-stat-label">System sections</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 01 COLOUR PALETTE ═══════════ -->
+<section id="palette">
+<div class="container">
+  <p class="section-label"><span class="section-num">01 /</span> Colour Palette</p>
+  <div class="palette-grid fade-in">
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0f2318;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Deep Forest</p>
+        <p class="swatch-hex">#0f2318</p>
+        <p class="swatch-use">Primary background. The base canvas — almost black but alive with green depth.</p>
+        <span class="swatch-tag primary">Primary BG</span>
+      </div>
+    </div>
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1a3a2a;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Forest</p>
+        <p class="swatch-hex">#1a3a2a</p>
+        <p class="swatch-use">Card surfaces, nav, secondary panels. One step above the base.</p>
+        <span class="swatch-tag secondary">Surface</span>
+      </div>
+    </div>
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#244d37;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Mid Green</p>
+        <p class="swatch-hex">#244d37</p>
+        <p class="swatch-use">Hover states, elevated surfaces, tertiary panels.</p>
+        <span class="swatch-tag secondary">Surface +2</span>
+      </div>
+    </div>
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#4ade80;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Lime Accent</p>
+        <p class="swatch-hex">#4ade80</p>
+        <p class="swatch-use">CTAs, eyebrows, active states, brand marks. Use with restraint — maximum 1–2 elements per screen.</p>
+        <span class="swatch-tag accent">Accent</span>
+      </div>
+    </div>
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#f5f0e8;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Cream</p>
+        <p class="swatch-hex">#f5f0e8</p>
+        <p class="swatch-use">Primary text, headlines, high-emphasis copy. Warm rather than pure white.</p>
+        <span class="swatch-tag primary">Text</span>
+      </div>
+    </div>
+
+    <div class="swatch">
+      <div class="swatch-color" style="background:#c8c2b6;"></div>
+      <div class="swatch-info">
+        <p class="swatch-name">Cream Muted</p>
+        <p class="swatch-hex">#c8c2b6</p>
+        <p class="swatch-use">Body copy, secondary text, supporting descriptions.</p>
+        <span class="swatch-tag secondary">Text muted</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Palette rationale -->
+  <div class="rule-card fade-in" style="max-width:700px;">
+    <p class="rule-card-title">Why This Palette?</p>
+    <p class="rule-card-desc" style="margin-bottom:var(--space-3);">Green represents <strong style="color:var(--cream);">flavour, freshness, and identity</strong> — but here it's treated as an atmosphere, not a brand paint. The deep forest tones are immersive without being oppressive; they reference the specificity of serious kitchens, not generic "food" branding.</p>
+    <p class="rule-card-desc">The lime accent is deployed like a seasoning — present enough to define, absent enough to matter. Cream type over dark green creates immediate premium legibility without the clinical cold of pure black-on-white.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 02 TYPOGRAPHY ═══════════ -->
+<section id="typography">
+<div class="container">
+  <p class="section-label"><span class="section-num">02 /</span> Typography</p>
+
+  <div class="type-specimen fade-in">
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Hero Display
+        <small>Instrument Serif Italic</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-hero-serif">Flavour.</span>
+      </div>
+      <div class="type-spec-meta">--text-hero<br>48–128px</div>
+    </div>
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Display
+        <small>Instrument Serif Italic</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-display-serif">The art of hospitality</span>
+      </div>
+      <div class="type-spec-meta">--text-3xl<br>40–80px</div>
+    </div>
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Section Heading
+        <small>Cabinet Grotesk Black</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-heading-sans">For Founders</span>
+      </div>
+      <div class="type-spec-meta">--text-2xl<br>32–56px</div>
+    </div>
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Subheading
+        <small>Cabinet Grotesk Bold</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-subhead-sans">Content-led storytelling</span>
+      </div>
+      <div class="type-spec-meta">--text-xl<br>24–36px</div>
+    </div>
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Body Copy
+        <small>Cabinet Grotesk Regular</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-body">talkwithflavour platforms the stories of food and hospitality founders — operators, chefs, and makers building something real. This is where their voice lives.</span>
+      </div>
+      <div class="type-spec-meta">--text-base<br>16–18px</div>
+    </div>
+
+    <div class="type-spec-row">
+      <div class="type-spec-label">
+        Label / Eyebrow
+        <small>Cabinet Grotesk Medium</small>
+      </div>
+      <div class="type-spec-sample">
+        <span class="t-label">Food & Hospitality Founders · Season Two</span>
+      </div>
+      <div class="type-spec-meta">--text-xs<br>12–14px</div>
+    </div>
+
+  </div>
+
+  <!-- Type pairing rationale -->
+  <div class="rules-grid fade-in">
+    <div class="rule-card">
+      <p class="rule-card-title">Instrument Serif</p>
+      <p class="rule-card-desc">A refined, optical-size aware serif from Google. Used exclusively in italic at display sizes. It carries editorial weight and warmth — evoking quality print, not corporate polish. Appears in headlines, pull quotes, and brand marks only.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-title">Cabinet Grotesk</p>
+      <p class="rule-card-desc">A contemporary geometric grotesque from Fontshare. Distinctive without being eccentric — highly legible at small sizes, confident at large ones. The Black weight at all-caps creates structural tension against the fluid italic serif.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-title">The Rule of Contrast</p>
+      <p class="rule-card-desc">These two fonts should never compete. The serif owns italics, display sizes, and emotional moments. The grotesque owns uppercase labels, body copy, and navigation. Their contrast creates the editorial premium feel without overdesigning.</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 03 LOGO ═══════════ -->
+<section id="logo">
+<div class="container">
+  <p class="section-label"><span class="section-num">03 /</span> Logo & Brand Mark</p>
+
+  <div class="logo-grid fade-in">
+
+    <!-- Variant 1: Primary (dark bg) -->
+    <div class="logo-variant on-dark">
+      <span class="logo-variant-label">Primary — Dark</span>
+      <div class="brand-mark on-dark-bg">
+        <span class="brand-mark-wordmark">talkwithflavour</span>
+        <span class="brand-mark-tag">for food & hospitality founders</span>
+      </div>
+    </div>
+
+    <!-- Variant 2: Forest bg -->
+    <div class="logo-variant on-forest">
+      <span class="logo-variant-label">On Surface</span>
+      <div class="brand-mark on-dark-bg">
+        <span class="brand-mark-wordmark">talkwithflavour</span>
+        <span class="brand-mark-tag">for food & hospitality founders</span>
+      </div>
+    </div>
+
+    <!-- Variant 3: Light bg -->
+    <div class="logo-variant on-light">
+      <span class="logo-variant-label">Reversed — Light</span>
+      <div class="brand-mark on-light-bg">
+        <span class="brand-mark-wordmark">talkwithflavour</span>
+        <span class="brand-mark-tag">for food & hospitality founders</span>
+      </div>
+    </div>
+
+    <!-- Variant 4: Accent bg -->
+    <div class="logo-variant on-accent">
+      <span class="logo-variant-label">Accent Background</span>
+      <div class="brand-mark on-accent-bg">
+        <span class="brand-mark-wordmark">talkwithflavour</span>
+        <span class="brand-mark-tag">for food & hospitality founders</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SVG monogram -->
+  <div style="margin-bottom:var(--space-12);" class="fade-in">
+    <p class="section-label" style="margin-bottom:var(--space-8);">Favicon / Monogram Mark</p>
+    <div style="display:flex;gap:var(--space-6);align-items:center;flex-wrap:wrap;">
+
+      <!-- On dark -->
+      <div style="padding:var(--space-6);background:var(--green-deep);border:1px solid var(--rule-color);">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-label="talkwithflavour monogram mark">
+          <!-- Abstract T+F letterform with a leaf/flavour curve -->
+          <rect x="8" y="8" width="32" height="32" rx="0" fill="none" stroke="rgba(245,240,232,0.12)" stroke-width="1"/>
+          <!-- Vertical stem -->
+          <rect x="21" y="10" width="6" height="28" fill="#f5f0e8"/>
+          <!-- Horizontal bar (T) -->
+          <rect x="10" y="10" width="28" height="6" fill="#f5f0e8"/>
+          <!-- Accent leaf dot -->
+          <circle cx="38" cy="38" r="4" fill="#4ade80"/>
+        </svg>
+      </div>
+
+      <!-- On lime -->
+      <div style="padding:var(--space-6);background:#4ade80;border:1px solid rgba(0,0,0,0.1);">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-label="talkwithflavour monogram on lime">
+          <rect x="21" y="10" width="6" height="28" fill="#0f2318"/>
+          <rect x="10" y="10" width="28" height="6" fill="#0f2318"/>
+          <circle cx="38" cy="38" r="4" fill="#1a3a2a"/>
+        </svg>
+      </div>
+
+      <!-- On cream -->
+      <div style="padding:var(--space-6);background:#f5f0e8;border:1px solid rgba(0,0,0,0.08);">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-label="talkwithflavour monogram on cream">
+          <rect x="21" y="10" width="6" height="28" fill="#0f2318"/>
+          <rect x="10" y="10" width="28" height="6" fill="#0f2318"/>
+          <circle cx="38" cy="38" r="4" fill="#244d37"/>
+        </svg>
+      </div>
+
+    </div>
+    <p style="font-size:var(--text-xs);color:var(--cream-faint);margin-top:var(--space-4);letter-spacing:0.06em;">The monogram uses a bold T-form (T for Talk) with a lime accent dot — referencing both the brand initial and the concept of flavour as a final, deliberate touch.</p>
+  </div>
+
+  <!-- Logo rules -->
+  <div class="do-dont-grid fade-in">
+    <div class="do-card">
+      <p class="do-card-header">✓&nbsp; Do</p>
+      <ul class="do-dont-list">
+        <li>Use the wordmark in Cabinet Grotesk Black (900 weight)</li>
+        <li>Maintain the tag line in Instrument Serif Italic beneath when space allows</li>
+        <li>Apply on the four approved background variants only</li>
+        <li>Use minimum 16px clear space around the mark on all sides</li>
+        <li>Scale the lime accent dot proportionally with the monogram</li>
+      </ul>
+    </div>
+    <div class="dont-card">
+      <p class="dont-card-header">×&nbsp; Don't</p>
+      <ul class="do-dont-list">
+        <li>Recolour the wordmark — only cream, deep green, or lime are permitted</li>
+        <li>Add drop shadows, gradients, or glow effects to the logo</li>
+        <li>Stretch, skew, or alter the letter spacing</li>
+        <li>Place the mark on busy photographic backgrounds without an overlay</li>
+        <li>Use the monogram alone when the full wordmark fits the space</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 04 LAYOUT & SPACING ═══════════ -->
+<section id="layout">
+<div class="container">
+  <p class="section-label"><span class="section-num">04 /</span> Layout & Spacing Principles</p>
+
+  <div class="rules-grid fade-in">
+    <div class="rule-card">
+      <p class="rule-card-num">01</p>
+      <p class="rule-card-title">Content Before Chrome</p>
+      <p class="rule-card-desc">Navigation, labels, and UI chrome should recede. The content — video, interview, story — is the primary visual. Navigation is minimal, always fixed, always small. No decorative elements compete with the work.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-num">02</p>
+      <p class="rule-card-title">One Focal Point Per Screen</p>
+      <p class="rule-card-desc">Every viewport has one dominant element: a headline, a video, a founder portrait. The eye is guided without being pushed. Secondary elements exist only to support the primary — never to compete with it.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-num">03</p>
+      <p class="rule-card-title">The Editorial Rule</p>
+      <p class="rule-card-desc">Sections alternate rhythm: full-bleed moment → narrow text → asymmetric two-column → full-bleed. This creates a reading journey, not a template. No two adjacent sections share the same column structure.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-num">04</p>
+      <p class="rule-card-title">Generous Vertical Space</p>
+      <p class="rule-card-desc">Section padding: clamp(64px, 8vw, 128px). White space is confidence. Empty areas are not to be filled — they let premium content breathe and create the feeling of intention over volume.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-num">05</p>
+      <p class="rule-card-title">Neobrutalist Detail</p>
+      <p class="rule-card-desc">The brutalist signature: hard edges (border-radius: 0–4px), visible structural borders in low-opacity cream, and offset box-shadows using the lime accent. Applied with restraint — never on more than 2–3 elements per page.</p>
+    </div>
+    <div class="rule-card">
+      <p class="rule-card-num">06</p>
+      <p class="rule-card-title">4px Spacing System</p>
+      <p class="rule-card-desc">All spacing derived from a 4px base grid. No arbitrary values. The eye registers harmonic proportion even when it can't name it — and breaks in the grid register as carelessness.</p>
+    </div>
+  </div>
+
+  <!-- Wireframe spec -->
+  <p style="font-size:var(--text-xs);letter-spacing:0.1em;text-transform:uppercase;color:var(--green-accent);margin-bottom:var(--space-6);">Website Landing — Structural Skeleton</p>
+
+  <div class="wireframe fade-in">
+    <div class="wireframe-header">
+      <span class="wf-label">talkwithflavour</span>
+      <span class="wf-label">Nav links →</span>
+    </div>
+    <div class="wireframe-hero">
+      <span class="wf-label">Full-bleed hero — video or editorial image</span>
+      <span class="wf-title">For food & hospitality founders.</span>
+    </div>
+    <div class="wireframe-grid">
+      <div class="wireframe-block"><span class="wf-label">Feature story — 2/3 width</span></div>
+      <div class="wireframe-block"><span class="wf-label">Founder CTA — 1/3 width</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:1px;">
+      <div class="wireframe-block" style="min-height:80px;"><span class="wf-label">Episode card</span></div>
+      <div class="wireframe-block" style="min-height:80px;"><span class="wf-label">Episode card</span></div>
+      <div class="wireframe-block" style="min-height:80px;"><span class="wf-label">Episode card</span></div>
+    </div>
+    <div class="wireframe-block" style="min-height:60px;justify-content:center;align-items:center;text-align:center;">
+      <span class="wf-label">Single-column pull quote / testimonial — full width</span>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ═══════════ 05 COMPONENTS ═══════════ -->
+<section id="components">
+<div class="container">
+  <p class="section-label"><span class="section-num">05 /</span> UI Components</p>
+
+  <div class="component-section fade-in">
+
+    <!-- Buttons -->
+    <div class="component-block">
+      <p class="component-block-title">Buttons</p>
+      <div class="btn-sample-group">
+        <button class="btn-primary">Get in Touch</button>
+        <button class="btn-ghost">View Episode</button>
+      </div>
+      <p style="font-size:var(--text-xs);color:var(--cream-faint);margin-top:var(--space-6);line-height:1.55;">Primary buttons use the lime accent with a hard offset shadow — this is the neobrutalist signature. One primary CTA per view maximum. Ghost buttons for secondary actions only.</p>
+    </div>
+
+    <!-- Card -->
+    <div class="component-block">
+      <p class="component-block-title">Founder / Episode Card</p>
+      <div class="card-sample">
+        <div class="card-sample-img">
+          <span>Video thumbnail</span>
+        </div>
+        <div class="card-sample-body">
+          <p class="card-sample-tag">Restaurant · London</p>
+          <p class="card-sample-title">The story behind the kitchen</p>
+          <p class="card-sample-desc">How one founder turned a single supper club into a destination concept.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="component-block">
+      <p class="component-block-title">Badges & Labels</p>
+      <div class="badge-group" style="margin-bottom:var(--space-6);">
+        <span class="badge badge-lime">Food</span>
+        <span class="badge badge-lime">Hospitality</span>
+        <span class="badge badge-cream">Season 01</span>
+        <span class="badge badge-cream">Interview</span>
+        <span class="badge badge-filled">New</span>
+      </div>
+      <p style="font-size:var(--text-xs);color:var(--cream-faint);line-height:1.55;">Hard-edged (0–2px radius), uppercase, tracked. Never more than 2 lime badges visible per card — the accent must remain scarce.</p>
+    </div>
+
+    <!-- Form -->
+    <div class="component-block">
+      <p class="component-block-title">Enquiry Form Field</p>
+      <div class="form-sample">
+        <div>
+          <label class="form-label" for="name-demo">Your name</label>
+          <input class="form-input" id="name-demo" type="text" placeholder="e.g. Jamie Olivier" autocomplete="off">
+        </div>
+        <div>
+          <label class="form-label" for="brand-demo">Brand / Restaurant</label>
+          <input class="form-input" id="brand-demo" type="text" placeholder="Your concept name" autocomplete="off">
+        </div>
+        <button class="btn-primary" style="align-self:flex-start;">Send Enquiry</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 06 VOICE & TONE ═══════════ -->
+<section id="voice">
+<div class="container">
+  <p class="section-label"><span class="section-num">06 /</span> Voice, Tone & Copy Rules</p>
+
+  <div class="voice-grid fade-in">
+
+    <div class="voice-card">
+      <p class="voice-label">The Enquiry Prompt</p>
+      <p class="voice-example">"Tell me about your concept."</p>
+      <p class="voice-note">Not "Fill in the form below." The voice is curious and direct — treating founders like the intelligent operators they are.</p>
+    </div>
+
+    <div class="voice-card">
+      <p class="voice-label">The Hero Line</p>
+      <p class="voice-example">"Where hospitality founders find their voice."</p>
+      <p class="voice-note">Simple. Specific. No superlatives, no "empowering" language. It describes what happens here — not what we think of ourselves.</p>
+    </div>
+
+    <div class="voice-card">
+      <p class="voice-label">Section Labels</p>
+      <p class="voice-example">"Founders. Stories. Platform."</p>
+      <p class="voice-note">Single nouns, no filler. Navigation and section headings are declarative — never questions, never sales copy.</p>
+    </div>
+
+    <div class="voice-card">
+      <p class="voice-label">CTA Copy</p>
+      <p class="voice-example">"Start a conversation."</p>
+      <p class="voice-note">Avoids "Sign up", "Subscribe", "Get started". Every action feels like an invitation, not a form submission.</p>
+    </div>
+
+    <div class="voice-card">
+      <p class="voice-label">Episode / Content Title</p>
+      <p class="voice-example">"Tunde Wey on feeding the neighbourhood."</p>
+      <p class="voice-note">Name first — the founder is the subject. The concept follows. No clickbait, no "You won't believe…" The work earns the click.</p>
+    </div>
+
+    <div class="voice-card">
+      <p class="voice-label">About / Mission Line</p>
+      <p class="voice-example">"Built for the people who run the room."</p>
+      <p class="voice-note">Insider language that hospitality people recognise. Signals specialist knowledge, not consumer positioning.</p>
+    </div>
+
+  </div>
+
+  <!-- Do / Don't: copy -->
+  <div class="do-dont-grid fade-in">
+    <div class="do-card">
+      <p class="do-card-header">✓&nbsp; Write</p>
+      <ul class="do-dont-list">
+        <li>Short. Declarative. Present tense.</li>
+        <li>Industry-literate — use real hospitality terms (concept, covers, front-of-house)</li>
+        <li>Name the founder early — people, not products</li>
+        <li>One clear idea per sentence</li>
+        <li>Active voice throughout</li>
+      </ul>
+    </div>
+    <div class="dont-card">
+      <p class="dont-card-header">×&nbsp; Avoid</p>
+      <ul class="do-dont-list">
+        <li>"Empowering", "elevating", "unlocking potential"</li>
+        <li>Exclamation marks</li>
+        <li>Passive constructions ("Stories are told here")</li>
+        <li>Jargon from outside the industry (KPIs, synergy, ecosystem)</li>
+        <li>Generic food metaphors ("feast your eyes", "a taste of…")</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════ 07 DIGITAL APPLICATION ═══════════ -->
+<section id="digital">
+<div class="container">
+  <p class="section-label"><span class="section-num">07 /</span> Digital Applications</p>
+
+  <!-- Motion -->
+  <p style="font-size:var(--text-sm);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--cream);margin-bottom:var(--space-6);">Motion Spec</p>
+
+  <div class="motion-grid fade-in" style="margin-bottom:var(--space-16);">
+    <div class="motion-card">
+      <p class="motion-card-title">Standard Easing</p>
+      <p class="motion-card-val">cubic-bezier(0.16, 1, 0.3, 1)</p>
+      <p class="motion-card-desc">The golden curve. Used for all interactive hover/focus transitions. Fast out, slow settle. Feels intentional, never bouncy.</p>
+    </div>
+    <div class="motion-card">
+      <p class="motion-card-title">Duration — Micro</p>
+      <p class="motion-card-val">180ms</p>
+      <p class="motion-card-desc">Button hover states, input focus rings, badge colour shifts. Below human perception threshold for latency.</p>
+    </div>
+    <div class="motion-card">
+      <p class="motion-card-title">Duration — Element</p>
+      <p class="motion-card-val">320–400ms</p>
+      <p class="motion-card-desc">Modal opens, card expand, section reveal. Perceptible but never sluggish.</p>
+    </div>
+    <div class="motion-card">
+      <p class="motion-card-title">Scroll Reveal</p>
+      <p class="motion-card-val">opacity 0 → 1</p>
+      <p class="motion-card-desc">CSS scroll-driven animations only. Opacity reveals — no translate (prevents CLS). Content enters calmly, never dramatically.</p>
+    </div>
+    <div class="motion-card">
+      <p class="motion-card-title">Neobrutalist Hover</p>
+      <p class="motion-card-val">box-shadow offset ↑</p>
+      <p class="motion-card-desc">Primary buttons: shadow grows from 4px to 6px offset on hover, background inverts to transparent. Tactile without animation overkill.</p>
+    </div>
+    <div class="motion-card">
+      <p class="motion-card-title">Reduced Motion</p>
+      <p class="motion-card-val">prefers-reduced-motion</p>
+      <p class="motion-card-desc">All transitions collapse to 0.01ms. Static state is always the accessible fallback — the design must look complete without motion.</p>
+    </div>
+  </div>
+
+  <!-- IG grid -->
+  <p style="font-size:var(--text-sm);font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--cream);margin-bottom:var(--space-6);">Instagram Grid Spec</p>
+
+  <div style="display:grid;grid-template-columns:auto 1fr;gap:var(--space-12);align-items:start;" class="fade-in">
+
+    <div class="ig-grid">
+      <div class="ig-tile" style="background:#1a3a2a;">Video</div>
+      <div class="ig-tile" style="background:#244d37;">Quote</div>
+      <div class="ig-tile" style="background:#0f2318;">Portrait</div>
+      <div class="ig-tile" style="background:#2e5e43;">B-roll</div>
+      <div class="ig-tile" style="background:#1a3a2a;">Title card</div>
+      <div class="ig-tile" style="background:#0f2318;">Video</div>
+      <div class="ig-tile" style="background:#244d37;">Behind scenes</div>
+      <div class="ig-tile" style="background:#2e5e43;">Text graphic</div>
+      <div class="ig-tile" style="background:#1a3a2a;">Founder</div>
+    </div>
+
+    <div>
+      <p style="font-size:var(--text-xs);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--green-accent);margin-bottom:var(--space-4);">Grid Pattern: 1–2–3 rhythm</p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:var(--space-3);">
+        <li style="font-size:var(--text-sm);color:var(--cream-faint);line-height:1.55;padding-left:var(--space-5);position:relative;"><span style="position:absolute;left:0;color:var(--green-accent);">01</span> Every 3rd post is a title card — wordmark or brand message on deep green. This anchors the grid identity.</li>
+        <li style="font-size:var(--text-sm);color:var(--cream-faint);line-height:1.55;padding-left:var(--space-5);position:relative;"><span style="position:absolute;left:0;color:var(--green-accent);">02</span> Portrait / video posts: dark green or near-black background where possible, subject centred and well-lit.</li>
+        <li style="font-size:var(--text-sm);color:var(--cream-faint);line-height:1.55;padding-left:var(--space-5);position:relative;"><span style="position:absolute;left:0;color:var(--green-accent);">03</span> Text graphics: Cream type on forest green, a single editorial serif quote. No more than 2 lines of copy.</li>
+        <li style="font-size:var(--text-sm);color:var(--cream-faint);line-height:1.55;padding-left:var(--space-5);position:relative;"><span style="position:absolute;left:0;color:var(--green-accent);">04</span> Lime accent used only on CTAs and brand mark posts — never as a dominant post background.</li>
+        <li style="font-size:var(--text-sm);color:var(--cream-faint);line-height:1.55;padding-left:var(--space-5);position:relative;"><span style="position:absolute;left:0;color:var(--green-accent);">05</span> Video-first: still frame should feel like a film still, not a thumbnail. No text overlay on video unless it is the title card.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="site-footer">
+  <span class="footer-brand">talkwithflavour</span>
+  <span class="footer-note">Visual Identity Spec v1.0 · April 2026</span>
+</footer>
+
+</body>
+</html>
