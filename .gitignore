@@ -1,3 +1,155 @@
+# ============================================================
+# AI Command Centre vault — .gitignore
+# ============================================================
+# Default posture: this is a PRIVATE repository.
+# If you're taking parts public (build-in-public), scroll to the
+# PUBLIC-REPO section at the bottom and uncomment what applies.
+# ============================================================
+
+# ------------------------------------------------------------
+# OS junk
+# ------------------------------------------------------------
 .DS_Store
-.obsidian/workspace*
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ------------------------------------------------------------
+# Editor / IDE
+# ------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.#*
+
+# ------------------------------------------------------------
+# Obsidian — ignore machine-specific state, keep shared config
+# ------------------------------------------------------------
+# The .obsidian/ folder contains both shareable things (plugin
+# configs, hotkeys, themes) and machine-specific things (workspace
+# layout, cache). Ignore only the machine-specific bits so that
+# moving between laptops keeps your setup consistent.
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
 .obsidian/cache
+.obsidian/graph.json
+.obsidian/plugins/*/data.json
+.trash/
+
+# ------------------------------------------------------------
+# Claude Code
+# ------------------------------------------------------------
+# Keep .claude/commands/ committed (the slash commands are part of
+# the system). Ignore user-specific overrides, sessions, and logs.
+.claude/settings.local.json
+.claude/sessions/
+.claude/*.log
+.claude/*.cache
+
+# ------------------------------------------------------------
+# Secrets & env files
+# ------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# ------------------------------------------------------------
+# Large media — use external storage or Git LFS, never raw git
+# ------------------------------------------------------------
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.avi
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xd
+assets/raw/
+assets/_staging/
+
+# ------------------------------------------------------------
+# Temporary files
+# ------------------------------------------------------------
+*.tmp
+*.temp
+*.bak
+*.backup
+.~lock.*
+
+# ------------------------------------------------------------
+# Private scratch space — never committed
+# ------------------------------------------------------------
+# Safety valves for anything that doesn't belong in a scene's
+# Notes section but you want to keep around locally.
+notes/
+scratchpad/
+private/
+_private/
+
+# Any file suffixed with _private.md or .private.md is ignored
+# everywhere in the vault. Useful for private variants of shared files.
+**/*_private.md
+**/*.private.md
+
+# Git cannot ignore partial file content. If a scene's Notes section
+# contains confidential material, either move it to /private/ or
+# prefix the filename with _ to keep it local (see below).
+
+# ============================================================
+# PUBLIC-REPO ADDITIONS
+# ============================================================
+# UNCOMMENT the lines below if you're making this a public,
+# build-in-public repository. Without these ignores, you'd be
+# publishing client-confidential material, personal relationships,
+# and strategic work across multiple campaigns.
+# ============================================================
+
+# --- Client work (Talk with Flavour scene, Nathan's character file) ---
+# Nathan hasn't consented to having his wound/want/need sheet public.
+characters/nathan.md
+characters/restaurant-owner-archetype.md
+campaigns/command-centre/chapters/*/scenes/02-talk-with-flavour-*.md
+artifacts/*/02-talk-with-flavour-*.md
+
+# --- Personal relationships ---
+# Yuri's character file is deliberately under-drafted because her
+# interior isn't yours to publish, even in skeleton form.
+characters/yuri.md
+
+# --- Sibling campaigns (keep only command-centre public) ---
+# The command-centre campaign is the public playthrough. The others
+# are strategic work that shouldn't leak to a public repo unless you
+# consciously decide they should.
+campaigns/yurika/
+campaigns/the-guild/
+campaigns/agency/
+
+# --- In-progress scenes (convention-based) ---
+# Git can't filter by YAML frontmatter status, but a convention works:
+# prefix in-progress scene filenames with _ (e.g. _03-dacakegasm.md),
+# then rename on conclude. The pattern below ignores underscored files.
+# **/_*.md
+
+# ============================================================
+# Future additions
+# ============================================================
+# If you add scripts or code to the vault later (e.g. a Python tool
+# for bulk operations on scene files), extend this file accordingly:
+__pycache__/
+*.pyc
+node_modules/
+dist/
+build/
