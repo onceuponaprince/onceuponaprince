@@ -76,11 +76,17 @@ Because the landing is the gate. Because the founder has declared commercial int
 
 ### Moment-by-moment capture
 
-- [ ] Scene opened, Set Stage signed off.
+- [x] Scene opened, Set Stage signed off (2026-04-21).
+- [x] `[[resource-curator]]` archetype drafted and committed — the Chapter 2b hero now has a character file with wound/want/need/weakness + five product-decision constraints.
+- [x] Landing design spec drafted at `docs/superpowers/specs/2026-04-21-study-buddy-landing-design.md` while founder works the ai-swarm bootstraps in parallel. Covers: (1) four founder-gated decisions (domain, product name, waitlist infra, visual register) with recommendations, (2) seven-section component architecture inheriting Misled's shape, (3) full landing copy Resource-Curator-facing in editorial register, (4) voice notes for Chapter 2b as a whole, (5) build sequence for the BorAI session when Prince is next available.
+- Recommendation staked on domain: `studybuddy.page` primary, `studybuddy.xyz` fallback. Recommendation staked on visual register: Instrument Serif + Cabinet Grotesk + deep-green accent (`#1F4028` family) — shares zero register with Misled's Y2K gold, reads scholarly rather than startup-y.
+- **What the orchestrator cannot do alone:** purchase the domain, create the Supabase project, verify the Resend sending domain, link the Vercel project, extend `apps/study-buddy/` inside BorAI with the landing route. These items gate scene close and are queued for a BorAI session.
 
 ### What's changing?
 
-- 
+- The chapter now has its hero as a character file, not only as a catalogue description. Future Chapter 2b scenes can reference `[[resource-curator]]` as an authoritative constraint source.
+- The landing's visual register is named — editorial, scholarly, deep-green accent, no Y2K inheritance. This is the first Chapter 2b design decision; it will shape the Scene 2b-02 MVP UI too.
+- The product's public brand is committed as *Study Buddy* (two words) with `studybuddy.page` as the recommended URL. Working name, not final — sharpens only if signals come back unfavourable.
 
 ---
 
