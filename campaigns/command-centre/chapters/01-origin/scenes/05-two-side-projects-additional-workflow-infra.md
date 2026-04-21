@@ -9,6 +9,9 @@ date_concluded: 2026-04-21
 characters:
   - "[[prince]]"
 artifact_format: thread, essay
+artifact_file:
+  - "[[05-orchestration-shape-inverted-thread]]"
+  - "[[05-vault-as-user-data]]"
 tags:
   - side-project
   - infra

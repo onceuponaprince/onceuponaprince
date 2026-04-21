@@ -10,7 +10,9 @@ characters:
   - "[[misled-founder]]"
   - "[[misled-audience-archetype]]"
 artifact_format: thread, essay
-artifact_file: 
+artifact_file:
+  - "[[04-smoke-test-the-url-thread]]"
+  - "[[04-the-backend-the-frontend-invented]]"
 tags:
   - client-work
   - landing-page

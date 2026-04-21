@@ -31,8 +31,8 @@ Tests the campaign thesis in its weakest form: can one human do this with discip
 - [x] **[[01-onboarding-yourself]]** — Campaign Book written. *Concluded. Artifact: [[01-build-should-feel-like-play]].*
 - [x] **[[02-talk-with-flavour-landing-page]]** — First paid-client deliverable through the scene structure. Preview URL shipped on Vercel; BorAI monorepo bootstrapped along the way. *Concluded. Artifact: [[02-three-failed-deploys]].*
 - [x] **[[03-talk-with-flavour-client-feedback]]** — First real feedback loop on the method. Nathan's V1 review triggers a category shift (videographer → media platform); V2 preview ships. *Concluded. Artifact: [[03-when-the-clients-corrections-become-the-product]].*
-- [x] **[[04-misled-ethos-page]]** — Second client deliverable. Misled — London skate + streetwear movement brand. Stage 1 of a three-stage launch (ethos → tease → pre-order). *Concluded. Artifact: pending (thread + essay).*
-- [x] **[[05-two-side-projects-additional-workflow-infra]]** — Two personal-infra side-projects (ai-swarm-infra, study-buddy) catalogued into BorAI; both polished and committed on feature branches; study-platform spec with four weighed architectures and a behavioural decision framework delivered. *Concluded. Artifact: pending.*
+- [x] **[[04-misled-ethos-page]]** — Second client deliverable. Misled — London skate + streetwear movement brand. Stage 1 of a three-stage launch (ethos → tease → pre-order). *Concluded. Artifacts: [[04-smoke-test-the-url-thread]], [[04-the-backend-the-frontend-invented]].*
+- [x] **[[05-two-side-projects-additional-workflow-infra]]** — Two personal-infra side-projects (ai-swarm-infra, study-buddy) catalogued into BorAI; both polished and committed on feature branches; study-platform spec with four weighed architectures and a behavioural decision framework delivered. *Concluded. Artifacts: [[05-orchestration-shape-inverted-thread]], [[05-vault-as-user-data]].*
 - [ ] **06 — Chapter 1 close** — Weekly synthesis.
 
 ## Climax
