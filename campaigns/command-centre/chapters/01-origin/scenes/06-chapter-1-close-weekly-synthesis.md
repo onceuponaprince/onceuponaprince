@@ -3,14 +3,14 @@ campaign: "[[command-centre]]"
 chapter: "01-origin"
 scene: 06
 title: "Chapter 1 close — weekly synthesis"
-status: in-progress
+status: concluded
 date_opened: 2026-04-21
-date_concluded: 
+date_concluded: 2026-04-21
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
 artifact_format: essay
-artifact_file: 
+artifact_file: "[[06-play-produced-the-narrative]]"
 tags:
   - chapter-close
   - weekly-synthesis
@@ -86,22 +86,45 @@ Because 2a and 2b would absorb attention the moment they open. Closing Chapter 1
 
 ## Conclude
 
-*Filled at end of session.*
-
 ### How is now different from the start?
+
+At the start: five concluded scenes, four artifact drafts on disk, an implicit argument for the method unspoken. Now: the argument named. Chapter 1 is an argument that the scene structure holds under paid-client pressure (02, 03, 04), absorbs substantive correction (03 category shift), catches operational failure as narrative material (02 green page, 04 deploy-URL mismatch), absorbs internal-infra work when the exception is named (05), and produces publishable artifacts as a by-product rather than a separate task. The chapter ends as chapter, not as five essays.
 
 ### What are the consequences?
 
+- Chapter 2 opens on a closed Chapter 1, not an open one. Chapters 2a and 2b inherit five proof points rather than five open scenes.
+- The pattern for every future chapter close is named: mechanical synthesis from stored Conclude blocks, short session, essay as climax artifact. The webapp's *end-of-week as chapter-publishing* trial later has a shape to match.
+- The method's commercial weight is visible. Two paying clients' work ran through it without breakage. Future client pitching can cite this chapter as method, not as anecdote.
+- The *play produces narrative* loop is validated at vault level across five scenes. At external-publication level it is validated across three of five (01, 02, 03 shipped; 04 and 05 drafted, not yet posted). That gap is Chapter 2's handover, not Chapter 1's.
+- The happiness + existential beats named in Set Stage are the frame Chapter 2 operates against, not rhetorical flourish. A solo operator shipping at this tempo is the concrete referent; the economy being redrawn is the background the chapter ships against.
+
 ### What did we learn?
+
+The scene structure survives contact with paid clients' briefs (02), paid clients' corrections (03), new verticals (04), internal-infra exceptions (05), and its own chapter-close synthesis (06).
+
+Friction is content. The three failed deploys of 02, the category miscall of 03, the deploy-URL mismatch of 04, the intent-logged-as-action capture of 05 — none were smoothed. Each became an artifact beat. The method's load-bearing aesthetic commitment is honesty, not polish.
+
+Voice is architecture (Scene 03): run the stylistic rule first, not last. Aesthetic is load-bearing (Scene 04): it is not decoration, it is a statement of position the audience reads every word for. Precedents in young projects set by accident (Scene 05): the scene structure catches them before they set silently.
+
+The method absorbs orchestration-shape inversion (Scene 05): plan → execute → review can flip mid-scene to review → synthesise → narrate if the capture is corrected honestly rather than the frame defended.
+
+AI orchestration collapses what was designed as a week of work into much less calendar time. What stayed solo-founder-hard: the taste, the voice, the decisions about what the work is. What multiplied: the hands.
 
 ### Progress to thesis
 
+Yes, with the caveats named in Scenes 02 and 05. The *play produces narrative* loop runs at vault level across five scenes. The external-publish step does not yet auto-close; Chapter 2's webapp is where that gap closes. The thesis held as manual proof. The method's productisation is what Chapter 2a sets out to test.
+
 ### Progress to goal
+
+Chapter 1's arc was *insight to manual proof on real client work.* The proof arrived. Two clients (Talk with Flavour, Misled) shipped preview URLs. One absorbed a category correction (TWF V2). One internal-infra exception catalogued honestly and named (Scene 05). Four artifacts drafted; three shipped externally; two drafted, not yet posted. The chapter closes as argument, not as link.
 
 ### Next scene
 
+Two parallel. Chapter 2 opens in a branching split: [[01-ai-swarm-hello-world]] in [[02a-systems-and-tools]] and [[01-study-buddy-waitlist-landing]] in [[02b-products-that-sell]]. Chapter 3 opens after whichever branch closes first; the other continues on its own timeline.
+
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+
+**Essay.** Title: *Play produced the narrative.* Artifact: [[06-play-produced-the-narrative]].
 
 ---
 
