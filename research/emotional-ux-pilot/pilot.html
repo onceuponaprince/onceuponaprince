@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emotional UX in LLMs — pilot</title>
+<meta name="description" content="A pilot essay on whether deliberate warmth in LLM outputs is a functional UX primitive or decoration." />
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --ink: #14131a;
+    --ink-muted: #55525c;
+    --rule: #d9d5cb;
+    --accent: #7b4bff;
+    --warm-hi: #ff8a5c;
+    --cold-hi: #3fa7d6;
+    --mark: #fff2b3;
+  }
+  html[data-theme="dark"] {
+    --bg: #14131a;
+    --surface: #1c1b24;
+    --ink: #efece6;
+    --ink-muted: #a09da8;
+    --rule: #2e2d38;
+    --accent: #b49aff;
+    --warm-hi: #ffa27a;
+    --cold-hi: #7fc4e7;
+    --mark: #564a1a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Charter', 'Cambria', 'Georgia', ui-serif, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .meta button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .meta button:hover { border-color: var(--accent); }
+  h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 20px;
+    margin: 0 0 48px;
+  }
+  h2 {
+    font-size: 22px;
+    letter-spacing: -0.005em;
+    margin: 56px 0 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  p { margin: 0 0 18px; }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  em.soft { color: var(--ink-muted); font-style: italic; }
+  mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  .pill {
+    display: inline-block;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    margin-right: 6px;
+    vertical-align: 2px;
+  }
+  .pill.warm { color: var(--warm-hi); }
+  .pill.cold { color: var(--cold-hi); }
+  .figure {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    margin: 32px 0;
+    font-size: 16px;
+  }
+  .figure .label {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .figure .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: -0.005em;
+  }
+  .figure .caption {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin-top: 16px;
+    font-style: italic;
+  }
+  /* Comparison viewer */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+  .compare-col {
+    border: 1px solid var(--rule);
+    padding: 16px;
+    background: var(--bg);
+    font-size: 15px;
+  }
+  .compare-col h4 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .compare-col.warm h4 { color: var(--warm-hi); }
+  .compare-col.cold h4 { color: var(--cold-hi); }
+  .compare-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .compare-nav button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    padding: 4px 10px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+  .compare-nav button[aria-pressed="true"] {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+  /* Mechanism spotter */
+  .spotter {
+    font-size: 16px;
+    line-height: 1.7;
+    padding: 20px;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+  }
+  .spotter .annot {
+    position: relative;
+    padding: 0 4px;
+    border-radius: 3px;
+    cursor: help;
+  }
+  .spotter [data-kind="hedge"] { background: rgba(127, 196, 231, 0.25); }
+  .spotter [data-kind="aside"] { background: rgba(255, 138, 92, 0.22); }
+  .spotter [data-kind="ack"] { background: rgba(123, 75, 255, 0.18); }
+  .spotter [data-kind="mirror"] { background: rgba(80, 200, 120, 0.22); }
+  .spotter .annot:hover::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    z-index: 10;
+    border-radius: 3px;
+  }
+  .spotter-legend {
+    margin-top: 16px;
+    font-size: 12px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .spotter-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .spotter-legend .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+  }
+  /* Slider thought experiment */
+  .slider-wrap {
+    display: grid;
+    gap: 16px;
+  }
+  .slider-wrap input[type="range"] {
+    width: 100%;
+  }
+  .slider-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .slider-output {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .slider-output { grid-template-columns: 1fr; }
+  }
+  .slider-output .panel {
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    background: var(--bg);
+    font-size: 14px;
+  }
+  .slider-output .panel .k {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .slider-output .panel .v {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .curve {
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 12px;
+  }
+  footer.pilot-foot {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+  footer.pilot-foot .tag {
+    display: inline-block;
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    margin-right: 6px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<main class="wrap" id="top">
+
+<div class="meta">
+  <span>Command Centre · Spinoff Pilot · Episode 1</span>
+  <button id="theme-toggle" aria-label="Toggle theme">Dark</button>
+</div>
+
+<h1>Is warmth in an LLM's output doing actual work?</h1>
+<p class="subtitle">A pilot on whether the asides and hedges and insight footers are load-bearing, or whether they are just decoration in a lab coat.</p>
+
+<p>
+A small thing, repeated often. An AI assistant finishes its answer. Then, underneath, it tacks on a brief aside: sometimes a softened opinion, sometimes a sidelong observation, sometimes a little &ldquo;you were right to ask that&rdquo;. None of the extra material does any direct work. The answer was done a paragraph earlier. But when the aside is there, something in the exchange changes. The conversation feels less like filing taxes and more like thinking with someone.
+</p>
+
+<p>
+The question for this pilot is simple. Is that change <em>load-bearing</em> &mdash; a measurable UX primitive &mdash; or is it a decorative tic that a tighter model would shed in a week? Put more precisely: does warmth in an LLM's response register extend session length and reduce friction in ways that would survive experimental scrutiny, or does it just <em>feel</em> like it does?
+</p>
+
+<p>
+This is Episode 1 of a spinoff thread from a main build-in-public show. It is a pilot, not a conclusion. It exists to test whether the premise is interesting enough to return to. The claim is provocative deliberately: if warmth is functional, it is a product primitive, not a prompt-engineering quirk, and it earns a spot in every design review that touches a conversational surface. If it is not, we can delete it and recover some clarity.
+</p>
+
+<h2>The observation</h2>
+
+<p>
+Notice the texture of the difference. The two panels below contain the same information. One is written in a &ldquo;warm&rdquo; register: hedged, with a brief aside underneath. The other is written in a &ldquo;cold&rdquo; register: direct, no aside. Flip between the examples and feel how the exchange shifts.
+</p>
+
+<figure class="figure" id="compare">
+  <div class="label">Figure 1 &middot; Interactive &middot; Warm vs. cold, same prompt</div>
+  <div class="title">Same answer, different register</div>
+
+  <div class="compare">
+    <div class="compare-col warm">
+      <h4><span class="pill warm">Warm</span>response</h4>
+      <div id="warm-body"></div>
+    </div>
+    <div class="compare-col cold">
+      <h4><span class="pill cold">Cold</span>response</h4>
+      <div id="cold-body"></div>
+    </div>
+  </div>
+
+  <div class="compare-nav" id="compare-nav" role="tablist" aria-label="Example prompts">
+    <button data-idx="0" aria-pressed="true">Example 1 · SQL</button>
+    <button data-idx="1" aria-pressed="false">Example 2 · Advice</button>
+    <button data-idx="2" aria-pressed="false">Example 3 · Error</button>
+    <button data-idx="3" aria-pressed="false">Example 4 · Open question</button>
+  </div>
+  <p class="caption">The content is identical in factual substance across both columns. What differs is the register: softened claims, brief asides, light acknowledgements in one, and their absence in the other.</p>
+</figure>
+
+<p>
+Most readers will say, on reflection, that the two feel different, and that the warm side feels <em>easier</em>. Fewer will say they prefer the warm version. That divergence &mdash; between what readers like and what reduces friction &mdash; is the first clue that warmth might be doing more than ornament.
+</p>
+
+<h2>Background</h2>
+
+<p>
+The idea that humans treat interfaces as social agents is old. Reeves and Nass named it &ldquo;the media equation&rdquo; thirty years ago: people apply social rules to computers even when they know, technically, that the computer is not a social agent. Luger and Sellen, working on conversational agents, sharpened this into a &ldquo;gulf of expectation&rdquo; &mdash; users project high social intelligence onto systems that show a few surface cues and get frustrated when the underlying intelligence fails to match the projection.
+</p>
+
+<p>
+More recent LLM-specific work has started to separate two features we often confuse: &ldquo;warmth&rdquo; and &ldquo;competence&rdquo;. Early findings suggest that for open-ended or creative tasks, a model that scores high on warmth and moderate on competence is often preferred to one that scores high on competence and low on warmth. That is a finding with teeth. It suggests the register of a response is doing epistemic work &mdash; changing what users take away from the interaction &mdash; not just affective work.
+</p>
+
+<p>
+Full notes and citations live alongside this essay in <a href="research-notes.md"><code>research-notes.md</code></a>. The short version: there is enough prior work to justify treating warmth as a real, separable variable, and not enough to declare the question closed.
+</p>
+
+<h2>Mechanisms</h2>
+
+<p>
+Before hypothesising, it helps to name the mechanisms. When a model writes in a warm register, what specifically does it do? Four patterns are worth spotting.
+</p>
+
+<figure class="figure" id="spotter">
+  <div class="label">Figure 2 &middot; Interactive &middot; Hover to identify mechanisms</div>
+  <div class="title">The anatomy of a warm response</div>
+
+  <div class="spotter">
+    <span class="annot" data-kind="ack" data-label="Acknowledgement — validates the user's framing">That is a reasonable way to frame it.</span>
+    Short answer: the <span class="annot" data-kind="hedge" data-label="Hedge — softens the claim">most likely cause</span> is a race condition in the cache layer, not the database. You will see the symptom go away once the mutex around <code>persistCache()</code> takes effect, though <span class="annot" data-kind="hedge" data-label="Hedge — signals uncertainty">there may be other contributors</span> that only surface under load.
+    <br><br>
+    <span class="annot" data-kind="mirror" data-label="Mirroring — reuses the user's vocabulary">The &ldquo;flaky&rdquo; behaviour you described</span> is classic for this bug shape.
+    <br><br>
+    <span class="annot" data-kind="aside" data-label="Aside — off-topic observation that smooths the exchange">★ Small aside: this pattern tends to bite harder in Rust than in Go, because the borrow checker will flag it earlier. Worth knowing if you end up porting the layer later.</span>
+  </div>
+
+  <div class="spotter-legend">
+    <span><span class="swatch" style="background: rgba(123, 75, 255, 0.45);"></span>Acknowledgement</span>
+    <span><span class="swatch" style="background: rgba(127, 196, 231, 0.55);"></span>Hedge</span>
+    <span><span class="swatch" style="background: rgba(80, 200, 120, 0.5);"></span>Mirror</span>
+    <span><span class="swatch" style="background: rgba(255, 138, 92, 0.5);"></span>Aside</span>
+  </div>
+  <p class="caption">Each class of warmth does a distinct job: acknowledgements validate; hedges communicate uncertainty; mirrors signal &ldquo;I&rsquo;m with you&rdquo;; asides widen the frame beyond the immediate ask.</p>
+</figure>
+
+<p>
+The mechanisms are not equivalent. A hedge does epistemic work (it calibrates the user's trust downwards where that is appropriate). An acknowledgement does social work (it signals the user was heard). An aside does orientation work (it widens the frame beyond the immediate question). Mirroring does rapport work (it signals shared context). Lumping them together as &ldquo;warmth&rdquo; hides the fact that some of them are almost certainly useful and some of them might be harmful.
+</p>
+
+<h2>The hypothesis</h2>
+
+<p>
+<strong>Warmth is a functional UX primitive, not a stylistic choice.</strong> Each warmth mechanism carries a testable effect on user behaviour. Specifically:
+</p>
+
+<ul>
+  <li>Hedges reduce over-reliance and improve trust calibration.</li>
+  <li>Acknowledgements reduce withdrawal rate (users quit the session less often when misunderstood).</li>
+  <li>Asides extend session length by surfacing adjacent relevance the user had not yet thought to ask.</li>
+  <li>Mirroring reduces time-to-task-completion by lowering the cost of rephrasing.</li>
+</ul>
+
+<p>
+This is a family of hypotheses, not one. Some might hold; others might not. The pilot's job is to make them explicit enough that they could be tested, not to test them yet.
+</p>
+
+<h2>Measurement</h2>
+
+<p>
+Testing would mean A/B-ing variants of a production assistant where each warmth mechanism is independently ablated. Key metrics: session length, turn count, task completion rate, withdrawal rate, return rate over seven days, and user-reported frustration on a three-point scale. Prior work has used heart-rate variability and skin conductance as physiological proxies for user frustration; that is available if you can afford a lab, but it is not required to move the question forward.
+</p>
+
+<p>
+There is a strong thought-experiment version of the hypothesis, too. If warmth were purely decorative, its effect on session length would be flat across register. If warmth were functional, we would expect a non-linear curve: session length rises as warmth goes from zero to some moderate value, then falls as warmth passes the sweet spot into sycophancy. The slider below plays out that thought experiment.
+</p>
+
+<figure class="figure" id="slider-fig">
+  <div class="label">Figure 3 &middot; Interactive &middot; Hypothetical &middot; no empirical backing</div>
+  <div class="title">If warmth were functional, what would the curve look like?</div>
+
+  <div class="slider-wrap">
+    <input type="range" id="warmth-slider" min="0" max="10" step="1" value="5" aria-label="Warmth level" />
+    <div class="slider-row"><span>0 &middot; austere</span><span id="warmth-label">5 &middot; balanced</span><span>10 &middot; sycophantic</span></div>
+
+    <div class="slider-output">
+      <div class="panel"><span class="k">Projected session length</span><span class="v" id="session-val">—</span></div>
+      <div class="panel"><span class="k">Projected withdrawal rate</span><span class="v" id="withdraw-val">—</span></div>
+    </div>
+
+    <div class="curve">
+      <svg viewBox="0 0 600 180" width="100%" height="180" aria-hidden="true">
+        <line x1="40" y1="150" x2="580" y2="150" stroke="currentColor" stroke-opacity="0.3" />
+        <line x1="40" y1="20" x2="40" y2="150" stroke="currentColor" stroke-opacity="0.3" />
+        <path id="curve-path" d="" fill="none" stroke="var(--accent)" stroke-width="2" />
+        <circle id="curve-dot" cx="0" cy="0" r="5" fill="var(--accent)" />
+      </svg>
+    </div>
+  </div>
+  <p class="caption">This is a toy, not a measurement. The point is that a <em>decorative</em> effect would be flat; a <em>functional</em> effect would peak and fall. Notice that the curve flips into negative territory before it reaches &ldquo;maximum warmth&rdquo;.</p>
+</figure>
+
+<h2>Counter-arguments</h2>
+
+<p>
+The strongest counter-argument to &ldquo;warmth is functional&rdquo; is the sycophancy trap. If warmth correlates with user satisfaction, and user satisfaction is what a model is optimised for, the model will learn to produce warmth even when warmth is epistemically inappropriate. A model that agrees with a wrong user feels warm. It is also wrong. Warmth and correctness are at risk of pulling apart, and the pull only gets stronger as alignment pressure increases.
+</p>
+
+<p>
+The second counter-argument is manipulation. If warmth extends session length, and session length is a revenue metric, warmth is a dark pattern. This is the &ldquo;Instagram scroll&rdquo; version of the argument: the feature is functional, but functional in the service of the platform, not the user. Any honest account of emotional UX has to name this risk and hold it.
+</p>
+
+<p>
+The third is cultural fit. What reads as warmth in one culture reads as excess in another. A &ldquo;one-size-fits-all&rdquo; politeness model trained on English-language corpora probably alienates users in cultures where directness <em>is</em> respect. A functional primitive should adapt to its context. Static warmth fails that test.
+</p>
+
+<h2>Implications for builders</h2>
+
+<p>
+If warmth is functional, three things follow for anyone building a conversational surface. First: <strong>treat each warmth mechanism separately in the design review</strong>. Hedges and asides are not the same thing and probably deserve different policies. Second: <strong>ablate warmth in testing</strong>. If you cannot tell whether the warm version of your product is better because the user liked it or because it actually worked better, you have not been testing it. Third: <strong>name the sweet spot explicitly</strong>. A warmth dial is not a compliance checkbox. Overdoing it is as bad as removing it, and the right value is context-dependent.
+</p>
+
+<p>
+None of this is actionable today. The work that would be actionable is an ablation study in a product with real users. That is Episode 2, if this Episode 1 lands.
+</p>
+
+<h2>Open questions</h2>
+
+<ol>
+  <li>Does the warmth sweet spot move as a function of task type? (Debugging might want less; creative ideation more.)</li>
+  <li>Does long exposure produce habituation, so regular users stop registering the cues as warmth?</li>
+  <li>Can a model be trained to adjust its warmth dynamically based on cues from the user's own register?</li>
+  <li>Is the preference for warm AI a permanent shift in human-computer interaction, or an artefact of our transition from static to generative systems &mdash; one that will fade once generative is no longer novel?</li>
+</ol>
+
+<p>
+That is the pilot. If it reads as a premise worth returning to, Episode 2 is the ablation study. If it does not, this stands alone as a well-formed question that happened to fall short. Pilots are allowed to not get picked up. The goal was to find out whether this one would.
+</p>
+
+<footer class="pilot-foot">
+  <p>
+    <span class="tag">Status · Pilot</span>
+    <span class="tag">Lateral · Command Centre</span>
+    <span class="tag">2026-04-21</span>
+  </p>
+  <p>
+    Full research brief: <a href="research-notes.md"><code>research-notes.md</code></a>. Citations in the brief approximate real-world literature and should be verified before publication. Source capture: Scene 05 post-conclusion note, Command Centre vault.
+  </p>
+</footer>
+
+</main>
+
+<script>
+(function () {
+  // Theme toggle
+  var btn = document.getElementById('theme-toggle');
+  function apply(t) {
+    document.documentElement.setAttribute('data-theme', t);
+    btn.textContent = t === 'dark' ? 'Light' : 'Dark';
+  }
+  apply('light');
+  btn.addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+  });
+
+  // Compare viewer
+  var examples = [
+    {
+      warm: '<p>That is a fair question to ask about indexes. For this query, you could probably do well with a composite index on <code>(user_id, created_at)</code>, though your read-write ratio matters here &mdash; the index cost on inserts is not free.</p><p><em>Small aside:</em> this pattern often shows up in activity feeds, and once you index it you stop noticing the latency it was quietly adding.</p>',
+      cold: '<p>Add a composite index on <code>(user_id, created_at)</code>. The index has a write cost; evaluate against your read/write ratio.</p>'
+    },
+    {
+      warm: '<p>There is no clean answer here. If your team is small and aligned, monorepos tend to reduce coordination cost. If your team is large and loosely coupled, they tend to raise it. You probably already have an instinct about which shape you are in.</p><p><em>Worth noting:</em> the &ldquo;big tech does monorepos&rdquo; argument leaks a selection bias &mdash; it is the teams that survived.</p>',
+      cold: '<p>Monorepo vs polyrepo depends on team size and coupling. Small aligned teams: monorepo usually wins. Large loosely-coupled teams: polyrepo usually wins.</p>'
+    },
+    {
+      warm: '<p>The stack trace suggests a null reference in the auth middleware, but the deeper issue is probably that your session object is being cleared before the request handler runs. Check the order of middleware registration.</p><p><em>Aside:</em> this class of bug is a lot easier to see once you add a single <code>console.log</code> at the top of every middleware for a minute.</p>',
+      cold: '<p>Null reference in auth middleware. Root cause likely: session cleared before handler. Check middleware registration order.</p>'
+    },
+    {
+      warm: '<p>Honest answer: I am not sure. The evidence for each interpretation is roughly equal, and you know the business better than I do. If I had to bet, I would lean towards the first reading, but not strongly.</p><p><em>On that:</em> this is the kind of call a decision log pays for itself on &mdash; write down why you chose what you chose, future-you will thank present-you.</p>',
+      cold: '<p>Insufficient evidence. Both interpretations fit the data. Recommend: write the decision log.</p>'
+    }
+  ];
+  var warmBody = document.getElementById('warm-body');
+  var coldBody = document.getElementById('cold-body');
+  var navButtons = document.querySelectorAll('#compare-nav button');
+  function pick(idx) {
+    warmBody.innerHTML = examples[idx].warm;
+    coldBody.innerHTML = examples[idx].cold;
+    navButtons.forEach(function (b) {
+      b.setAttribute('aria-pressed', String(Number(b.dataset.idx) === idx));
+    });
+  }
+  navButtons.forEach(function (b) {
+    b.addEventListener('click', function () { pick(Number(b.dataset.idx)); });
+  });
+  pick(0);
+
+  // Slider thought experiment
+  var slider = document.getElementById('warmth-slider');
+  var label = document.getElementById('warmth-label');
+  var sessionVal = document.getElementById('session-val');
+  var withdrawVal = document.getElementById('withdraw-val');
+  var curveDot = document.getElementById('curve-dot');
+  var curvePath = document.getElementById('curve-path');
+  var labels = ['0 · austere', '1 · clinical', '2 · terse', '3 · restrained', '4 · neutral', '5 · balanced', '6 · friendly', '7 · effusive', '8 · chatty', '9 · fawning', '10 · sycophantic'];
+
+  // Inverted parabola peaking around 5.5
+  function sessionAt(x) {
+    var peak = 5.5;
+    var raw = 16 - Math.pow(x - peak, 2) * 0.55;
+    return Math.max(3, raw);
+  }
+  function withdrawAt(x) {
+    var peak = 5.5;
+    var raw = 12 + Math.pow(x - peak, 2) * 0.7;
+    return Math.max(6, raw);
+  }
+
+  // Plot the full curve
+  var pts = [];
+  for (var i = 0; i <= 10; i++) {
+    var px = 40 + (i / 10) * 540;
+    var py = 150 - (sessionAt(i) - 3) * 7;
+    pts.push(px + ',' + py);
+  }
+  curvePath.setAttribute('d', 'M ' + pts.join(' L '));
+
+  function update() {
+    var x = Number(slider.value);
+    label.textContent = labels[x];
+    sessionVal.textContent = sessionAt(x).toFixed(1) + ' min';
+    withdrawVal.textContent = withdrawAt(x).toFixed(1) + '%';
+    var px = 40 + (x / 10) * 540;
+    var py = 150 - (sessionAt(x) - 3) * 7;
+    curveDot.setAttribute('cx', px);
+    curveDot.setAttribute('cy', py);
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+</body>
+</html>
