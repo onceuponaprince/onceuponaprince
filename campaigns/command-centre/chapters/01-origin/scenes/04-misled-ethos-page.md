@@ -3,13 +3,13 @@ campaign: "[[command-centre]]"
 chapter: "01-origin"
 scene: 04
 title: "misled ethos page"
-status: in-progress
+status: concluded
 date_opened: 2026-04-20
-date_concluded: 
+date_concluded: 2026-04-21
 characters:
   - "[[misled-founder]]"
   - "[[misled-audience-archetype]]"
-artifact_format: 
+artifact_format: thread, essay
 artifact_file: 
 tags:
   - client-work
@@ -100,21 +100,33 @@ Task 1 — scaffold `apps/misled` in BorAI with Next.js 15 + Tailwind, local dev
 
 ## Conclude
 
-*Filled at end of session.*
-
 ### How is now different from the start?
+
+We started with a PDF brief and a hollow shell. The site was a `coming soon` placeholder with no pulse. Now: it is a functional engine. Supabase is live. The Resend double-opt-in flow handles confirmations through a custom API route and an inline Y2K-styled email template. The scanlines, the typography, the Win95 chrome are all in sync with a backend that will actually accept and remember a user. `https://misled.vercel.app/` serves the ethos page publicly, and the client has a URL that reads like a final product, not a mock.
 
 ### What are the consequences?
 
+The client has a preview URL that feels like a final product. The infrastructure is self-cleaning: a Vercel Cron job purges unconfirmed subscriber rows every seven days. A pre-push hook guards against the trivial lint errors that previously burned build cycles. The production-branch retarget landed as a dashboard flip, not a git merge, and a deployment promotion closed the loop — no feature-branch-to-main merge needed to ship Task 7. The rule stays intact: `feature/misled-ethos-page` remains the live source; `main` is configuration only. Stage 2 of the three-stage launch (ethos → tease → pre-order) has a foundation to build on.
+
 ### What did we learn?
+
+Defaults are dangerous. The Vercel production branch did not align with momentum: it had to be named and chosen. A pretty interface is no shield for sloppy devops: documentation and hooks are the only things that stop play from turning into mess. The load-bearing lesson is simpler still: smoke-test the URL you plan to send, not the URL you assume to be serving. A twenty-second curl earlier in the session would have caught the deploy mismatch before the backend work began. The handoff's `preview_url: https://misled.vercel.app/` had been true once; state drifts, and a plan is only as good as its most recently-verified assumption.
 
 ### Progress to thesis
 
+Build should feel like play. Play should write the story. The play was the typographic and aesthetic stack: Anton, Press Start 2P, VT323, the vaporwave horizon lifted from Maxime Heckel, scanlines layered on CRT. The story is the resulting system: an opinionated surface that now persists real users, sends real emails, and cleans up after itself. The aesthetic shaped the architecture. The backend exists only to support the world the frontend invented.
+
 ### Progress to goal
+
+Chapter 1's goal is *from insight to manual proof on real client work*. Scene 04 was always the one that had to carry the proof: the client work, shipped, end-to-end. That is what this session delivered. Not theory, not internal infra: a live site for a paying client, with a working subscriber flow and a distinctive voice. The preview URL is the evidence. Mobile check passed on a real phone. The remaining work (register the domain on client sign-off, send the message, publish the artifact) is downstream of the proof, not part of it.
 
 ### Next scene
 
+**[[06-chapter-1-close-weekly-synthesis]]** — Chapter 1's final scene. Weekly synthesis, stepping back from individual client work to notice what the method produced in the round. Scene 05 (two side-projects) already concluded earlier this session. The branch for Misled can merge into the main narrative on Prince's decision; it does not require its own scene.
+
 ### Artifact format
+
+**Thread + essay.** The thread compresses the five-beat arc of the session and lands on the deploy-mismatch lesson — a clean, shareable lesson that travels alone. The essay takes the longer arc: why 'build should feel like play' showed up literally in this scene, why the Y2K choice was load-bearing rather than decorative, and why the most honest lesson (smoke-test the URL you intend to send) is not advice anyone wants to learn the hard way.
 *Thread / newsletter / video / essay / none.*
 
 ---
