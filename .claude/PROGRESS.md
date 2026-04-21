@@ -1,39 +1,10 @@
-# Session handoff — 2026-04-21 close
+# Session handoff — 2026-04-21 two-task-force dispatch close
 
 Read BEFORE the standard session-open ritual or immediately after. This is the queue of cross-scene work that the ritual (which lands on the active in-progress scene) will not surface on its own.
 
 ## TL;DR
 
-Scene 05 concluded 2026-04-21. Chapter 1 in-progress. Scene 04 (Misled) is the next scene to progress. Three queued items from Scene 05 should happen in-flight alongside Scene 04.
-
-## Queued from Scene 05
-
-### 1. Thread artifact draft
-
-- **Goal:** compressed, punchy, build-in-public thread for Twitter/X. Five-beat cadence (matches Scenes 02 and 03).
-- **Source:** Conclude block of `[[05-two-side-projects-additional-workflow-infra]]`. NOT the catalogue source files directly.
-- **Hook:** open with the orchestration-shape inversion (plan → execute → review flipped to review → synthesise → narrate mid-scene). Land on the decision framework as a shareable artefact in its own right.
-- **Save to:** `/artifacts/01-origin/05-two-side-projects-additional-workflow-infra-thread.md` (confirm slug against prior scene artifacts; Scene 03's artifact was `03-when-the-clients-corrections-become-the-product`).
-- **Delegate:** Gemini. Voice polish pass may be needed (Gemini defaults to mildly American register; enforce British English + de-corporatise in the prompt).
-
-### 2. Essay artifact draft
-
-- **Goal:** long-arc, reflective essay for Prince's blog.
-- **Source:** Conclude block + `05-source-ai-swarm-infra-catalogue.md` + `05-source-study-buddy-catalogue.md` (both scene-adjacent in the scenes directory).
-- **Hook:** runtime-import (vault as user data, not system data) as an architectural commitment more interesting than it appears. ai-swarm-infra's honest scaffold-state used as counterweight: not everything in `ops/` has to run yet.
-- **Save to:** `/artifacts/01-origin/05-two-side-projects-additional-workflow-infra-essay.md`.
-- **Delegate:** Gemini.
-
-### 3. Vercel CI regression — talk-with-flavour on main
-
-- **Issue:** `talk-with-flavour` Vercel deploy fails on `main` after Scene 05's study-buddy merge. `misled` was already failing pre-Scene-05 (Scene 04 WIP).
-- **Likely cause:** `apps/study-buddy/package.json` declares `next`, `react`, `react-dom`, `typescript`, `@types/*` as dependencies but they are not installed (Chapter 1 constraint). `pnpm install` at workspace root fails; cascades into sibling deploys.
-- **Production impact:** existing deployments stay live (Vercel does not auto-rollback on failure). New deploys break until fixed.
-- **Fix options:**
-    - (a) Install study-buddy's runtime deps. Crosses Chapter 1's "no webapp build" constraint. NOT recommended.
-    - (b) Add `apps/study-buddy/vercel.json` with `ignoreCommand: "exit 0"` so Vercel skips this app's deploy until it is ready. RECOMMENDED. ~10 min.
-    - (c) Move problematic deps into `devDependencies`. Weaker fix; may still fail.
-    - (d) Add `apps/study-buddy` to the Vercel dashboard "Ignored Build Step" list. UI-only; no repo trace.
+Two-task-force dispatch executed 2026-04-21 — Misled Phase 5 backend shipped, ai-swarm-infra runnable with 3 bootstrap tutorials, emotional-UX spinoff pilot landed. Scene 04 still in-progress — seals when Prince sends the client message. Three human-only items outstanding (preview URL, mobile check, worker bootstraps).
 
 ## State snapshot
 
@@ -41,36 +12,67 @@ Scene 05 concluded 2026-04-21. Chapter 1 in-progress. Scene 04 (Misled) is the n
 
 - Active campaign: `[[command-centre]]`
 - Active chapter: `[[01-origin]]`
+- Active scene: `[[04-misled-ethos-page]]` (status: in-progress; Phase 5 backend shipped this session; Conclude draft awaiting Prince's edit)
 - Last concluded scene: `[[05-two-side-projects-additional-workflow-infra]]` (2026-04-21)
-- In-progress scene: `[[04-misled-ethos-page]]`
-- Chapter finale: Scene 06 (Chapter 1 close, weekly synthesis) after Scene 04 lands
+- Chapter finale: Scene 06 (weekly synthesis) after Misled seals
 
-### BorAI repo (separate repo: github.com/onceuponaprince/borai.cc)
+### BorAI repo (github.com/onceuponaprince/borai.cc)
 
-- `main` at `35cc0a8` (post-Scene-05 merges)
-- Feature branches `feature/ai-swarm-infra` and `feature/study-buddy`: merged via `gh pr merge --merge --delete-branch`
-- Remaining local branch: `feature/misled-ethos-page` (pushed earlier this session)
-- Merge commits preserving parallel-track graph on main: PR #1 (`ace243b`) and PR #2 (`35cc0a8`)
+- `main` at `58d2095` (pre-push hook added)
+- `feature/misled-ethos-page` pushed at `02b7bc2` — Phase 5 backend (Supabase + Resend + cron) + earlier Tasks 1–6. Live preview on feature-branch URL; `misled.vercel.app` production still shows placeholder from main.
+- `feature/ai-swarm-infra-impl` pushed at `e5a9715` — new branch off main. Full Python implementation + 3 bootstrap tutorials. Ready for PR against main.
+
+## Queued items
+
+### 1. Misled preview URL + smoke-test rerun
+
+- `https://misled.vercel.app/` is production = main = placeholder. Feature branch has its own Vercel-generated preview URL.
+- Need from Prince: paste the preview URL, or retarget Vercel production branch (dashboard flip, not a git merge).
+- Orchestrator then re-runs smoke test against the correct URL + fills `{{PREVIEW_URL}}` in the client message draft.
+
+### 2. Mobile viewport check (375px)
+
+- On a real phone. Win95 chrome + floating sticker overlap are tight at that width.
+- Cannot be delegated.
+
+### 3. Client message send + Scene 04 seal
+
+- Draft at `docs/handoffs/2026-04-21-misled-client-message-draft.md`.
+- Scene 04 Conclude draft at `docs/handoffs/2026-04-21-misled-scene-04-conclude-draft.md`. Prince edits, merges into scene, flips `status: concluded`.
+
+### 4. Worker-node bootstraps
+
+- Three tutorials under `ops/ai-swarm-infra/bootstrap/`.
+- Run on Ryzen 7535HS (Windows Coder), 2019 MBP (macOS Reviewer), this Linux box (orchestrator host).
+- After that: `uv run python main.py "..."` closes the end-to-end swarm loop.
+
+### 5. Emotional-UX pilot verification
+
+- Open `research/emotional-ux-pilot/pilot.html` in a browser.
+- Decide: Episode 2 (ablation study in a real product) or shelve.
+
+### 6. Deferred: `misled.london` domain registration
+
+- No action until Prince explicitly says go.
 
 ## Tooling state (for delegate-agent)
 
-- **Cursor CLI (`agent`):** AUTHED. Available for multi-file edits.
-- **Gemini CLI:** AUTHED. Available for synthesis and long-context work.
-- **Grok (xAI API):** UNAVAILABLE — team credits exhausted at session start. Web search fallback worked. Check whether credits were topped up.
-- **Copilot CLI:** available (not used this session).
-- **gh (GitHub CLI):** snap-packaged; prefix `GIT_CONFIG_NOSYSTEM=1` before any gh command that internally calls git (hits `/etc/gitconfig` permission issue otherwise).
+- **Gemini CLI:** AUTHED. Rate-limited under parallel load (2 max recommended on free tier).
+- **Copilot CLI:** AUTHED. `-p --deny-tool=shell --deny-tool=write` pattern works cleanly.
+- **Cursor CLI (`cursor-agent`):** AUTHED but unused this session — displaced by Copilot + direct orchestrator writes for this job's shape.
+- **Grok (xAI API):** UNAVAILABLE — team credits exhausted at Scene 05 start. Status not re-checked this session.
 
 ## Session close rituals performed
 
-- Scene 05 Conclude block written, signed off, saved
-- Frontmatter flipped: `status: concluded`, `date_concluded: 2026-04-21`, `artifact_format: thread, essay`
-- Chapter 01-origin checklist updated (Scene 05 done; Scene 06 close slot added)
-- Scene 05 Gemini catalogue outputs preserved as scene-adjacent source files (see `05-source-*.md`)
-- Both BorAI PRs merged; branches deleted; main synced
-- This handoff written and committed
+- Scene 04 Moment-by-moment updated with Phase 5 backend shipment, deploy mismatch, and session-close analysis request
+- Session close handoff written at `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`, extended with token usage / memory leakage / scope refinement / 7-of-10 delegation rating
+- Scene 05 post-conclusion captures committed
+- Spec + plan + pilot + all Tier 3 drafts committed to vault
+- Both feature branches pushed to origin
+- This PROGRESS.md updated for the next session
 
-## Session close rituals NOT performed (deliberate; queued above)
+## Session close rituals NOT performed (deliberate)
 
-- Thread artifact draft
-- Essay artifact draft
-- Vercel CI regression fix
+- Scene 04 Conclude block not merged into scene file (awaiting Prince's edit of the draft)
+- Scene 04 `status: concluded` flip not applied (awaits Prince sending the client message)
+- PR for `feature/ai-swarm-infra-impl` not opened (recommend opening only after Prince has run at least one end-to-end swarm validation)

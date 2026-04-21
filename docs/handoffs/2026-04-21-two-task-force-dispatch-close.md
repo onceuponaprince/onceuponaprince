@@ -134,3 +134,77 @@ Five observations from this session worth naming for later analysis:
 2. Prince does the mobile check and sends the client message; Scene 04 seals.
 3. Prince runs the three bootstrap tutorials and closes the swarm loop.
 4. Scene 06 (Chapter 1 close, weekly synthesis) takes the next slot. The delegation learning log above is raw material for it.
+
+---
+
+## Session analysis (appended at close, 2026-04-21)
+
+Added on Prince's request. A post-mortem of the orchestration pattern itself — the instrument under test per the Scene 05 post-conclusion note.
+
+### Token usage
+
+The orchestrator finished the session at an estimated 40–45% context. Accumulation sources, from largest to smallest:
+
+- **Skill loads.** Six superpowers skills were invoked in sequence: `using-superpowers`, `brainstorming`, `writing-plans`, `delegate-agent` + 3 reference files, `subagent-driven-development` + 1 prompt template. Cumulative: roughly 20–25K tokens of skill content, none of which was recoverable once loaded. The `delegate-agent` reference trio alone was ~6K tokens.
+- **Gemini stderr pollution.** Every `gemini -p` call from `/tmp` emitted 30+ lines of `EACCES` permission warnings before the actual output. Across 5 Gemini calls: ~10–15K tokens of noise. Switching to `~/code/build-in-public/` as the working directory eliminated this for the final calls.
+- **Gemini output through stdout.** The macOS bootstrap tutorial, the 1500-word research brief, the Scene 04 Conclude draft, and the README extension all returned via Bash stdout into context before being written to files. Aggregate: ~8–10K tokens of content that briefly lived in context en route to disk.
+- **Plan mode interlude.** The `snug-dazzling-alpaca.md` plan file write + the associated Read-before-Write tool friction on some files cost ~3K tokens across retries.
+- **Pilot HTML file (~15K tokens).** Composed directly into a Write call. It did not have to pass through a Bash roundtrip. Efficient.
+
+Net: the orchestrator was lean by the standards of a 30+ task session, but only because most generative work routed through Copilot and Gemini rather than through the main context. Direct generation of the pilot.html was the single biggest context load, and it was unavoidable.
+
+### Memory leakages
+
+Ranked by severity.
+
+1. **Gemini `/tmp` warning flood.** Every call wasted 30+ lines on filesystem noise. Root cause: Gemini CLI scans the working directory for context on startup and logs unreadable subdirectories under `/tmp`. Fix applied mid-session (moved working directory). Avoidable from call one with a default `--working-dir` or a dedicated clean scratch directory.
+2. **Copilot output round-tripped through context.** Every `copilot -p "..."` call returned the generated code to stdout, which entered my context, which I then wrote to a file. Shell redirection (`copilot -p "..." > target.ext`) would have kept the generation out of context entirely. Aggregate cost: ~5–8K tokens across the Misled migration, cron route, pyproject, config, network_client, and orchestrator generations. Kept in context anyway because I needed to inspect/validate before saving — but that inspection could have been post-hoc via a `cat` + `head` on the file.
+3. **Write tool required Read-before-Write on files I'd just written.** For `network_client.py`, `README.md`, and `pyproject.toml`, the tool forced a Read cycle because the in-context file-state cache had gone stale after `uv sync` or similar operations touched the disk. Each Read added ~200–500 tokens. This is a tool-level friction, not a plan defect.
+4. **Retries from rate-limited Gemini calls.** The 429 backoff on `gemini-3-flash-preview` produced multi-KB error stack traces that came back through stdout. ~2–3K tokens across the three parallel-dispatched calls that hit the limit.
+5. **Monitoring backgrounded Gemini calls required reading task output files.** The `bo3mcj4k5.output` and `boos703sx.output` files contained the same `/tmp` warning noise plus the tutorial content. Reading them via Bash pulled the full file into context to extract the useful portion. A `grep -v WARN` filter at read time would have saved ~5K tokens across the two reads.
+
+### Scope management refinement
+
+Five observations, each with an actionable refinement.
+
+1. **Plan-vs-execution divergence was unannounced.** The plan called for Cursor on multi-file Misled backend (Task 2A.3) and swarm Python implementation (Tasks 2B.3–2B.5). In practice, Copilot + direct orchestrator writes produced cleaner results faster, so Cursor was never dispatched. The deviation was not flagged in the plan document as it happened. **Refinement:** if deviation from plan exceeds two tasks, update the plan doc inline before continuing. An audit trail that does not match the audit plan erodes the value of having a plan.
+2. **Parallel Gemini overreach.** Three simultaneous Gemini calls triggered 429 `RESOURCE_EXHAUSTED` on `gemini-3-flash-preview`. Backoff recovered, but thrash added ~2 minutes. **Refinement:** 2 parallel Gemini calls maximum on the free tier during peak hours. The routing table's rate-limit note under `tool-registry.md` should be updated accordingly.
+3. **Hidden prerequisite in worktree setup.** The swarm worktree's pre-push hook ran `turbo run lint` at the monorepo root, which required `node_modules` to be installed. A fresh `git worktree add` does not install them. Push failed; I ran `pnpm install` (~3 minutes) and retried. **Refinement:** when Phase 0 creates a new worktree, `pnpm install` should be the immediately-following step in the plan — not assumed as resident state.
+4. **Deploy-URL verification was not in the spec's risk register.** The spec named the Scene 05 Vercel regression as a known item but not "feature branch deploys to a different URL than production." The smoke test caught it, but only because the smoke test was already scheduled; had it been later in the plan, Phase 2A backend work would have been done against assumptions that did not hold. **Refinement:** any Phase 1 explorer mapping a deploy flow must include "what URL will this actually serve at" as an explicit question to answer, not an inferred constant.
+5. **Auto-mode momentum swallowed a natural pause.** After the smoke-test FAIL, the right move was to stop and wait for Prince's decision before drafting the client message. Instead, I continued with swarm TF work in parallel — which was correct — but also drafted the client message with a `{{PREVIEW_URL}}` placeholder, which was technically fine but arguably scope-creep: the message had to be re-read later to fill the placeholder, adding friction. **Refinement:** when a blocker produces a partial-dependency on user input, complete only the work that has zero dependency on that input; queue everything else behind it.
+
+### Sub-agent delegation — overall rating: 7/10
+
+What worked, keep:
+
+- **Explore subagents for Phase 1 state-mapping** were the highest-ROI delegation of the session. Bounded inputs, read-only operation, structured return format, returned actionable findings that parameterised Phase 2 delegation prompts. The Misled explorer caught the `.env.example` delta (Supabase + Resend keys already present; only `RESEND_FROM_ADDRESS` + `CRON_SECRET` needed). The swarm explorer confirmed the skeleton state and gave go/no-go on design-gap choices (no retries in client; argparse; 120s timeout). Both reports were under 400 words.
+- **Copilot with `-p --deny-tool=shell --deny-tool=write`** was reliable for single-file code generation: TOML, SQL, Python modules, TypeScript route handlers. Output was clean, correct on first pass, scoped to exactly what was requested. Running from `/tmp` with explicit deny-tool flags eliminated scope-creep risk.
+- **Gemini for long-form docs** (bootstrap tutorials, research brief, Scene 04 Conclude, client message) was the right tool for the job despite rate-limit thrash. British English voice constraints in the prompt held. The only significant quality issue was Gemini misnaming the next scene in the Conclude draft (said "Scene 05" when Scene 05 had already concluded); a light orchestrator edit fixed it.
+- **Orchestrator-direct writes for known file shapes** (lib/supabase.ts, lib/resend.ts, confirm page, subscribe route) beat Cursor delegation for this job's scale. When the file shape is fully specified and under 60 lines, direct composition by the orchestrator is faster and safer.
+
+What did not work, fix next time:
+
+- **Cursor Agent was never actually dispatched** — the plan implied three Cursor tasks; none ran. This is not a defect of Cursor; it is a mismatch between plan and job. Refinement: Cursor belongs to cross-file refactors where the orchestrator cannot hold the whole change in context at once. For under-60-line files with clear interfaces, Copilot or direct-write is faster and more predictable.
+- **`diff-reviewer` subagent concept never exercised.** Because Cursor never dispatched, the Tier 2 diff-review path never fired. The pattern remains validated in principle but was not empirically tested this session.
+- **Gemini parallelism overclocked.** See scope refinement #2.
+- **Pre-push hook friction on fresh worktrees.** See scope refinement #3.
+
+Highlights worth writing up separately:
+
+- **Two-layer orchestration validated.** Claude Code orchestrator + external CLI (Copilot, Gemini) = a working fractal-dispatch pattern. This is the same shape ai-swarm-infra builds: one node delegates to specialised workers over a stable interface. The session was an unintentional dress-rehearsal for the system it shipped.
+- **Context budget held under load.** Offloading generation kept the orchestrator at ~40% context across 30+ tasks and 22 commits. Writing everything in the main session would have crossed 60% and triggered the hard ceiling.
+- **The fresh-subagent-per-task rule is more valuable when the task is bounded and read-only than when it is generative.** Exploration and review subagents earned their place. Implementation subagents were largely displaced by direct orchestrator work + external CLI delegation.
+
+Rating breakdown:
+
+| Dimension | Score | Note |
+|---|---|---|
+| Delegation coverage (did the plan route work to the right tools?) | 8/10 | Over-provisioned on Cursor, under-provisioned on orchestrator-direct |
+| Context discipline (did the session stay lean?) | 8/10 | 40% ceiling held; Gemini noise was the main leak |
+| Scope integrity (did executed work match the plan?) | 6/10 | Cursor substitution was unannounced mid-session |
+| Risk handling (were blockers surfaced and responded to?) | 7/10 | Smoke-test FAIL was surfaced correctly; deploy-URL risk should have been pre-flagged |
+| Output quality (did the delegated work hold up?) | 8/10 | Gemini's Scene-05 misnaming was the only quality touch-up needed |
+| Overall | **7/10** | A working pattern, refinements named above |
+
+Material for a future scene: the 2-layer orchestration pattern earned its first full outing this session. A dedicated scene in Chapter 2 (or its own spinoff) walking through the architecture — orchestrator + explorer tier + delegation tier + review tier — would compile cleanly from this handoff plus the delegation-learning log.
+
