@@ -1,19 +1,19 @@
 ---
 title: Misled — client message draft
 date: 2026-04-21
-status: awaiting Prince's pass + preview URL
+status: awaiting Prince's voice pass
 ---
 
 # Client message draft
 
-Replace `{{PREVIEW_URL}}` with the correct feature-branch preview URL before sending. If the Vercel production branch gets retargeted to `feature/misled-ethos-page`, the URL can simply be `https://misled.vercel.app/`.
+URL resolved: production branch retargeted to `feature/misled-ethos-page` and latest deployment promoted. `https://misled.vercel.app/` now serves the Y2K ethos page (smoke-test pass recorded in `2026-04-21-misled-smoke-test.md`, Pass 4).
 
 ---
 
 ```text
 Ethos preview is live:
 
-{{PREVIEW_URL}}
+https://misled.vercel.app/
 
 The layout organises the manifesto within Windows 95 dialogs: vaporwave hero, CRT scanlines, tech rave aesthetic.
 
