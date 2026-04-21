@@ -1,0 +1,438 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MISLED.LONDON :: SIGNAL ACQUIRED</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Anton&family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* === Y2K-Misled tokens — Rave/Tech, brand-overridden ============== */
+    :root {
+      --y2k-acid-gold: #FFB800;
+      --y2k-acid-soft: #FFD166;
+      --y2k-holo-pink: #FF71CE;
+      --y2k-cyber-cyan: #01CDFE;
+      --y2k-astral-violet: #B967FF;
+      --y2k-blood: #FF003C;
+      --y2k-void-black: #0D0015;
+      --y2k-void-deep: #050008;
+      --y2k-purple-dark: #1A0033;
+      --y2k-chrome: #C8C8D4;
+      --y2k-chrome-light: #FFFFFF;
+      --y2k-chrome-dark: #4A4A55;
+      --y2k-white-dim: #E0DAEC;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      background: var(--y2k-void-black, #0D0015);
+      color: var(--y2k-white-dim, #E0DAEC);
+      font-family: 'Verdana', 'Trebuchet MS', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* === Site-wide CRT scanlines ====================================== */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 60;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0,
+        transparent 2px,
+        rgba(0,0,0,0.18) 2px,
+        rgba(0,0,0,0.30) 3px
+      );
+      mix-blend-mode: multiply;
+    }
+
+    /* === Top toolbar — Win95 chrome =================================== */
+    .toolbar {
+      background: var(--y2k-chrome, #C8C8D4);
+      border-bottom: 2px solid var(--y2k-chrome-dark, #4A4A55);
+      box-shadow: inset 2px 2px 0 #FFFFFF, inset -2px -2px 0 #4A4A55;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 50;
+    }
+    .toolbar-left { display: flex; align-items: center; gap: 12px; }
+    .toolbar-sigil {
+      width: 28px; height: 28px;
+      border: 1px solid var(--y2k-chrome-dark, #4A4A55);
+      background: #000;
+      display: inline-block;
+      box-shadow: inset 1px 1px 0 #4A4A55, inset -1px -1px 0 #FFFFFF;
+    }
+    .toolbar-nav { display: flex; gap: 2px; }
+    .toolbar-btn {
+      background: var(--y2k-chrome, #C8C8D4);
+      border: none;
+      box-shadow: inset 2px 2px 0 #FFFFFF, inset -2px -2px 0 #4A4A55;
+      color: #000;
+      font-family: 'Space Mono', 'Courier New', monospace;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .toolbar-btn:hover {
+      box-shadow: inset 2px 2px 0 #4A4A55, inset -2px -2px 0 #FFFFFF;
+    }
+    .toolbar-counter {
+      background: #000;
+      color: var(--y2k-acid-gold, #FFB800);
+      font-family: 'VT323', 'Space Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 2px;
+      padding: 2px 8px;
+      box-shadow: inset 2px 2px 0 #4A4A55, inset -2px -2px 0 #FFFFFF, 0 0 8px rgba(255,184,0,0.6);
+    }
+
+    /* === Hero — vaporwave horizon ==================================== */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      overflow: hidden;
+      background: linear-gradient(180deg,
+        #87CEEB 0%, #FFB6C1 35%, #B967FF 65%, #1A0033 90%, #0D0015 100%
+      );
+    }
+    /* Sun shape */
+    .hero-sun {
+      position: absolute;
+      bottom: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #FFD166 0%, #FF71CE 45%, #B967FF 75%, transparent 100%);
+      filter: blur(2px);
+      opacity: 0.95;
+    }
+    /* Perspective grid floor */
+    .hero-floor {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 50%;
+      background-image:
+        linear-gradient(to right, rgba(1,205,254,0.55) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(1,205,254,0.55) 1px, transparent 1px);
+      background-size: 64px 64px;
+      transform: perspective(800px) rotateX(60deg);
+      transform-origin: top center;
+      animation: y2k-perspective-pan 4s linear infinite;
+    }
+    @keyframes y2k-perspective-pan {
+      from { background-position: 0 0; }
+      to { background-position: 0 64px; }
+    }
+    /* Hero centre stack */
+    .hero-stack {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    .hero-eyebrow {
+      font-family: 'Press Start 2P', 'VT323', monospace;
+      font-size: 10px;
+      color: var(--y2k-acid-gold, #FFB800);
+      text-shadow: 0 0 6px #FFB800;
+      letter-spacing: 3px;
+      margin-bottom: 24px;
+      animation: y2k-blink 2s linear infinite;
+    }
+    .hero-sigil {
+      width: 140px; height: 140px;
+      filter: drop-shadow(0 0 24px rgba(255,184,0,0.55));
+      margin-bottom: 24px;
+    }
+    .hero-headline {
+      font-family: 'Anton', 'Impact', sans-serif;
+      font-size: 88px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 0.95;
+      color: #FFFFFF;
+      text-shadow: 4px 4px 0 #FF71CE, 8px 8px 0 #B967FF;
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      color: rgba(255,255,255,0.9);
+      max-width: 480px;
+      margin: 0 auto 24px;
+    }
+    .hero-status {
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      color: var(--y2k-cyber-cyan, #01CDFE);
+      letter-spacing: 2px;
+    }
+
+    /* === Marquee ====================================================== */
+    .marquee {
+      background: #000;
+      border-top: 2px solid var(--y2k-acid-gold, #FFB800);
+      border-bottom: 2px solid var(--y2k-acid-gold, #FFB800);
+      overflow: hidden;
+      padding: 8px 0;
+      position: relative;
+      z-index: 40;
+    }
+    .marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      font-family: 'VT323', 'Press Start 2P', monospace;
+      font-size: 22px;
+      color: var(--y2k-acid-gold, #FFB800);
+      letter-spacing: 4px;
+      text-shadow: 0 0 6px #FFB800;
+      animation: y2k-marquee 20s linear infinite;
+    }
+    @keyframes y2k-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* === Win95 floating panel ========================================= */
+    .panel {
+      background: var(--y2k-purple-dark, #1A0033);
+      box-shadow:
+        inset 2px 2px 0 #FFFFFF, inset -2px -2px 0 #4A4A55,
+        8px 8px 0 rgba(255,184,0,0.55);
+      max-width: 720px;
+      margin: 64px auto;
+    }
+    .panel-titlebar {
+      background: var(--y2k-acid-gold, #FFB800);
+      color: #0D0015;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Press Start 2P', 'VT323', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .panel-controls { display: flex; gap: 4px; }
+    .panel-control {
+      width: 22px; height: 18px;
+      background: var(--y2k-chrome, #C8C8D4);
+      box-shadow: inset 1px 1px 0 #FFFFFF, inset -1px -1px 0 #4A4A55;
+      color: #0D0015;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel-body {
+      padding: 32px;
+      background: var(--y2k-void-black, #0D0015);
+      margin: 4px;
+      box-shadow: inset 2px 2px 0 #4A4A55, inset -2px -2px 0 #FFFFFF;
+    }
+    .panel-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--y2k-acid-gold, #FFB800);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .panel h2 {
+      font-family: 'Anton', 'Impact', sans-serif;
+      font-size: 40px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 1.05;
+      color: #FFFFFF;
+      margin-bottom: 24px;
+    }
+    .panel p {
+      font-family: 'Space Grotesk', 'Verdana', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--y2k-white-dim, #E0DAEC);
+      margin-bottom: 16px;
+    }
+    .panel blockquote {
+      border-left: 2px solid var(--y2k-acid-gold, #FFB800);
+      padding-left: 24px;
+      margin: 24px 0;
+    }
+    .panel blockquote p {
+      font-family: 'Anton', sans-serif;
+      font-size: 24px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      line-height: 1.1;
+    }
+
+    /* === UNDER CONSTRUCTION ornament ================================== */
+    .ornament-construction {
+      position: fixed;
+      bottom: 64px;
+      right: 32px;
+      background: var(--y2k-acid-gold, #FFB800);
+      color: #000;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      padding: 8px 16px;
+      border: 2px dashed #000;
+      transform: rotate(-5deg);
+      z-index: 70;
+      box-shadow: 4px 4px 0 var(--y2k-blood, #FF003C);
+      animation: y2k-blink 4s linear infinite;
+    }
+    @keyframes y2k-blink {
+      0%, 90%, 100% { opacity: 1; }
+      92%, 98% { opacity: 0.4; }
+    }
+
+    /* === Status bar (fixed bottom) ==================================== */
+    .status-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--y2k-chrome, #C8C8D4);
+      border-top: 2px solid #FFFFFF;
+      box-shadow: inset 0 1px 0 #FFFFFF;
+      padding: 4px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #000;
+      z-index: 80;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .status-cell {
+      box-shadow: inset 1px 1px 0 #4A4A55, inset -1px -1px 0 #FFFFFF;
+      padding: 2px 8px;
+      background: var(--y2k-chrome, #C8C8D4);
+    }
+    .status-cell .acid {
+      color: var(--y2k-acid-gold, #FFB800);
+      background: #000;
+      padding: 0 4px;
+      letter-spacing: 2px;
+    }
+    .blink-cursor {
+      display: inline-block;
+      width: 8px;
+      animation: y2k-blink 1s linear infinite;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top toolbar -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <span class="toolbar-sigil"></span>
+      <div class="toolbar-nav">
+        <button class="toolbar-btn">DECKS</button>
+        <button class="toolbar-btn">APPAREL</button>
+        <button class="toolbar-btn">ACADEMY</button>
+        <button class="toolbar-btn">CONTACT</button>
+      </div>
+    </div>
+    <div class="toolbar-counter">VISITORS // 000356.5</div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-floor"></div>
+    <div class="hero-sun"></div>
+    <div class="hero-stack">
+      <div class="hero-eyebrow">&gt; SIGNAL ACQUIRED</div>
+      <img src="../misled_sigil.png" alt="Misled sigil" class="hero-sigil">
+      <h1 class="hero-headline">DON'T BE MISLED.</h1>
+      <p class="hero-sub">A movement against the pressures pulling you off your path.</p>
+      <p class="hero-status">[ EST. LONDON // FIRST DROP INCOMING ]</p>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <span class="marquee-track">
+      MISLED &gt;&gt;&gt; WELCOME TO THE VOID &gt;&gt;&gt; EST. LONDON &gt;&gt;&gt; THE FUTURE IS YOURS &gt;&gt;&gt; DROP INCOMING &gt;&gt;&gt; NO HERD &gt;&gt;&gt;
+      MISLED &gt;&gt;&gt; WELCOME TO THE VOID &gt;&gt;&gt; EST. LONDON &gt;&gt;&gt; THE FUTURE IS YOURS &gt;&gt;&gt; DROP INCOMING &gt;&gt;&gt; NO HERD &gt;&gt;&gt;
+    </span>
+  </div>
+
+  <!-- Manifesto panel -->
+  <section class="panel">
+    <div class="panel-titlebar">
+      <span>BRAND_IDENTITY.TXT</span>
+      <div class="panel-controls">
+        <span class="panel-control">_</span>
+        <span class="panel-control">□</span>
+        <span class="panel-control">X</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <p class="panel-eyebrow">&gt; THE THESIS // 01</p>
+      <h2>Misled is more than a brand. It is a refusal.</h2>
+      <p>Young people in underrepresented communities are bombarded with pressures, algorithmic expectations, and false ideals that pull them away from who they actually are. They are misled — into chasing trends, into performing selves they didn't choose.</p>
+      <p>Most skate and streetwear brands in London don't stand for the people wearing them. They sell to the herd. We don't.</p>
+      <blockquote>
+        <p>Our apparel and skateboards aren't just products. They are symbols of resistance against conformity.</p>
+      </blockquote>
+      <p>Every deck we craft and every hoodie we produce holds the same line: a positive, supportive, authentic community of young people who proudly stand against the pressures that seek to mislead them.</p>
+    </div>
+  </section>
+
+  <!-- Tease -->
+  <section class="panel">
+    <div class="panel-titlebar" style="background: #FF71CE;">
+      <span>DROP_INCOMING.EXE</span>
+      <div class="panel-controls">
+        <span class="panel-control">_</span>
+        <span class="panel-control">□</span>
+        <span class="panel-control">X</span>
+      </div>
+    </div>
+    <div class="panel-body" style="text-align: center;">
+      <p class="panel-eyebrow">&gt; STATUS: COMING</p>
+      <h2>Decks. Hoodies. Something worth putting on.</h2>
+      <p>Limited first drop, London-made. Sign up to see it before anyone else.</p>
+      <p style="font-family: 'VT323', monospace; font-size: 16px; color: #8A78A8; letter-spacing: 2px; margin-top: 24px;">[ AWAITING SIGNAL // PRESS ANY KEY<span class="blink-cursor">_</span>]</p>
+    </div>
+  </section>
+
+  <!-- Floating UNDER CONSTRUCTION -->
+  <div class="ornament-construction">⚠ UNDER CONSTRUCTION ⚠</div>
+
+  <!-- Status bar (fixed bottom) -->
+  <div class="status-bar">
+    <span class="status-cell">© 2026 MISLED</span>
+    <span class="status-cell">LAST UPDATED // 04.21.2026</span>
+    <span class="status-cell"><span class="acid">VISITORS // 000356.5</span></span>
+    <span class="status-cell">BEST VIEWED // 1024×768<span class="blink-cursor">_</span></span>
+  </div>
+
+</body>
+</html>
