@@ -1240,7 +1240,177 @@ Orchestrator outputs a structured presentation with file paths + one-line contex
 
 Already covered in Task 2B.9 commit. If Prince rejects any tutorial, rollback that specific file + re-delegate with correction notes.
 
-### Task 3.5: Write session close handoff
+### Task 3.5: Write session close handoff (deferred until Phase 4 lands)
+
+Moved to after Phase 4 so the handoff captures the pilot too.
+
+---
+
+# Phase 4: Spinoff pilot — Emotional UX in LLMs
+
+Runs sequentially after Phase 2A and Phase 2B are green. Framed as a pilot episode for a potential spinoff research series. Deliverable is a hybrid artifact: long-form essay + embedded interactive playground, in a single self-contained HTML file.
+
+## Why after Phase 2 and not in parallel
+
+Parallelism has a cost: coordination overhead, context pressure, attention fragmentation. The pilot is research-heavy (Gemini-dominant) but the artifact is a designed object that benefits from focused, unbroken attention. Sequencing it after the main dispatch gives it that.
+
+## Location
+
+New folder in the vault: `~/code/build-in-public/research/emotional-ux-pilot/`
+
+## File structure
+
+```
+research/emotional-ux-pilot/
+├── README.md              # meta: what this pilot is, how to read it, status
+├── research-notes.md      # raw research output from Gemini (the reading list)
+└── pilot.html             # the dynamic artifact — hybrid essay + interactive demo
+```
+
+Three files only. Pilot discipline.
+
+### Task 4.1: Deep research brief (Gemini Tier 3)
+
+**Files:**
+- Create: `~/code/build-in-public/research/emotional-ux-pilot/research-notes.md`
+
+- [ ] **Step 1: Dispatch Gemini for research**
+
+```bash
+gemini -p "$(cat <<'EOF'
+Produce a research brief on emotional UX quirks deliberately baked into large language model outputs. Focus on the hypothesis that 'warmth' in an LLM's response register is functional rather than decorative: that asides, off-topic insight footers, hedging, and politeness markers act as measurable UX primitives which extend session length and reduce friction.
+
+The brief must cover:
+
+1. Prior work on anthropomorphism in interactive systems (Reeves and Nass 'The Media Equation', Luger and Sellen's work on conversational agents, anything relevant from HCI 2015–2026).
+
+2. Recent (2024–2026) research specifically on LLM interaction quality: any studies on politeness, sycophancy, trust calibration, interaction length, user perception of warmth. Include citations.
+
+3. Observable mechanisms in current-generation LLM outputs (ChatGPT, Claude, Gemini) that create the warmth effect: aside boxes, em-dashes, hedged opinions, insight footers, 'you're right to ask...' style acknowledgements.
+
+4. Counter-arguments: sycophancy as a problem, false familiarity, trust mis-calibration, the difference between warmth as texture and warmth as manipulation.
+
+5. A short section on measurement: how would you actually test the hypothesis (session length, return rate, user satisfaction, task completion)? What prior studies exist?
+
+6. Three or four open questions worth pursuing.
+
+Voice: research-register, British English, no marketing speak. Use proper citations (author, year). No em-dashes. Under 1500 words. Markdown with H2 section headings.
+
+Return only the research brief body.
+EOF
+)"
+```
+
+- [ ] **Step 2: Save output**
+
+```bash
+mkdir -p ~/code/build-in-public/research/emotional-ux-pilot
+# Orchestrator writes Gemini output to research/emotional-ux-pilot/research-notes.md
+```
+
+### Task 4.2: Pilot artifact — hybrid essay + playground (orchestrator + Gemini + playground skill)
+
+**Files:**
+- Create: `~/code/build-in-public/research/emotional-ux-pilot/pilot.html`
+
+**Delegation:** Gemini drafts the essay prose; orchestrator composes the HTML using the `playground` skill pattern (self-contained single file, inline CSS + JS, no external deps).
+
+- [ ] **Step 1: Dispatch Gemini for the essay body**
+
+```bash
+RESEARCH_NOTES=$(cat ~/code/build-in-public/research/emotional-ux-pilot/research-notes.md)
+gemini -p "$(cat <<EOF
+Draft a long-form essay on 'Emotional UX in LLMs' in Prince's voice. This is the pilot episode of a potential spinoff research series under the command-centre vault. Self-contained, publishable on its own, hinting at a larger premise worth returning to.
+
+Essay structure (roughly 2000–2500 words):
+1. Opening hook — a specific moment. Prince noticed that off-topic aside boxes in a model's output 'smooth' the exchange, and wondered whether the warmth is decoration or load-bearing.
+2. The observation — what exactly feels different between a 'warm' and a 'cold' model response. Concrete examples.
+3. Background — fold in the prior-work and recent-research points from the research notes below.
+4. The hypothesis — warmth as a functional UX primitive, not stylistic choice. State it clearly.
+5. The experiment framing — how we would test this (session length, task completion, return rate). Cite prior studies that come close.
+6. Counter-arguments — sycophancy, false familiarity, the line between texture and manipulation. Honest about the risk.
+7. Implications for product builders — what to do with this if you're designing an LLM surface.
+8. Open questions — three or four, ending the essay as a pilot rather than a conclusion.
+
+Voice constraints per ~/code/build-in-public/CLAUDE.md section 'Voice guide':
+- British English, sophisticated register, specific over abstract
+- No em-dashes. Use colons, parentheses, or periods.
+- No marketing speak. Avoid: game-changer, disruptor, synergy, leverage (performative), unlock (marketingly), 'in today's fast-paced world'
+- Short declarative openings. Colons that earn their keep.
+- Name things directly. Do not hedge opinions into consensus-safe mush.
+
+Return the essay as markdown, starting with a top-level H1 title. No preamble.
+
+Research notes to draw from:
+${RESEARCH_NOTES}
+EOF
+)"
+```
+
+- [ ] **Step 2: Save essay body to a temp file**
+
+```bash
+# Orchestrator writes Gemini output to /tmp/pilot-essay.md for use in step 3
+```
+
+- [ ] **Step 3: Invoke the playground skill with hybrid spec**
+
+The orchestrator invokes `playground` to produce `pilot.html` with:
+- The essay body (from step 2) rendered as scrollable long-form prose
+- Three embedded interactive components inline in the essay flow:
+  1. **Warm vs cold comparison viewer** — a side-by-side diff UI with five pre-rendered prompt/response pairs. Same prompt, rendered in 'warm' register (asides, hedging, insight footer) and 'cold' register (direct, no asides). A toggle flips all five examples between modes.
+  2. **Mechanism spotter** — user clicks a passage of LLM output; inline annotations highlight which warmth mechanisms are present (em-dash, hedge phrase, aside box, acknowledgement, etc.). Static annotations over static text.
+  3. **Session-length thought-experiment slider** — an interactive slider labelled 'how warm?' from 0 to 10. Shows pre-rendered output pairs at each notch. Accompanied by a line chart showing hypothetical session length as a function of warmth with a peak in the middle (overdoing it is as bad as removing it).
+- Visual design: quiet, research-paper feel, high typographic contrast, readable at 70ch line width. Dark reading mode with a light toggle. No Y2K.
+
+The `playground` skill produces a single self-contained HTML file at `~/code/build-in-public/research/emotional-ux-pilot/pilot.html` — inline CSS, inline JS, no external deps beyond a system font stack.
+
+- [ ] **Step 4: Open the file locally to sanity-check**
+
+```bash
+xdg-open ~/code/build-in-public/research/emotional-ux-pilot/pilot.html || echo "open the file manually in a browser to sanity check"
+```
+
+Expected (manual verification by orchestrator): essay renders, all three interactive components work, no console errors, keyboard-navigable.
+
+### Task 4.3: README for the pilot folder
+
+**Files:**
+- Create: `~/code/build-in-public/research/emotional-ux-pilot/README.md`
+
+- [ ] **Step 1: Orchestrator writes README directly (no delegation, short)**
+
+Contents:
+- What this pilot is: framed as a spinoff pilot in the command-centre 'show'. Research thread on emotional UX in LLMs as a functional primitive. Self-contained — reads without prior context.
+- How to view it: open `pilot.html` in a browser.
+- Files: `research-notes.md` (the backing research brief), `pilot.html` (the dynamic artifact), `README.md` (this file).
+- Status: pilot. Not a commitment to a full series. If it earns its place, it becomes a campaign.
+- Relationship to command-centre: lateral. Not inside a chapter. Surfaces from Scene 05's UX research note (2026-04-21).
+- Licence and reuse notes.
+
+Under 200 words.
+
+### Task 4.4: Commit the pilot
+
+- [ ] **Step 1: Commit**
+
+```bash
+cd ~/code/build-in-public
+git add research/emotional-ux-pilot/
+git commit -m "docs(pilot): emotional UX in LLMs — spinoff pilot (research + dynamic artifact)"
+```
+
+### Task 4.5: Queue for Prince Tier 3 review
+
+Present to Prince in the final consolidated packet alongside the other Tier 3 items:
+- Path: `~/code/build-in-public/research/emotional-ux-pilot/pilot.html`
+- One-line context: "Spinoff pilot. Hybrid essay + interactive playground. Open in a browser. Lands or doesn't — if it lands it becomes a campaign."
+
+Prince decides: ship as-is, revise specific sections, or shelve for later.
+
+---
+
+### Task 3.5 (final): Write session close handoff
 
 **Files:**
 - Create: `~/code/build-in-public/docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`
