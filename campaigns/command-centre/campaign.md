@@ -81,7 +81,10 @@ it filters for founders who are ready.
 ## Chapters
 
 - **Chapter 1 — Origin.** Campaign Book written. Manual-run proof. First founding-thesis post shipped.
-- **Chapter 2 — The ritual.** Webapp MVP (Set Stage + Conclude only).
+- **[[02a-systems-and-tools|Chapter 2a — Systems and tools]].** ai-swarm-infra made operational; Grok scraper integrated into delegate-agent; Command Centre webapp MVP shipped. The infrastructure the product rests on.
+- **[[02b-products-that-sell|Chapter 2b — Products that sell]].** study-buddy from catalogue to commerce. The method's commercial proof — a narrative that sells.
 - **Chapter 3 — The watcher.** Capture layer added. Agent drafts Conclude blocks.
 - **Chapter 4 — First followers.** Waitlist opens.
 - **Chapter 5 — First player.** First external founder onboarded.
+
+Chapters 2a and 2b run concurrently. Chapter 3 opens after whichever closes first; the other continues to its own close on its own timeline.
