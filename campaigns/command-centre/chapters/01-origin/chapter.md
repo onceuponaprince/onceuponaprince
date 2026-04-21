@@ -32,7 +32,8 @@ Tests the campaign thesis in its weakest form: can one human do this with discip
 - [x] **[[02-talk-with-flavour-landing-page]]** — First paid-client deliverable through the scene structure. Preview URL shipped on Vercel; BorAI monorepo bootstrapped along the way. *Concluded. Artifact: [[02-three-failed-deploys]].*
 - [x] **[[03-talk-with-flavour-client-feedback]]** — First real feedback loop on the method. Nathan's V1 review triggers a category shift (videographer → media platform); V2 preview ships. *Concluded. Artifact: [[03-when-the-clients-corrections-become-the-product]].*
 - [ ] **[[04-misled-ethos-page]]** — Second client deliverable. Misled — London skate + streetwear movement brand. Stage 1 of a three-stage launch (ethos → tease → pre-order).
-- [ ] **05 — Chapter 1 close** — Weekly synthesis.
+- [x] **[[05-two-side-projects-additional-workflow-infra]]** — Two personal-infra side-projects (ai-swarm-infra, study-buddy) catalogued into BorAI; both polished and committed on feature branches; study-platform spec with four weighed architectures and a behavioural decision framework delivered. *Concluded. Artifact: pending.*
+- [ ] **06 — Chapter 1 close** — Weekly synthesis.
 
 ## Climax
 
