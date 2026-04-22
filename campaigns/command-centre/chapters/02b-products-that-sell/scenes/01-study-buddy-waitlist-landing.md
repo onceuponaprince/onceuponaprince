@@ -3,9 +3,9 @@ campaign: "[[command-centre]]"
 chapter: "02b-products-that-sell"
 scene: 01
 title: "study-buddy waitlist landing"
-status: in-progress
+status: concluded
 date_opened: 2026-04-21
-date_concluded: 
+date_concluded: 2026-04-22
 characters:
   - "[[prince]]"
   - "[[resource-curator]]"
@@ -18,7 +18,7 @@ blockers:
   - "BorAI apps/study-buddy/ landing route scaffold"
 supersedes:
   - "docs/superpowers/specs/2026-04-21-study-buddy-landing-design.md"
-artifact_format: 
+artifact_format: essay, thread
 artifact_file: 
 tags:
   - chapter-2b
@@ -106,22 +106,42 @@ Because the landing is the gate. Because the founder has declared commercial int
 
 ## Conclude
 
-*Filled at end of session.*
-
 ### How is now different from the start?
+
+At Set Stage: `apps/study-buddy/` scaffolded inside BorAI with parser stub and no UI; no domain, no design direction, no character file, no URL. Now: the Resource Curator has a character file; two design specs sit in the repo (the 2026-04-21 editorial-scholarly direction, superseded; the 2026-04-22 zine direction, current); the project handle is `teenyweeny.studio` with the URL doing the work of a wordmark. What has *not* changed: the landing page does not exist. No URL, no waitlist, no signal.
 
 ### What are the consequences?
 
+Chapter 2b's downstream scenes inherit the teenyweeny.studio wordmark and zine register — the MVP UI in 2b-02 and the pricing page in 2b-03 carry the same visual commitment, so those decisions don't reopen. The superseded 2026-04-21 spec becomes the first instance of the superseded-spec pattern in this vault — the two files together read as the decision itself. The external-dependency queue is now legible as `blockers:` frontmatter; the scene cannot ship to `shipped` until those land. Chapter 2b's *landing before build* rule holds the line: no Scene 2b-02 until a URL exists.
+
 ### What did we learn?
+
+Four beats, sober.
+
+1. **The deciding input was an owned asset, not a deliberation outcome.** The orchestrator produced a careful domain recommendation (studybuddy.page > studybuddy.xyz). The founder pivoted to teenyweeny.studio because he already owned it. Real work went unused. Worth naming because it shows where design authority actually lives in a solo build — the founder's asset register, not the orchestrator's analysis.
+2. **A landing page without a URL is not a landing page.** The declared deliverable was a live URL that would let the Shareability signal fire. Specs shipped instead. The instrumentation remains unfireable. The scene produced a plan to ship; it did not ship.
+3. **The zine register is cheaper to commit to than the editorial register was.** URL-as-wordmark means no logo to commission, no separate brand name to defend, no two-word mark to source fonts for. The pivot reduced Chapter 2b's design surface — though the reduction was a side-effect of the asset-ownership input, not a deliberate design call.
+4. **Superseded specs earn their keep when kept in place.** The 2026-04-21 spec, left beside the 2026-04-22, turns the pivot into a visible decision rather than a silent overwrite. Use again.
 
 ### Progress to thesis
 
+*Play should write the story.* The scene produced story — a publishable pivot with a deciding input that runs against the orchestrator's recommendation. Two specs in the repo, a register rewritten, a domain-as-brand commitment, an honest note about unused analysis. Beat material.
+
+But Chapter 2b's thesis-progress test — *does the method produce a saleable product?* — this scene cannot answer. The narrative is running ahead of the product. That is the chapter's chosen pattern; the scene honours it but also inherits its cost. No URL means no signal, which means commercial proof sits one scene further out than the chapter arc implied on paper.
+
 ### Progress to goal
+
+Seven goals declared at Set Stage: domain decided + registered, landing route extended, copy drafted, waitlist wired, preview URL live, smoke-test passing, Resource Curator archetype drafted.
+
+What landed: the archetype. Domain was decided (twice) but not registered. Copy was drafted (twice, once editorial, once zine). Landing route, waitlist wiring, preview URL, smoke-test — none. Score: 1 of 7 met. The other six need a BorAI session: the founder inside `apps/study-buddy/`, registering the domain, running the Supabase and Resend setup, linking Vercel, scaffolding the route.
 
 ### Next scene
 
+**Scene 2b-01b — ship the URL.** Founder-led BorAI session: register teenyweeny.studio, create Supabase project, verify Resend sending domain, link Vercel, scaffold landing route per the 2026-04-22 spec. The chapter's *landing before build* rule makes Scene 2b-02 (Parser + flashcard renderer) unreachable until this lands. Parallel-track work on [[02a-systems-and-tools]] remains legitimate but doesn't advance this chapter.
+
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+
+Essay (Prince's blog register), with a thread variant. The essay sits on the long beat — design authority and the deciding-input lesson. The thread compresses to the pivot and the superseded-spec pattern. Both formats carry the scene's honest shape without adding optimism.
 
 ---
 
