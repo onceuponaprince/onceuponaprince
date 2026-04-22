@@ -13,6 +13,7 @@ artifact_format:
 artifact_file: 
 tags:
   - chapter-2b
+  - teenyweeny-studio
   - study-buddy
   - landing-page
   - waitlist
@@ -81,12 +82,16 @@ Because the landing is the gate. Because the founder has declared commercial int
 - [x] Landing design spec drafted at `docs/superpowers/specs/2026-04-21-study-buddy-landing-design.md` while founder works the ai-swarm bootstraps in parallel. Covers: (1) four founder-gated decisions (domain, product name, waitlist infra, visual register) with recommendations, (2) seven-section component architecture inheriting Misled's shape, (3) full landing copy Resource-Curator-facing in editorial register, (4) voice notes for Chapter 2b as a whole, (5) build sequence for the BorAI session when Prince is next available.
 - Recommendation staked on domain: `studybuddy.page` primary, `studybuddy.xyz` fallback. Recommendation staked on visual register: Instrument Serif + Cabinet Grotesk + deep-green accent (`#1F4028` family) — shares zero register with Misled's Y2K gold, reads scholarly rather than startup-y.
 - **What the orchestrator cannot do alone:** purchase the domain, create the Supabase project, verify the Resend sending domain, link the Vercel project, extend `apps/study-buddy/` inside BorAI with the landing route. These items gate scene close and are queued for a BorAI session.
+- [x] **2026-04-22 — Project handle pivoted: `study-buddy` → `teenyweeny.studio`.** Founder directives: (1) the URL is the wordmark — no separate brand name, the domain is the brand; (2) visual register rewritten away from editorial-scholarly toward zine — monospace headers, dotted/dashed rules, photocopier grain, single bold accent; (3) palette moves off deep-green; new accent rust (`#B7410E` family) on cream surface; (4) landing copy preserved verbatim — the arguments (privacy, zero-install, distribute-under-your-own-brand) hold regardless of register; only the wordmark and product-name mentions swap; (5) rename applies forward only — Scene 05 catalogue and Chapter 1 references stay as historical *study-buddy*; (6) project still lives at `apps/study-buddy/` on `feature/study-buddy` inside BorAI for now (rename of branch + directory is a BorAI-session decision, not a vault decision).
+- [x] New design spec written at `docs/superpowers/specs/2026-04-22-teenyweeny-studio-landing-design.md`. The 2026-04-21 spec is left in place as the superseded version — a record of the editorial-scholarly direction that was considered and rejected, useful for the Conclude block's "what we learned" beat.
+- **2026-04-22 — Honest note on the deciding input.** The pivot to `teenyweeny.studio` happened because the founder already owned the domain. No creative-discovery process behind the name, no shortlist, no availability sweep. Owning it was the whole reason. Worth marking honestly because it cuts against the 2026-04-21 spec's careful *studybuddy.page recommended* reasoning — the deciding input was an existing asset, not a deliberation outcome. The orchestrator's domain analysis was real work that did not get used.
 
 ### What's changing?
 
 - The chapter now has its hero as a character file, not only as a catalogue description. Future Chapter 2b scenes can reference `[[resource-curator]]` as an authoritative constraint source.
-- The landing's visual register is named — editorial, scholarly, deep-green accent, no Y2K inheritance. This is the first Chapter 2b design decision; it will shape the Scene 2b-02 MVP UI too.
-- The product's public brand is committed as *Study Buddy* (two words) with `studybuddy.page` as the recommended URL. Working name, not final — sharpens only if signals come back unfavourable.
+- The landing's visual register is named — and then re-named. First pass: editorial, scholarly, deep-green accent. Second pass (2026-04-22): zine, monospace, rust accent, URL-as-wordmark. The pivot is itself the most interesting decision of the scene — the editorial register read like a small-press publisher; the zine register reads like a curator's own workshop. The latter sits closer to the Resource Curator's actual self-image: practitioner first, polish second.
+- The project handle is now `teenyweeny.studio`. The domain *is* the brand. There is no separate wordmark to commission, no name to defend in copy, no logo to design — the URL does the work. This is a Chapter 2b commitment with downstream consequences: Scene 2b-02's MVP player UI inherits the same register; pricing copy in 2b-03 carries the same wordmark posture.
+- Scene 05's catalogue and Chapter 1 references retain *study-buddy* as historical record. Forward-looking artifacts (this scene's capture, Chapter 2b's scene list, the new design spec) use *teenyweeny.studio*.
 
 ---
 

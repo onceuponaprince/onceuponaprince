@@ -34,7 +34,7 @@ Chapter 1 tested whether the method produces publishable narrative. Chapter 2b t
 
 ## Scenes
 
-- [ ] **01 — study-buddy waitlist landing** — Landing page + waitlist capture on a real domain, before any product build. Classic BIP sequence; matches founder's *landing before build* framing.
+- [ ] **01 — teenyweeny.studio waitlist landing** — Landing page + waitlist capture on a real domain, before any product build. Classic BIP sequence; matches founder's *landing before build* framing. (Project handle pivoted from `study-buddy` to `teenyweeny.studio` mid-scene on 2026-04-22 — see scene capture for the register and palette consequences.)
 - [ ] **02 — Parser + flashcard renderer** — The MVP the landing promised. Day 1-30 of the catalogue's 90-day timeline. Runtime-import architecture per Scene 05's commitment (*vault as user data, not system data*).
 - [ ] **03 — Pricing and commercial packaging** — Catalogue's Option I or Option II, chosen and defended. Scene produces the pricing page + the argument for the choice.
 - [ ] **04 — First sale attempt** — Chapter 2b's climax. Thesis test: does the method produce commerce?

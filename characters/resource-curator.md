@@ -10,20 +10,20 @@ tags:
   - archetype
   - hero
   - end-user
-  - study-buddy
+  - teenyweeny-studio
 ---
 
 # The Resource Curator
 
 *Archetype · Universe: [[command-centre]] · Hero of [[02b-products-that-sell]]*
 
-The intended user of [[study-buddy]]. Every product decision in Chapter 2b tests against whether it serves this character. Not a student in general; a specific kind of expert who wants to share what they know.
+The intended user of [[teenyweeny-studio]]. Every product decision in Chapter 2b tests against whether it serves this character. Not a student in general; a specific kind of expert who wants to share what they know.
 
 ---
 
 ## Relation to the central idea
 
-The Resource Curator is the commercial expression of *build should feel like play* pointed at a different room. They have already done the play — the vault. What they cannot do alone is turn their play into a shareable tool for others. Study-buddy exists so their play produces a sellable artifact. That is the campaign thesis in a second voice.
+The Resource Curator is the commercial expression of *build should feel like play* pointed at a different room. They have already done the play — the vault. What they cannot do alone is turn their play into a shareable tool for others. teenyweeny.studio exists so their play produces a sellable artifact. That is the campaign thesis in a second voice.
 
 ## Wound
 
@@ -84,7 +84,7 @@ Usually older than the Obsidian power-user stereotype by five to fifteen years. 
 4. If the answer optimises for SaaS pricing (per-seat, per-vault) rather than for the curator's distribution posture, the answer is wrong.
 5. If the answer makes the curator feel like their work is being platformised away from them, the answer is wrong.
 
-The archetype's job is to say no to answers that would turn study-buddy into another platform the curator does not trust.
+The archetype's job is to say no to answers that would turn teenyweeny.studio into another platform the curator does not trust.
 
 ## Notes
 
