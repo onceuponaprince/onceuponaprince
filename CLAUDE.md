@@ -41,12 +41,15 @@ If an action would make the work feel more like filing taxes or less like playin
     /chapters/<NN-chapter-slug>/
         chapter.md
         /scenes/<NN-scene-slug>.md
+        /catalogues/<slug>.md        (optional)
 /characters/<n>.md
 /templates/
 /artifacts/<chapter-slug>/<NN-scene-slug>.md
 /assets/
 /.claude/commands/
 ```
+
+**Catalogues (optional):** reference material filed inside a chapter when a source document informs scenes without being a scene itself — functional definitions, landscape scans, architectural alternatives. No frontmatter required. No scene structure. File naming echoes the scene that inherits them most directly (e.g. `05-source-<subject>-catalogue.md`).
 
 ### Naming
 
