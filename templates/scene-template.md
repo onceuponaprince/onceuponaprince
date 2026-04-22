@@ -8,6 +8,9 @@ date_opened:
 date_concluded: 
 characters:
   - "[[]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: 
 tags:
   - 

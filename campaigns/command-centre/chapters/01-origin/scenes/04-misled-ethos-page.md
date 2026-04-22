@@ -9,6 +9,9 @@ date_concluded: 2026-04-21
 characters:
   - "[[misled-founder]]"
   - "[[misled-audience-archetype]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: thread, essay
 artifact_file:
   - "[[04-smoke-test-the-url-thread]]"

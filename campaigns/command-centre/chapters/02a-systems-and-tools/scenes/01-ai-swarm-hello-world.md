@@ -9,6 +9,9 @@ date_concluded:
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: 
 artifact_file: 
 tags:

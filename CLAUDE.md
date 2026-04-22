@@ -75,11 +75,18 @@ status: not-started | in-progress | concluded | shipped
 date_opened: YYYY-MM-DD
 date_concluded: YYYY-MM-DD
 characters: ["[[slug]]"]
+spec_file: "path/to/spec.md" | null
+blockers: ["prose descriptor", ...]
+supersedes: ["[[slug]]" | "path/to/file.md"] | null
 artifact_format: thread | newsletter | video | essay | none
 artifact_file: "[[artifact-filename]]"
 tags: []
 ---
 ```
+
+- `spec_file` — the active design spec that drove the scene. Mirrors `artifact_file`. Null when no spec precedes the work.
+- `blockers` — external dependencies gating close. Prose descriptors, not IDs. Empty list when none.
+- `supersedes` — older specs, scenes, or patterns this work replaces. Null when none.
 
 **Chapter / Campaign / Character:** see `templates/`.
 
@@ -100,6 +107,17 @@ tags: []
 - Goal for this session
 - Moment-by-moment capture
 - What's changing?
+
+### Pivot (optional)
+
+Inserted mid-scene when register, handle, architecture, or audience changes — not when copy merely adjusts. Carries four beats:
+
+- **Trigger** — why the pivot happened
+- **Old → New** — what changed
+- **Carries forward** — what still holds
+- **Supersedes** — what is now historical record
+
+A pivot that breaks the scene's *premise* demands a new scene, not a beat within this one. The heading takes the form `## Pivot — YYYY-MM-DD`.
 
 ### Conclude
 
@@ -125,11 +143,11 @@ The Conclude block's five core questions are the exact five-beat structure of a 
 
 ### Capturing during work
 
-1. Identify the active scene (`status: in-progress`).
-2. Append to **Moment-by-moment capture**.
+1. Identify the active scene (`status: in-progress`). If there are zero or more than one, ask which.
+2. Append to **Moment-by-moment capture**. Match existing entries' shape — short entries as checklist items, longer observations as prose bullets.
 3. Update **What's changing?** if understanding shifts.
 4. Don't modify Set Stage silently.
-5. Don't over-prompt.
+5. Don't prompt for more capture — log what was given and stop.
 
 ### Concluding a scene
 
@@ -179,6 +197,14 @@ The Conclude block's five core questions are the exact five-beat structure of a 
 7. Don't invent a sixth Conclude question.
 8. Don't reference three-layer architecture in external artifacts unless the scene is about it.
 
+## Named patterns
+
+Rules elevated from practice. Each earns its place by appearing in three or more scenes before being codified.
+
+- **Superseded-spec pattern.** When a spec is rewritten mid-scene, the old file stays in place under its original date-stamped name. The two files together *are* the decision.
+- **Forward-only rename.** Renames of handles, products, or characters apply to new artifacts only. Concluded scenes retain their original references as historical record.
+- **Single atomic scene commit.** One scene's work ships as one commit where possible. If splitting is necessary, split by beat, not by file.
+
 ## When in doubt
 
 1. Ask the founder.
@@ -186,6 +212,10 @@ The Conclude block's five core questions are the exact five-beat structure of a 
 3. Consult the four design laws.
 4. Consult the solo-thesis-holder's archetype constraints.
 5. Draft, flag uncertainty, let the founder decide.
+
+## Clarifying loop pacing
+
+Default to six questions in two sub-batches of three per round. Continue rounds until *go / ready / continue / proceed / do it*. Simple factual lookups bypass the loop entirely.
 
 ## Session open ritual
 

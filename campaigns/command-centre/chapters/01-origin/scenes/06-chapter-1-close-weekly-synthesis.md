@@ -9,6 +9,9 @@ date_concluded: 2026-04-21
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: essay
 artifact_file: "[[06-play-produced-the-narrative]]"
 tags:

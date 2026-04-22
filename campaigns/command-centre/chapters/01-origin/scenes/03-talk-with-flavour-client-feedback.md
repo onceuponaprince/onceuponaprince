@@ -10,6 +10,9 @@ characters:
   - "[[nathan]]"
   - "[[general-business-archetype]]"
   - "[[restaurant-owner-archetype]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: essay
 artifact_file: "[[03-when-the-clients-corrections-become-the-product]]"
 tags:

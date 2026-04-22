@@ -10,6 +10,9 @@ characters:
   - "[[nathan]]"
   - "[[general-business-archetype]]"
   - "[[restaurant-owner-archetype]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: essay
 artifact_file: "[[02-three-failed-deploys]]"
 tags:

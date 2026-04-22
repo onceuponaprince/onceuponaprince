@@ -8,6 +8,9 @@ date_opened: 2026-04-20
 date_concluded: 2026-04-21
 characters:
   - "[[prince]]"
+spec_file: null
+blockers: []
+supersedes: null
 artifact_format: thread, essay
 artifact_file:
   - "[[05-orchestration-shape-inverted-thread]]"
