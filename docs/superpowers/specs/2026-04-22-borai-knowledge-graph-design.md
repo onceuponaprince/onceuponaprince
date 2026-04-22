@@ -78,6 +78,10 @@ Runtime graph files in `$BORAI_GRAPH_DIR` (default `/borai/graph/`):
 | `vectors.npy` | numpy float32 matrix, shape `(N, embedding_dim)`. One row per node. |
 | `vectors_index.json` | `{"row_to_node": [...node_ids...]}` — maps row index to node id. |
 | `hash_registry.json` | `{"/path/to/file.md": "md5hash"}` — watcher's dirty detection. |
+| `cache/embeddings.json` | `{"content_sha256": row_index}` — embedding cache keys. |
+| `cache/embeddings_vectors.npy` | Parallel numpy matrix for cached embeddings. |
+| `cache/haiku_responses.json` | `{"prompt_sha256": {edges, created_at}}` — Haiku response cache. |
+| `cache/meta.json` | `{embed_model, haiku_model, embedding_dim}` — for cache invalidation. |
 
 **Node schema:**
 
@@ -205,9 +209,52 @@ Default (unknown agent): `["relates_to"]`.
 
 **Atomic file swap.** Pipeline writes new state to `graph.json.tmp`, `vectors.npy.tmp`, `vectors_index.json.tmp`, then `os.rename()` to final names. Rename is atomic on POSIX; readers either see old state or new state, never partial.
 
-**Retrieval loads fresh per query.** Reads graph.json + vectors.npy on every query call. At expected scale (≤ 10k nodes, ~50MB total) this is sub-100ms and avoids stale-cache concerns. Add a cached snapshot with explicit invalidation if scale exceeds comfortable load time; not first-version work.
+**Retrieval holds an in-process graph snapshot.** Engine loads graph.json + vectors.npy once, reloads only when graph.json mtime changes. Pipeline's atomic swap bumps mtime atomically; engine sees the new snapshot on its next query. See Caching section for detail.
 
 **Watcher debounce.** File events batched over a 1s window; bulk changes (git checkout, bulk edit) process as one pipeline run.
+
+## Caching
+
+Four caches, two mechanisms (on-disk + in-process), one shared invalidation principle: model fingerprint on disk, mtime in process.
+
+### Embedding cache (on-disk)
+
+`$BORAI_GRAPH_DIR/cache/embeddings.json` maps `sha256(chunk_content)` to a row index in a parallel `cache/embeddings_vectors.npy`. Embedder checks cache before calling Ollama; hit returns cached vector, miss calls Ollama and appends to cache.
+
+- **Invalidation**: `cache/meta.json` records `embed_model` and `embedding_dim`. Mismatch on startup wipes the cache.
+- **TTL**: none. Embeddings don't stale unless the model changes.
+- **Config**: `BORAI_EMBEDDING_CACHE_ENABLED` (default: true).
+
+### Haiku response cache (on-disk)
+
+`$BORAI_GRAPH_DIR/cache/haiku_responses.json` maps `sha256(new_chunk_id + sorted(neighbour_ids))` to the Haiku response (edge list + timestamp). Edge detector checks before calling Haiku; hit skips the API call entirely.
+
+- **Invalidation**: `cache/meta.json` records `haiku_model`. Mismatch wipes.
+- **TTL**: none. Semantic relationships between chunks don't stale unless the model's judgment changes.
+- **Config**: `BORAI_HAIKU_CACHE_ENABLED` (default: true).
+
+### Anthropic prompt caching (native API)
+
+Separate mechanism, complementary goal. Haiku calls set `cache_control: {type: "ephemeral"}` on the system prompt block. The system prompt carries the stable context — schema, edge-type definitions, few-shot examples — padded to meet Haiku's cache-size minimum. User message carries the dynamic part (new chunk + neighbours). Five-minute TTL on the cache block; reduces input-token cost by ~90% on hits within the window.
+
+Both caches apply in parallel: our on-disk response cache handles repeat-pair lookups across runs; Anthropic prompt caching handles the stable-prefix cost within a pipeline run.
+
+### Retrieval query cache (in-process)
+
+Process-local dict keyed on `sha256(query_text + agent)`. Hits skip the whole retrieval pipeline (embed + similarity + traversal + prune). TTL-bounded because query freshness matters for agent context.
+
+- **TTL**: `BORAI_QUERY_CACHE_TTL` (default: 60 seconds).
+- **Invalidation**: graph snapshot mtime change clears the cache.
+- **Config**: `BORAI_QUERY_CACHE_ENABLED` (default: true).
+
+### Graph snapshot (in-process)
+
+Retrieval engine loads `graph.json` + `vectors.npy` + `vectors_index.json` once into memory, holds in process between queries. Each query checks `graph.json` mtime; if newer than cached version, reload. Mtime check is sub-millisecond; reload is sub-100ms at expected scale.
+
+Pipeline's atomic swap (rename from `.tmp`) bumps mtime atomically — engine sees the new snapshot on its next query. No explicit signal needed.
+
+- **Invalidation**: mtime comparison on each query.
+- **Config**: always on (trivially disableable for tests).
 
 ## Configuration
 
@@ -224,6 +271,10 @@ BORAI_TOKEN_BUDGET      default: 1500
 BORAI_SIMILARITY_FLOOR  default: 0.3
 BORAI_HAIKU_CALL_CAP    default: 100
 BORAI_DEBOUNCE_SECONDS  default: 1.0
+BORAI_EMBEDDING_CACHE_ENABLED  default: true
+BORAI_HAIKU_CACHE_ENABLED      default: true
+BORAI_QUERY_CACHE_ENABLED      default: true
+BORAI_QUERY_CACHE_TTL          default: 60
 ```
 
 Loaded via `python-dotenv` from `ops/borai-graph/.env` with override from process env.
@@ -235,6 +286,8 @@ Loaded via `python-dotenv` from `ops/borai-graph/.env` with override from proces
 - **Chunker parse failure** → log WARN with file path; file is skipped (not marked clean in hash registry, so retried next cycle).
 - **File disappears mid-pipeline** → caught, logged, node pruned from graph on next cycle.
 - **Corrupt graph.json / vectors.npy** → run.py detects on startup (JSON parse, numpy load); logs ERROR and rebuilds from scratch by clearing hash_registry.
+- **Corrupt cache file** → log WARN, wipe affected cache file, continue cold on next cycle.
+- **Cache schema mismatch** (embed or Haiku model changed, detected via `cache/meta.json`) → wipe affected cache(s), rebuild on next run.
 
 ## Testing
 
@@ -245,6 +298,10 @@ Pytest, colocated in `ops/borai-graph/tests/`. Coverage priorities:
 - **Pipeline end-to-end** — given a fixture directory, run pipeline, assert graph.json shape.
 - **Retrieval engine** — fixture graph, query returns expected top-k with correct edge scoping per agent.
 - **Atomic swap** — kill pipeline mid-write (simulated), assert graph state is consistent on next read.
+- **Cache hit/miss** — embedder and edge detector skip Ollama/Haiku calls on cache hits; calls go through on miss.
+- **Cache invalidation** — altering `cache/meta.json` simulates model change; affected cache wipes on next run.
+- **Graph snapshot staleness** — mtime bump (simulated atomic swap) triggers engine reload; stale reads do not occur.
+- **Anthropic prompt caching** — verify `cache_control: ephemeral` set on the system prompt block in Haiku calls.
 
 Run: `uv run pytest` from `ops/borai-graph/`.
 
@@ -347,10 +404,10 @@ On first run, hash_registry.json is empty; every file under watch paths is treat
 1. **Scaffold** — directory structure, pyproject.toml, tests skeleton, .env.example.
 2. **pipeline.py** — the orchestrator. Stub every module it touches; write end-to-end with fake data flowing through. This establishes the data contracts before individual modules are real.
 3. **chunker.py** — source-aware, per-source-type dispatch. Fixtures for each type.
-4. **embedder.py** — Ollama HTTP client. Graceful on connection errors.
-5. **edge_detector.py** — rule-based Stage 1 first; Haiku Stage 2 second. Rules unit-tested individually.
+4. **embedder.py** — Ollama HTTP client. Embedding cache (see Caching). Graceful on connection errors.
+5. **edge_detector.py** — rule-based Stage 1 first; Haiku Stage 2 second with response cache + Anthropic prompt caching on the system prompt. Rules unit-tested individually.
 6. **watcher.py** — watchdog observer + hash registry + debounce queue. Daemon thread orchestration.
-7. **retrieval/engine.py** — query → embed → similarity → traverse → prune.
+7. **retrieval/engine.py** — query → embed → similarity → traverse → prune. In-process graph snapshot with mtime-based invalidation + TTL query cache.
 8. **dashboard/graph_stats.py** — read graph.json + vectors.npy, print stats.
 9. **run.py** — wire all together; CLI entrypoint.
 10. **README + .env.example** — setup instructions per above.
