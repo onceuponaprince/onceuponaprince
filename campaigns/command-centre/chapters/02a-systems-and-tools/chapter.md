@@ -20,13 +20,14 @@ tags:
 
 ## Arc
 
-The infrastructure that makes the product possible. Command Centre is currently markdown + founder discipline. This chapter installs the systems underneath so the webapp can stand on real infrastructure. Three tools in scope:
+The infrastructure that makes the product possible. Command Centre is currently markdown + founder discipline. This chapter installs the systems underneath so the webapp can stand on real infrastructure. Four tools in scope:
 
 1. **ai-swarm-infra** — Python skeletons become a running distributed swarm across the home cluster (Ryzen Coder + MacBook Reviewer + this machine as Orchestrator).
-2. **Grok scraper** — integrated into delegate-agent routing to replace the exhausted xAI credits Scene 05 flagged as dead.
-3. **Command Centre webapp MVP** — the original Chapter 2 plan from `campaign.md`. Set Stage + Conclude only.
+2. **Reaching past Claude** — `fast-travel-cli` (Gemini, Rust) and `ghostroute` (Grok, Node) shipped as sibling CLI tools in the same context-hygiene layer.
+3. **Delegate-agent integration** — wires the scrapers into delegate-agent routing, replacing the exhausted xAI credits Scene 05 flagged as dead.
+4. **Command Centre webapp MVP** — the original Chapter 2 plan from `campaign.md`. Set Stage + Conclude only.
 
-The webapp is this chapter's **climax**; ai-swarm and the scraper are the scaffolding it rests on.
+The webapp is this chapter's **climax**; ai-swarm, the scrapers, and the delegate-agent wiring are the scaffolding it rests on.
 
 ## Thesis progress
 
@@ -35,9 +36,10 @@ Chapter 1 tested the method with paying-client work anchoring it. Chapter 2a rem
 ## Scenes
 
 - [ ] **01 — ai-swarm hello-world** — Single Coder→Reviewer round-trip across the home cluster. Opens on orchestrator code + tutorials already committed on `feature/ai-swarm-infra-impl`; closes when the first end-to-end run completes.
-- [ ] **02 — Grok scraper into delegate-agent** — Integrates `~/code/scraper/` into delegate-agent routing. Unblocks the delegation path Scene 05 flagged as dead.
-- [ ] **03 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 04/05 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`.
-- [ ] **04+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build.
+- [ ] **02 — reaching-past-claude** — `fast-travel-cli` (Gemini, Rust, live build) and `ghostroute` (Grok, Node, retroactive documentation) shipped as siblings in the same context-hygiene layer. Unblocks Scene 03.
+- [ ] **03 — Scrapers into delegate-agent** — Integrates `fast-travel-cli` and `ghostroute` into delegate-agent routing. Unblocks the delegation path Scene 05 flagged as dead.
+- [ ] **04 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 04/05 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`.
+- [ ] **05+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build.
 
 ## Climax
 
