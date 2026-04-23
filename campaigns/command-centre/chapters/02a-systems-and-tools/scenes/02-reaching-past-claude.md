@@ -9,7 +9,7 @@ date_concluded:
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
-spec_file: null
+spec_file: "docs/superpowers/specs/2026-04-23-fast-travel-cli-design.md"
 blockers: []
 supersedes: null
 artifact_format: 
