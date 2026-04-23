@@ -36,10 +36,11 @@ Chapter 1 tested the method with paying-client work anchoring it. Chapter 2a rem
 ## Scenes
 
 - [ ] **01 — ai-swarm hello-world** — Single Coder→Reviewer round-trip across the home cluster. Opens on orchestrator code + tutorials already committed on `feature/ai-swarm-infra-impl`; closes when the first end-to-end run completes.
-- [ ] **02 — reaching-past-claude** — `fast-travel-cli` (Gemini, standalone Rust binary, live build) and `ghostroute` (monorepo of providers — Grok documented, Perplexity scaffolded, more to come) shipped as the context-hygiene layer. Unblocks Scene 03.
-- [ ] **03 — Scrapers into delegate-agent** — Integrates `fast-travel-cli` and `ghostroute` into delegate-agent routing. Unblocks the delegation path Scene 05 flagged as dead.
-- [ ] **04 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 04/05 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`.
-- [ ] **05+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build.
+- [ ] **02 — reaching-past-claude** — `fast-travel-cli` (Gemini, standalone Rust binary, live build) and `ghostroute` (monorepo of providers — Grok documented, Perplexity scaffolded, more to come) shipped as the context-hygiene layer. Unblocks Scene 04.
+- [ ] **03 — near-proximal-and-the-stream** — borai-graph edge model split into stored `near` (d=1) and computed `proximal` (d>1 with blended relevance). Adds a two-layer tag system (author YAML + reserved-prefix indexer-minted) and a progressive data-stream retrieval mode. Cheap indexer riders ship in the same PR. Runs parallel to Scene 02.
+- [ ] **04 — Scrapers into delegate-agent** — Integrates `fast-travel-cli` and `ghostroute` into delegate-agent routing. Unblocks the delegation path Scene 05 flagged as dead.
+- [ ] **05 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 04/05 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`.
+- [ ] **06+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build.
 
 ## Climax
 
