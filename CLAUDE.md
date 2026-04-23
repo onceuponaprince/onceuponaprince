@@ -134,6 +134,12 @@ A pivot that breaks the scene's *premise* demands a new scene, not a beat within
 
 The Conclude block's five core questions are the exact five-beat structure of a build-in-public post. Never treat Conclude as paperwork. It is the product.
 
+## Knowledge graph (borai-graph)
+
+A local RAG index over the vault, BorAI ops, and user skills lives at `/home/onceuponaprince/borai/graph`. Query it before generating substantive content — scenes, specs, plans, artifacts, skill outputs — to surface relevant prior work. See `docs/infra/borai-graph-usage.md` for the query one-liner and agent slugs.
+
+The graph is a cache of prior context, not a source of truth. If a query returns nothing or the daemon is down, proceed without — the file on disk wins when in conflict.
+
 ## Workflows
 
 ### Opening a new scene
