@@ -11,13 +11,13 @@ Read BEFORE the standard session-open ritual. This queue carries cross-scene wor
 3. **Five parallel agents landed on the same PR** after sign-off — scene-aware chunker (7 tests), per-agent `PROXIMAL_ALPHA` (3 tests), `borai-graph-tags` CLI (8 tests), reason `explain()` helper (11 tests), and the four agent skills updated in-place for the new API shape (`mode="full"` on three, shallow default on `delegate_agent`).
 4. **BorAI main pushed** — pre-push hook typecheck step now guarded with `--if-present` (`be42e6e`).
 5. **Vault main pushed** — scene file opened, captured, concluded, chapter checklist ticked, and `docs/infra/borai-graph-usage.md` refreshed for the new API.
-6. **Scene 2a-03 artifact queue**: `thread, essay, newsletter` — three registers of the same story, not yet drafted.
+6. **Scene 2a-03 artifact queue**: `thread, essay, newsletter` — **drafted and committed 2026-04-24 late-day** (`1e0c604`) at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-{thread,essay,newsletter}.md`. Scene's `artifact_file` frontmatter filled. Pending external publish; `status` stays on `concluded` until each register goes up.
 
 **Immediate next actions (mostly independent):**
 
-- **Review + merge PR #5.** 8 commits + a 4-commit parallel-agent layer, all green. Worth a read-through.
-- **Scene 2a-03 artefacts** — draft the thread, essay, newsletter. Three variants of the 91.6% → specificity story.
-- **Scene 2a-02** — fast-travel-cli first-run or ghostroute retroactive docs (either completes its closure).
+- ~~Review + merge PR #5~~ — **merged 2026-04-24 as squash commit `2f7464a`** on `onceuponaprince/borai.cc` `main`. Branch `feat/near-proximal-stream` deleted.
+- ~~Scene 2a-03 artefacts~~ — **drafted and committed** (`1e0c604`) at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-{thread,essay,newsletter}.md`. Pending external publish only.
+- **Scene 2a-02 closure** — brief saved at `docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md`. A fresh session in `~/code/` handles both trailing repo beats (fast-travel-cli first-run + ghostroute retroactive docs) in one run, optionally via parallel subagents.
 - **Scene 2a-01** — ai-swarm hello-world round-trip. Hardware-dependent.
 - **Scene 2b-01b** — teenyweeny URL. Still unopened.
 - **New strategic scenes** — see §Strategic next step below.
@@ -54,8 +54,8 @@ Orthogonal to ranking quality — once the right results are surfacing, return t
 
 ### BorAI repo (github.com/onceuponaprince/borai.cc)
 
-- `main` at `be42e6e` — pre-push hook typecheck guard added this session.
-- `feat/near-proximal-stream` at `b21fb2c` — 8 commits, PR #5 open.
+- `main` at `2f7464a` — PR #5 squash-merged 2026-04-24 late-day. Pre-push hook typecheck guard landed earlier on `main` (`be42e6e`).
+- ~~`feat/near-proximal-stream`~~ — merged and deleted on GitHub.
 - `feature/misled-ethos-page` at `02b7bc2` — unchanged; live production at `misled.vercel.app/`; must not merge to main.
 - `feature/ai-swarm-infra-impl` at `e5a9715` — unchanged; ready to PR after end-to-end validation.
 
@@ -80,7 +80,7 @@ Orthogonal to ranking quality — once the right results are surfacing, return t
 - Concluded this session:
   - `[[03-near-proximal-and-the-stream]]` — shipped. `status: concluded`, `date_concluded: 2026-04-24`, `artifact_format: thread, essay, newsletter`.
 - Vault HEAD: pushed to `origin/main`. Recent commits: scene-2a-03 open, Progress capture + Conclude, scene conclude + checklist, docs refresh.
-- Dirty state left alone this session: `references/misled/*.png` (binaries), untracked `artifacts/borai-graph-ship/`, `copilot-instructions.md`, `one-shots/`, `research/agent-architecture/`, `.claude/scheduled_tasks.lock`.
+- Dirty state swept 2026-04-24 late-day into six atomic commits: `.claude/*.lock` gitignored, misled pngs compressed, `artifacts/borai-graph-ship/` published (research-paper + retrospective + twitter-thread), `one-shots/` seeded with the ask-grok-cli walkie-talkie test log, `research/agent-architecture/` seeded (README + decisions + episodes + sources), `copilot-instructions.md` dropped (was a byte-identical duplicate of `CLAUDE.md` with drift risk — not a symlink; CLAUDE.md remains authoritative). All pushed to `origin/main`.
 
 ### Agent skills (not version-controlled)
 
@@ -121,10 +121,12 @@ Still unopened. Scene 2b-01's Conclude named it as: ship the `teenyweeny.studio`
 
 ### Scene 05 artifact publication (Chapter 1)
 
-Thread + essay both still pending. Source: Scene 05's Conclude block + the two catalogue files at `chapters/01-origin/catalogues/`. Paths:
+**Already drafted and committed** at `artifacts/chapter-1/`:
 
-- `/artifacts/01-origin/05-two-side-projects-additional-workflow-infra-thread.md` — delegate to Gemini for British-English voice polish.
-- `/artifacts/01-origin/05-two-side-projects-additional-workflow-infra-essay.md` — hook: runtime-import (vault as user data, not system data).
+- `05-orchestration-shape-inverted-thread.md` — 7-beat thread, opens on the orchestration inversion, lands on the decision-framework line.
+- `05-vault-as-user-data.md` — long-form essay, lands on the *structural polish without the build* pattern.
+
+Both in voice, British English. Pending external posting only — `status: shipped` flips when each goes up on its destination. The prior entry in this handoff claimed pending drafts at `artifacts/01-origin/05-two-side-projects-additional-workflow-infra-*.md`; that path is wrong and those files do not exist. Artefacts live at `artifacts/chapter-1/` under shorter titular names matching the scene's Conclude.
 
 ### Scene 04 downstream
 
@@ -158,20 +160,19 @@ Thread + essay both still pending. Source: Scene 05's Conclude block + the two c
 2. Read `campaigns/command-centre/campaign.md`.
 3. If touching the graph: `cd ~/code/BorAI-graph && docker compose ps` for stack state, `docker compose exec borai-graph borai-graph-stats` for health, `docker compose exec borai-graph borai-graph-tags --min-count 10` if curious about tag layer.
 4. Depending on intent:
-   - **Review + merge PR #5** → GitHub review, then `gh pr merge 5 --squash` (or merge via UI).
-   - **Scene 2a-03 artefacts** — draft the thread, essay, newsletter from the Conclude block. Source: `campaigns/command-centre/chapters/02a-systems-and-tools/scenes/03-near-proximal-and-the-stream.md`.
+   - **Scene 2a-02 closure** → `cd ~/code/` then open Claude Code with *"Read `~/code/build-in-public/docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md` and execute it."* Covers both trailing repo beats (fast-travel-cli first-run + ghostroute retroactive docs) in one session, optionally via parallel subagents.
    - **Strategic next — Vespa-style ranking** → `/set-stage` a new Scene 2a-04 (inserted ahead of the existing Scene 04 — delegate-agent integration — if that still feels right, else as Scene 2a-04b). See §Strategic next step above for the scope sketch.
-   - **Scene 2a-02 — fast-travel-cli first-run** → `cd ~/code/fast-travel-cli`, read `.claude/PROGRESS.md`.
-   - **Scene 2a-02 — ghostroute retroactive docs** → fresh session in `~/code/ghostroute/`.
    - **Scene 2a-01 — ai-swarm round-trip** → hardware across three machines.
    - **Scene 2b-01b** — `/set-stage` under chapter 2b.
-5. Greet with one line: *"PR #5 ready to merge; Scene 2a-03 concluded. Next is either artefacts, Vespa-style ranking, or one of the open 2a scenes. Pick."*
+   - **Scene 2a-03 artefacts — external posting** → thread, essay, newsletter live at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-*.md`; flip scene `status: shipped` when each goes up on its destination.
+   - **Chapter 1 Scene 05 artefacts — external posting** → thread + essay at `artifacts/chapter-1/05-*.md`; same flip-on-post pattern.
+5. Greet with one line: *"PR #5 merged; scene 2a-03 concluded + artefacts drafted. Next is either 2a-02 closure (brief saved), Vespa-style ranking, or one of the open 2a/2b scenes. Pick."*
 
 ## Out-of-scope but noted
 
-- `copilot-instructions.md` at vault root — still untracked; symlinked to CLAUDE.md.
-- `one-shots/` directory — still untracked; not touched.
-- `research/agent-architecture/` directory — surfaced in `git status`; not explored.
-- `artifacts/chapter-1/` — pre-existing from Chapter 1; not touched.
+- ~~`copilot-instructions.md` at vault root~~ — dropped 2026-04-24 late-day (was byte-identical duplicate of `CLAUDE.md`, not a symlink; drift risk).
+- ~~`one-shots/` directory~~ — committed 2026-04-24 late-day, seeded with the ask-grok-cli walkie-talkie test log.
+- ~~`research/agent-architecture/` directory~~ — committed 2026-04-24 late-day with full living-thread scaffold (README + decisions + episodes + sources).
+- `artifacts/chapter-1/` — pre-existing from Chapter 1; contains scene 05 artefacts (thread + essay), not touched structurally.
 - Old session files under `.claude/projects/` — auto-generated transcripts.
-- `.claude/scheduled_tasks.lock` — scheduler state; leave alone.
+- ~~`.claude/scheduled_tasks.lock`~~ — now covered by the `.claude/*.lock` gitignore rule.
