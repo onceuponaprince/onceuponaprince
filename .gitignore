@@ -53,6 +53,7 @@ desktop.ini
 .claude/sessions/
 .claude/*.log
 .claude/*.cache
+.claude/*.lock
 
 # ------------------------------------------------------------
 # Secrets & env files
