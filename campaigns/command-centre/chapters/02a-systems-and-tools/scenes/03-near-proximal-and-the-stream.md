@@ -3,16 +3,16 @@ campaign: "[[command-centre]]"
 chapter: "02a-systems-and-tools"
 scene: 03
 title: "near-proximal-and-the-stream"
-status: in-progress
+status: concluded
 date_opened: 2026-04-23
-date_concluded:
+date_concluded: 2026-04-24
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
 spec_file: "artifacts/borai-graph-ship/retrospective.md"
 blockers: []
 supersedes: null
-artifact_format:
+artifact_format: thread, essay, newsletter
 artifact_file:
 tags:
   - chapter-2a
@@ -157,7 +157,10 @@ Either Scene 2a-04 (scrapers into delegate-agent — delayed since Chapter 1 Sce
 
 ### Artifact format
 
-To be decided with founder — candidates: thread (the 91.6% → specificity narrative lands well as a BIP beat), essay (the progressive-data-stream design choice deserves longer), or none (infrastructure work that shows up in the *next* scene's narrative rather than its own).
+Thread, essay, and newsletter. The three map to three registers for the same story:
+- **Thread** — the 91.6% → specificity punch. Lead with the edge-count drop, land on *become more specific, not less*.
+- **Essay** — the progressive-data-stream design choice, argued at length. The sage's pure-decay recommendation, the founder's blend override, α as the open question, and why the breaking API change earns its place.
+- **Newsletter** — narrative of the whole session: from the retrospective's three options, through the fourth shape that emerged, to the graph that now carries a webapp.
 
 ---
 
