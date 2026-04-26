@@ -13,7 +13,10 @@ spec_file: "docs/superpowers/specs/2026-04-23-fast-travel-cli-design.md"
 blockers: []
 supersedes: null
 artifact_format: [thread, essay, newsletter]
-artifact_file: 
+artifact_file:
+  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-thread.md"
+  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-essay.md"
+  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-newsletter.md"
 tags:
   - chapter-2a
   - scrapers
@@ -181,3 +184,5 @@ Thread. The scene's arc — an opening that expected two tool-builds and discove
 ## Notes
 
 *Free space.*
+
+- 2026-04-26 — repo-level polish opened as PRs against `main`, awaiting review. **fast-travel-cli:** seven polish PRs (#1–#7); first-run post-polish pending fresh cookie export — auth-state expiry between sessions, not a code regression (round-trip code unchanged from the in-scene `86fdfe2` commit). **ghostroute:** three docs PRs (#1–#3); the closure brief's "Perplexity scaffolded, undocumented" premise was outdated by the time this session opened, so the work filled surviving gaps only — provider contract + add-a-provider walkthrough in the repo README, plus per-provider READMEs for Grok and Perplexity. Branch protection on `main` honoured in both repos; no merges. Two GitHub repos created in-flight (`onceuponaprince/fast-travel-cli` and `onceuponaprince/ghostroute`, both private) — flagged because the brief did not pre-authorise repo creation.
