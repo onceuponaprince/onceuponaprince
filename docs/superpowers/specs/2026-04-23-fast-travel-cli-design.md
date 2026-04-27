@@ -172,3 +172,117 @@ Scene 2a-02's fast-travel-cli close condition: step 6 produces markdown from a k
 - `~/code/ghostroute/cookie-master-key/` — Chrome extension producing the cookie JSON shape. Hostname-agnostic; works for Gemini with no extension changes.
 - `~/code/ghostroute/docs/superpowers/specs/2026-04-23-perplexity-scraper-design.md` — sibling provider's design spec; structure mirrored here.
 - Scene [[02-reaching-past-claude]] — the vault scene this spec drives.
+
+---
+
+## Phase 2 — Conversation search & filter (added 2026-04-27)
+
+**Status:** approved-in-design, pre-implementation. Ships after Phase 1 (Gemini extraction) lands.
+
+**Scope:** Search and filter past conversations across **Perplexity**, **Claude.ai**, and **Grok** (Gemini joins via Phase 1's existing extractor). Each provider has its own ingestion path; all feed into one unified SQLite + FTS5 index. The CLI gains `index`, `search`, and `show` subcommands.
+
+**Drives:** the *jump-back* primitive — go from "I remember asking about X somewhere" to the original conversation in seconds, regardless of which side-LLM held it.
+
+### Decisions (continuing the table)
+
+| # | Decision | Rationale |
+|---|----------|-----------|
+| 9 | **Per-provider ingestion, unified SQLite index at `~/.claude/fast-travel/index.db`.** | Three providers, three access patterns. Pretending they're the same is a leaky abstraction. One index makes search uniform; per-provider code keeps ingestion honest. |
+| 10 | **SQLite + FTS5 for full-text search.** | Single binary dependency, sub-second search at solo-founder volumes, no infrastructure. FTS5's BM25 ranking is good enough out of the box. |
+| 11 | **Ingestion is manual via subcommand.** `fast-travel index --provider <perplexity\|claude\|grok\|all>`. | Background daemons add ops surface for marginal benefit. The user runs it when they want fresh state, or once a day via cron. |
+| 12 | **Cookies and credentials reuse `~/.claude/cookie-configs/`.** Same global config dir as `ask-grok-cli`, `ask-perplexity-cli`, and Phase 1. | One auth surface across the whole context-hygiene layer. |
+| 13 | **Schema is provider-shaped but unified.** One `threads` table with `provider`, `thread_id`, `title`, `started_at`, `last_message_at`, `message_count`, `summary_json`, `url`. One `messages` table with `thread_id`, `role`, `content`, `position`, `at`. FTS5 virtual table over `messages.content` and `threads.title + summary_json`. | Asymmetric per-provider data normalises to common columns where possible; per-provider quirks land in the `summary_json` blob. |
+| 14 | **No semantic search for v1.** Pure FTS5 (BM25) only. | Embedding pipelines add cost (model, indexing time, storage). Defer until BM25 visibly fails. Most "I asked about X somewhere" queries are keyword-matchable. |
+| 15 | **Stateless query — index is the only state.** No query history, no cache, no recent-searches list. | The CLI is read-mostly; persistence is the index, queries are ephemeral. |
+
+### Per-provider ingestion
+
+**Perplexity.** Two paths, gated by flags:
+
+1. *Default:* parse vault `research/*/sources/*-perplexity.md` files for `Thread ID:` headers (Ep1's perplexity dump proves this pattern). Fetch each thread by URL via `chromiumoxide`. Cheap to re-run; captures research-driven threads.
+2. *`--full` flag:* log into perplexity.ai, scroll the threads sidebar, capture all thread URLs + titles, fetch each. Captures conversational and one-shot threads outside the vault.
+
+**Grok.** Walk `~/code/*/.claude/.swarm-memory.json` (the campfire is git-root-scoped — one file per project). Each entry has prompt + response + timestamp. Schema mapping: `provider="grok"`, `thread_id=<git-root-hash>::<entry-index>`, `title=<first 60 chars of prompt>`, `url=null` (Grok threads are not URL-addressable). `show` for a Grok thread renders the cached prompt + response inline rather than navigating anywhere.
+
+**Claude.ai.** Cookie-driven scrape of the conversation list page (canonical URL TBD during build — likely `claude.ai/conversations` or similar). No public API exists. Pattern: navigate, wait for the list to render, extract `{title, conversation_id, last_message_at}` per thread. Click-through fetches the full conversation. Most fragile of the three; expect periodic selector drift.
+
+### CLI surface
+
+```
+fast-travel index --provider <perplexity|claude|grok|gemini|all> [--full]
+  Re-ingest threads from the named provider into ~/.claude/fast-travel/index.db.
+  Idempotent: existing thread IDs update in place; new ones append.
+
+fast-travel search <query> [filter flags...]
+  Full-text search over the unified index. Default: top 20 by ranking formula.
+  Output: provider · title · last_message_at · snippet · URL (or "[grok local]").
+
+fast-travel show <thread-id> [--full]
+  Print the cached snippet of a thread by ID. --full triggers Phase 1-style
+  extraction (Gemini / Perplexity / Claude); Grok renders from cache directly.
+```
+
+### Filter primitives (v1)
+
+- `--provider <name>` — restrict to one provider
+- `--since <timespec>` — `7d`, `2w`, `1m`, `2026-04-01`
+- `--until <timespec>` — same syntax
+- `--min-messages <n>` — only threads with N+ messages (filters out one-shot lookups)
+- `--has-url` — restrict to threads with a real URL (excludes Grok)
+- `--limit <n>` — override default 20
+
+Deferred to v3: tag filtering (no tag schema yet), citation filtering, role-specific filters, vault-quote backref ("conversations I quoted from in vault scene X").
+
+### Ranking formula
+
+**Default:** `final_score = bm25_score * exp(-age_in_days / 90)` — BM25 multiplied by exponential recency decay with a 90-day characteristic constant. A 180-day-old result needs roughly 2.7× the BM25 score of a 90-day-old result to outrank it; a 90-day-old result needs roughly 2.7× a fresh result. Decay is gentle enough that *"I half-remember a thing from months ago"* queries still surface their answer; recent threads still rise without burying the rest.
+
+The user can override via `--rank <bm25|recency|exp|hybrid>` flag at search time:
+
+- `bm25` — pure BM25, recency ignored
+- `recency` — newest-first, BM25 only as a tiebreaker
+- `exp` — the default (90-day decay)
+- `hybrid` — top-50 by BM25 then re-rank by recency (two-phase, similar to the BM25 + RRF pattern queued for borai-graph)
+
+
+### Build sequence (Phase 2)
+
+Ordered, commit-per-step. Each step leaves the CLI compilable and the previous functionality intact.
+
+1. **Add subcommand routing.** `fast-travel index|search|show ...`. Stub each. Commit: `feat: add index/search/show subcommands`.
+2. **SQLite schema + migrations.** Create `~/.claude/fast-travel/index.db` on first run. Schema version column. Commit: `feat: sqlite schema for unified threads + messages`.
+3. **Perplexity ingestion (path 1 — vault scrape).** Parse vault `sources/*-perplexity.md` files for thread IDs, fetch each, store. Commit: `feat: perplexity ingestion via vault thread-IDs`.
+4. **Grok ingestion (campfire parse).** Walk `~/code/*/.claude/.swarm-memory.json` files, normalise into the index. Commit: `feat: grok ingestion from swarm-memory campfires`.
+5. **Claude.ai ingestion (list-page scrape).** CDP scrape of the conversation list. Commit: `feat: claude.ai ingestion via list-page scrape`.
+6. **Search command with FTS5.** Full-text query, default ranking formula. Commit: `feat: full-text search with ranking`.
+7. **Filter flags.** `--provider`, `--since`, `--until`, `--min-messages`, `--has-url`, `--limit`, `--rank`. Commit: `feat: filter and ranking flags for search`.
+8. **Show subcommand.** `fast-travel show <thread-id>` returns cached snippet; `--full` invokes Phase 1 extraction. Commit: `feat: show subcommand with --full extraction`.
+9. **README update.** Document the four-provider scope. Commit: `docs: README updated for phase 2`.
+10. **Perplexity ingestion (path 2 — full).** Conversation list page scrape behind `--full` flag. Commit: `feat: perplexity full ingestion via list-page scrape`.
+
+### Out of scope (Phase 2)
+
+- Semantic search / embeddings
+- Cross-provider thread linking ("this Perplexity thread led to that Claude thread")
+- Tag / label schema
+- Vault-quote backref search
+- Cron / daemon mode
+- MCP integration
+- ChatGPT ingestion (separate spec when the `ask-chatgpt` skill is more settled)
+
+### Predicted stalls (Phase 2)
+
+1. **Claude.ai DOM drift.** The conversation list selector will break periodically. Same mitigation as Phase 1: keep the selector in one place; treat drift as expected, not exceptional.
+2. **Cookie expiry across three providers simultaneously.** Each provider's cookies expire on its own schedule. A failed ingestion should report which provider's cookies failed, not bail silently.
+3. **`.swarm-memory.json` format drift.** If `ask-grok-cli` changes its schema, the Grok ingestion breaks. Pin the parser to a schema version; ignore unknown fields; bump on breaking changes.
+4. **Perplexity thread URL pattern change.** Currently `perplexity.ai/search/<id>`. If the URL pattern changes, vault-scraped thread IDs become unfetchable. Detect by HTTP 404 on a known-good ID; fall back to path 2 (`--full`).
+5. **Index corruption.** SQLite is robust but power loss during WAL writes can corrupt FTS5. Provide `fast-travel reindex` to rebuild from canonical sources. Schema version bump triggers reindex automatically.
+6. **`.swarm-memory.json` discovery cost.** Walking `~/code/*/.claude/.swarm-memory.json` is fast for a dozen projects but scales with the user's project count. Cache the file paths in the index; only re-scan on `index --full` or schema bump.
+
+### References (Phase 2)
+
+- `~/.claude/fast-travel/index.db` — the unified index location.
+- `~/code/ghostroute/ask-perplexity-cli/` — reference for Perplexity HTTP / scrape paths.
+- `~/code/<project>/.claude/.swarm-memory.json` (per git-root) — Grok ingestion source.
+- `claude.ai/conversations` (canonical URL TBD during build) — Claude.ai ingestion target.
+- `~/code/build-in-public/research/agent-architecture/sources/2026-04-23-perplexity.md` — example of the vault thread-ID extraction source for Perplexity path 1.
