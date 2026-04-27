@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agent architecture — Episode 1: Context and granularity</title>
+<meta name="description" content="An essay and live topology switcher on whether the choice of position on the agent-architecture spectrum can be made at the task level rather than the product level." />
+<style>
+  :root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --ink: #14131a;
+    --ink-muted: #55525c;
+    --rule: #d9d5cb;
+    --accent: #7b4bff;
+    --warm-hi: #ff8a5c;
+    --cold-hi: #3fa7d6;
+    --good: #2f7d32;
+    --bad: #b1311c;
+    --neutral: #8a8579;
+    --node: #2c2a35;
+    --node-fill: #ffffff;
+    --node-soft: #efece5;
+    --edge: #6b6877;
+    --context-overlay: rgba(123, 75, 255, 0.08);
+    --filter-stroke: #b1311c;
+    --mark: #fff2b3;
+  }
+  html[data-theme="dark"] {
+    --bg: #14131a;
+    --surface: #1c1b24;
+    --ink: #efece6;
+    --ink-muted: #a09da8;
+    --rule: #2e2d38;
+    --accent: #b49aff;
+    --warm-hi: #ffa27a;
+    --cold-hi: #7fc4e7;
+    --good: #79c87d;
+    --bad: #f08576;
+    --neutral: #a09da8;
+    --node: #efece6;
+    --node-fill: #1c1b24;
+    --node-soft: #25232e;
+    --edge: #898595;
+    --context-overlay: rgba(180, 154, 255, 0.10);
+    --filter-stroke: #f08576;
+    --mark: #564a1a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Iowan Old Style', 'Charter', 'Cambria', 'Georgia', ui-serif, serif;
+    font-size: 18px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+  .meta button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .meta button:hover { border-color: var(--accent); }
+  h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    font-style: italic;
+    color: var(--ink-muted);
+    font-size: 20px;
+    margin: 0 0 48px;
+  }
+  h2 {
+    font-size: 22px;
+    letter-spacing: -0.005em;
+    margin: 56px 0 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  p { margin: 0 0 18px; }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  em.soft { color: var(--ink-muted); font-style: italic; }
+  code {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 0.92em;
+    background: var(--node-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  mark {
+    background: var(--mark);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+  }
+  .figure {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    margin: 32px 0;
+    font-size: 16px;
+  }
+  .figure .label {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .figure .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: -0.005em;
+  }
+  .figure .caption {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin-top: 16px;
+    font-style: italic;
+  }
+
+  /* Topology switcher */
+  .switcher-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  @media (min-width: 720px) {
+    .switcher-controls { grid-template-columns: 1fr 1fr; }
+  }
+  .axis {
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    background: var(--bg);
+  }
+  .axis-label {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+  .axis-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .axis-buttons button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    padding: 6px 10px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    text-transform: lowercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: border-color 120ms, color 120ms;
+  }
+  .axis-buttons button:hover { border-color: var(--accent); }
+  .axis-buttons button[aria-pressed="true"] {
+    border-color: var(--accent);
+    color: var(--ink);
+    background: var(--surface);
+  }
+  .switcher-diagram {
+    border: 1px solid var(--rule);
+    background: var(--bg);
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+  .switcher-diagram svg { display: block; width: 100%; height: auto; }
+  .switcher-verdict {
+    display: grid;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .verdict-line {
+    border-left: 3px solid var(--rule);
+    padding: 6px 12px;
+  }
+  .verdict-line.good { border-left-color: var(--good); }
+  .verdict-line.bad { border-left-color: var(--bad); }
+  .verdict-line.note { border-left-color: var(--accent); font-style: italic; color: var(--ink-muted); }
+  .verdict-line .k {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    display: inline-block;
+    margin-right: 8px;
+  }
+  .verdict-line.good .k { color: var(--good); }
+  .verdict-line.bad .k { color: var(--bad); }
+
+  /* SVG node + edge styling (driven by classes) */
+  .topo-node {
+    fill: var(--node-fill);
+    stroke: var(--node);
+    stroke-width: 1.5;
+  }
+  .topo-node.orchestrator { stroke-width: 2.5; }
+  .topo-node.idle { fill: var(--node-soft); stroke: var(--ink-muted); }
+  .topo-label {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    fill: var(--ink);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+  }
+  .topo-edge {
+    stroke: var(--edge);
+    stroke-width: 1.5;
+    fill: none;
+  }
+  .topo-edge.thick { stroke-width: 3; }
+  .topo-edge.dashed { stroke-dasharray: 4 4; }
+  .topo-edge.filtered { stroke: var(--filter-stroke); stroke-dasharray: 2 3; }
+  .topo-arrow { fill: var(--edge); }
+  .topo-arrow.filtered { fill: var(--filter-stroke); }
+  .topo-context {
+    fill: var(--context-overlay);
+    stroke: var(--accent);
+    stroke-width: 1;
+    stroke-dasharray: 6 4;
+    opacity: 0.7;
+  }
+  .topo-stop-marker {
+    fill: var(--bad);
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 10px;
+    text-anchor: middle;
+  }
+  .topo-stop-marker.verifier { fill: var(--good); }
+  .topo-stop-marker.open { fill: var(--neutral); }
+
+  footer.pilot-foot {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+  footer.pilot-foot .tag {
+    display: inline-block;
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    margin-right: 6px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<main class="wrap" id="top">
+
+<div class="meta">
+  <span>Command Centre · Lateral Research · Agent Architecture · Episode 1</span>
+  <button id="theme-toggle" aria-label="Toggle theme">Dark</button>
+</div>
+
+<h1>Agent architecture is a spectrum, not a choice.</h1>
+<p class="subtitle">And the correct position on it changes per task, not per product. So why does most of the field commit to a position at the product level?</p>
+
+<p>
+The way the field talks about agent architecture is broken at the level of vocabulary. <em>Monolithic LLM</em> on one side, <em>multi-agent swarm</em> on the other &mdash; and the question framed as a product-level commitment. That framing forces a choice the underlying engineering doesn't actually need to make.
+</p>
+
+<p>
+What teams pay for, when they commit to one position and stick with it, is a series of mismatches at the task level. A monolith handles tightly-coupled reasoning well and an embarrassingly parallel workload badly. A swarm handles the parallel one well and the coupled one badly. The <em>position on the spectrum</em> is the right abstraction, and the position is task-contingent. The 2025&ndash;2026 literature now agrees: relative performance versus single-agent ranges from <mark>+80.8% to &minus;70.0%</mark>, entirely depending on task type. The architecture that wins on financial reasoning is the architecture that loses on sequential planning by exactly the same amount, in the opposite direction.
+</p>
+
+<p>
+The trouble is that the spectrum is not one-dimensional. <em>Number of agents</em> is a vanity axis the field over-uses. The dimensions that decide whether a configuration succeeds or fails are four: how the work is decomposed (the <strong>execution unit</strong>), what each unit gets to see (the <strong>context projection</strong>), how much it can spend (the <strong>budget</strong>), and what makes it stop (the <strong>stop policy</strong>). Most current frameworks expose only some of these as runtime knobs; many bake at least one in as an architectural assumption.
+</p>
+
+<p>
+The switcher below is the <em>menu</em> the spectrum offers. Move the four axes and the topology re-forms. A live verdict describes what the configuration is suited for and what it is hostile to. The exercise is meant to make a quiet point obvious: most of the interesting positions are not at the ends.
+</p>
+
+<!-- ============================== -->
+<!-- INTERACTIVE 1 — Topology Switcher -->
+<!-- ============================== -->
+
+<div class="figure" id="switcher-figure">
+  <div class="label">Interactive 1 of 5 &middot; Topology Switcher</div>
+  <div class="title">Four axes, not one</div>
+
+  <div class="switcher-controls">
+    <div class="axis">
+      <div class="axis-label">Execution Unit</div>
+      <div class="axis-buttons" data-axis="exec">
+        <button data-value="monolith" aria-pressed="true">monolith</button>
+        <button data-value="chain" aria-pressed="false">linear chain</button>
+        <button data-value="dag" aria-pressed="false">DAG</button>
+        <button data-value="swarm" aria-pressed="false">swarm</button>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="axis-label">Context Projection</div>
+      <div class="axis-buttons" data-axis="ctx">
+        <button data-value="full" aria-pressed="true">full history</button>
+        <button data-value="projected" aria-pressed="false">projected state</button>
+        <button data-value="filtered" aria-pressed="false">filtered handoff</button>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="axis-label">Budget</div>
+      <div class="axis-buttons" data-axis="budget">
+        <button data-value="high" aria-pressed="true">high</button>
+        <button data-value="medium" aria-pressed="false">medium</button>
+        <button data-value="low" aria-pressed="false">low</button>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="axis-label">Stop Policy</div>
+      <div class="axis-buttons" data-axis="stop">
+        <button data-value="open" aria-pressed="true">open-ended</button>
+        <button data-value="verifier" aria-pressed="false">verifier loop</button>
+        <button data-value="hardcap" aria-pressed="false">hard cap</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="switcher-diagram">
+    <svg id="topo-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topology diagram"></svg>
+  </div>
+
+  <div class="switcher-verdict" id="switcher-verdict">
+    <div class="verdict-line good"><span class="k">Suited for</span><span id="verdict-good"></span></div>
+    <div class="verdict-line bad"><span class="k">Hostile to</span><span id="verdict-bad"></span></div>
+    <div class="verdict-line note" id="verdict-note"></div>
+  </div>
+
+  <div class="caption">
+    Each axis is a control surface frameworks expose to varying degrees. LangGraph exposes all four; CrewAI assumes the execution unit; AutoGen exposes the topology but biases the stop policy; Claude Agent SDK exposes execution and context but defers budget. Most production failures live in the corners where one axis was assumed instead of chosen.
+  </div>
+</div>
+
+<p>
+A few configurations earn their keep across most workloads &mdash; the chain with projected context and a verifier loop, for instance, is a robust default for sequential reasoning. A few are <em>structurally unstable</em> &mdash; an open-ended swarm with full context shared across all agents, for example, has been quietly abandoned by serious teams since 2025. The interactive marks both. What it does not do is tell you which configuration you should pick for <em>your</em> task. That is the routing problem, and it is the genuine open work.
+</p>
+
+<h2>What the field has solved, and what it hasn't</h2>
+
+<p>
+The framework primitives for moving along the spectrum at runtime mostly exist. LangGraph's <code>Command(goto=..., update=...)</code> returns state-and-control-flow in a single object. OpenAI's <code>handoff(input_filter=...)</code> reshapes what the next agent sees. Claude Agent SDK's subagents run in fresh, isolated contexts, with the parent receiving only the final result. Pydantic AI's programmatic hand-off lets application code own the router. These are real, shipped, production primitives. The question of <em>how</em> to move along the spectrum is no longer the bottleneck.
+</p>
+
+<p>
+What the field has not built &mdash; and what every source consulted for this episode either circles around or names directly &mdash; is the <em>router</em>: the mechanism that picks the position per task without requiring a human to configure it for every workload. Six candidate signatures surfaced in the cold round: MasRouter's three-layer cascaded controller (ACL 2025); Gemini-style task taxonomy routers (TRouter, Arch-Router, MoMA); RouteLLM's BERT-class classifier between strong and weak models; ChatGPT's policy over inference graphs (<code>route(task, state, telemetry) &rarr; graph</code>); Copilot's four-tuple <code>route(task) &rarr; {execution_unit, context_projection, budget, stop_policy}</code>; and the lightweight task-feature classifier the contrarian X discourse keeps reaching for. No two are quite the same. None has yet won.
+</p>
+
+<p>
+The convergence under the divergence: the routing primitive is a policy that prices four things together &mdash; <strong>local difficulty</strong>, <strong>context entanglement</strong>, <strong>coordination tax</strong>, and <strong>debugging liability</strong>. The framework primitives <em>enable</em> per-task routing. What is missing is the <em>taxonomy</em> &mdash; the human design work that says <em>this kind of task benefits from dispatch, this kind doesn't</em>.
+</p>
+
+<h2>Closing</h2>
+
+<p>
+What you just played with is a <em>menu</em>. What the field still cannot reliably build is the <em>router that picks from it</em>. That is Episode 2's question: what would a working task-feature classifier look like &mdash; what features, what training data, what measurement loop? The framework primitives are ready. The taxonomy is not.
+</p>
+
+<p>
+The contrarian read that holds the whole thing together comes from Grok's pass through 2026 X discourse: <em>"the correct position changes per task &mdash; but building the router that reliably knows is the real unsolved primitive."</em> That line is the episode's load-bearing finding. The synthesis is in <a href="episodes/01-context-and-granularity.md"><code>episodes/01-context-and-granularity.md</code></a>. The seven raw source dumps are in <a href="sources/"><code>sources/</code></a>. The next four interactives &mdash; drift-vs-context slider, same-task walkthrough, coordination-overhead visualiser, cost/quality scatter &mdash; are in queue.
+</p>
+
+<footer class="pilot-foot">
+  <p>
+    <span class="tag">Living research</span>
+    <span class="tag">Episode 1 of N</span>
+    <span class="tag">Lateral track</span>
+  </p>
+  <p>
+    A sibling to <a href="../emotional-ux-pilot/"><code>research/emotional-ux-pilot/</code></a> within the Command Centre vault. When this thread earns Episode 2, it graduates to <code>campaigns/agent-architecture/</code>.
+  </p>
+  <p style="font-size: 12px; font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 0.05em; color: var(--ink-muted);">
+    Built 2026-04-27. Self-contained: no external dependencies. View source for the full implementation.
+  </p>
+</footer>
+
+</main>
+
+<script>
+(function(){
+  // ----- Theme toggle -----
+  var root = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var stored = null;
+  try { stored = localStorage.getItem('aa-pilot-theme'); } catch (e) {}
+  if (stored === 'dark') {
+    root.setAttribute('data-theme', 'dark');
+    btn.textContent = 'Light';
+  }
+  btn.addEventListener('click', function(){
+    var dark = root.getAttribute('data-theme') === 'dark';
+    if (dark) {
+      root.removeAttribute('data-theme');
+      btn.textContent = 'Dark';
+      try { localStorage.setItem('aa-pilot-theme', 'light'); } catch (e) {}
+    } else {
+      root.setAttribute('data-theme', 'dark');
+      btn.textContent = 'Light';
+      try { localStorage.setItem('aa-pilot-theme', 'dark'); } catch (e) {}
+    }
+  });
+
+  // ----- Topology switcher state -----
+  var state = { exec: 'monolith', ctx: 'full', budget: 'high', stop: 'open' };
+
+  document.querySelectorAll('.axis-buttons').forEach(function(group){
+    var axis = group.getAttribute('data-axis');
+    group.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click', function(){
+        state[axis] = b.getAttribute('data-value');
+        group.querySelectorAll('button').forEach(function(other){
+          other.setAttribute('aria-pressed', other === b ? 'true' : 'false');
+        });
+        render();
+      });
+    });
+  });
+
+  // ----- Topology layouts (node positions per execution unit) -----
+  function layout(execUnit) {
+    if (execUnit === 'monolith') {
+      return {
+        nodes: [{ id: 'M', x: 300, y: 140, label: 'M', kind: 'orchestrator' }],
+        edges: []
+      };
+    }
+    if (execUnit === 'chain') {
+      return {
+        nodes: [
+          { id: 'A', x: 100, y: 140, label: 'A', kind: 'orchestrator' },
+          { id: 'B', x: 250, y: 140, label: 'B', kind: 'worker' },
+          { id: 'C', x: 400, y: 140, label: 'C', kind: 'worker' },
+          { id: 'D', x: 540, y: 140, label: 'D', kind: 'worker' }
+        ],
+        edges: [
+          { from: 'A', to: 'B' },
+          { from: 'B', to: 'C' },
+          { from: 'C', to: 'D' }
+        ]
+      };
+    }
+    if (execUnit === 'dag') {
+      return {
+        nodes: [
+          { id: 'O', x: 300, y: 60, label: 'O', kind: 'orchestrator' },
+          { id: 'A', x: 150, y: 160, label: 'A', kind: 'worker' },
+          { id: 'B', x: 300, y: 160, label: 'B', kind: 'worker' },
+          { id: 'C', x: 450, y: 160, label: 'C', kind: 'worker' },
+          { id: 'S', x: 300, y: 250, label: 'Σ', kind: 'orchestrator' }
+        ],
+        edges: [
+          { from: 'O', to: 'A' },
+          { from: 'O', to: 'B' },
+          { from: 'O', to: 'C' },
+          { from: 'A', to: 'S' },
+          { from: 'B', to: 'S' },
+          { from: 'C', to: 'S' }
+        ]
+      };
+    }
+    // swarm
+    return {
+      nodes: [
+        { id: 'O', x: 300, y: 140, label: 'O', kind: 'orchestrator' },
+        { id: 'a', x: 130, y: 60, label: 'a', kind: 'worker' },
+        { id: 'b', x: 470, y: 60, label: 'b', kind: 'worker' },
+        { id: 'c', x: 100, y: 200, label: 'c', kind: 'worker' },
+        { id: 'd', x: 500, y: 200, label: 'd', kind: 'worker' },
+        { id: 'e', x: 220, y: 250, label: 'e', kind: 'worker' },
+        { id: 'f', x: 380, y: 250, label: 'f', kind: 'worker' }
+      ],
+      edges: [
+        { from: 'O', to: 'a' },
+        { from: 'O', to: 'b' },
+        { from: 'O', to: 'c' },
+        { from: 'O', to: 'd' },
+        { from: 'O', to: 'e' },
+        { from: 'O', to: 'f' }
+      ]
+    };
+  }
+
+  // ----- SVG render -----
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  function el(tag, attrs, parent) {
+    var node = document.createElementNS(SVG_NS, tag);
+    if (attrs) Object.keys(attrs).forEach(function(k){ node.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(node);
+    return node;
+  }
+
+  function nodeRadius(budget) {
+    if (budget === 'high') return 22;
+    if (budget === 'medium') return 18;
+    return 14;
+  }
+
+  function edgeClass(ctxProj) {
+    if (ctxProj === 'full') return 'topo-edge thick';
+    if (ctxProj === 'projected') return 'topo-edge';
+    return 'topo-edge filtered';
+  }
+
+  function arrowClass(ctxProj) {
+    if (ctxProj === 'filtered') return 'topo-arrow filtered';
+    return 'topo-arrow';
+  }
+
+  function render() {
+    var svg = document.getElementById('topo-svg');
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    var defs = el('defs', {}, svg);
+    var marker = el('marker', {
+      id: 'arrowhead',
+      viewBox: '0 -5 10 10',
+      refX: 8,
+      refY: 0,
+      markerWidth: 7,
+      markerHeight: 7,
+      orient: 'auto'
+    }, defs);
+    el('path', { d: 'M0,-5L10,0L0,5', class: arrowClass(state.ctx) }, marker);
+
+    var lay = layout(state.exec);
+    var r = nodeRadius(state.budget);
+
+    // Context overlay (full projection only)
+    if (state.ctx === 'full' && state.exec !== 'monolith') {
+      var xs = lay.nodes.map(function(n){ return n.x; });
+      var ys = lay.nodes.map(function(n){ return n.y; });
+      var pad = r + 14;
+      var minX = Math.min.apply(null, xs) - pad;
+      var maxX = Math.max.apply(null, xs) + pad;
+      var minY = Math.min.apply(null, ys) - pad;
+      var maxY = Math.max.apply(null, ys) + pad;
+      el('rect', {
+        x: minX, y: minY,
+        width: (maxX - minX), height: (maxY - minY),
+        rx: 14, ry: 14,
+        class: 'topo-context'
+      }, svg);
+    }
+
+    // Edges
+    lay.edges.forEach(function(e){
+      var a = lay.nodes.find(function(n){ return n.id === e.from; });
+      var b = lay.nodes.find(function(n){ return n.id === e.to; });
+      // shorten edges to node boundary
+      var dx = b.x - a.x;
+      var dy = b.y - a.y;
+      var len = Math.sqrt(dx*dx + dy*dy);
+      var ux = dx / len;
+      var uy = dy / len;
+      var x1 = a.x + ux * r;
+      var y1 = a.y + uy * r;
+      var x2 = b.x - ux * r;
+      var y2 = b.y - uy * r;
+      var line = el('line', {
+        x1: x1, y1: y1, x2: x2, y2: y2,
+        class: edgeClass(state.ctx),
+        'marker-end': 'url(#arrowhead)'
+      }, svg);
+      // filter label on filtered handoff
+      if (state.ctx === 'filtered') {
+        var mx = (x1 + x2) / 2;
+        var my = (y1 + y2) / 2 - 6;
+        var label = el('text', {
+          x: mx, y: my,
+          'text-anchor': 'middle',
+          'font-size': 9,
+          'font-family': 'ui-monospace, monospace',
+          fill: 'var(--filter-stroke)',
+          'letter-spacing': '0.06em'
+        }, svg);
+        label.textContent = 'FILTER';
+      }
+    });
+
+    // Nodes
+    lay.nodes.forEach(function(n){
+      el('circle', {
+        cx: n.x, cy: n.y, r: r,
+        class: 'topo-node ' + (n.kind === 'orchestrator' ? 'orchestrator' : '')
+      }, svg);
+      var t = el('text', {
+        x: n.x, y: n.y, class: 'topo-label'
+      }, svg);
+      t.textContent = n.label;
+    });
+
+    // Stop-policy markers (top-right corner per node)
+    var stopGlyph = state.stop === 'verifier' ? '✓' : (state.stop === 'hardcap' ? '⊟' : '∞');
+    var stopClass = state.stop === 'verifier' ? 'topo-stop-marker verifier' : (state.stop === 'hardcap' ? 'topo-stop-marker' : 'topo-stop-marker open');
+    lay.nodes.forEach(function(n){
+      var t = el('text', {
+        x: n.x + r - 2, y: n.y - r + 4,
+        class: stopClass
+      }, svg);
+      t.textContent = stopGlyph;
+    });
+
+    updateVerdict();
+  }
+
+  // ----- Verdict logic -----
+  function updateVerdict() {
+    var v = verdictFor(state);
+    document.getElementById('verdict-good').textContent = v.good;
+    document.getElementById('verdict-bad').textContent = v.bad;
+    document.getElementById('verdict-note').textContent = v.note;
+  }
+
+  function verdictFor(s) {
+    // Recognised configurations get specific verdicts; fallback synthesises from axis values.
+
+    // Structurally unstable: open-ended swarm with full context.
+    if (s.exec === 'swarm' && s.ctx === 'full' && s.stop === 'open') {
+      return {
+        good: 'Demos and slide decks. Quietly nothing else.',
+        bad: 'Production. Coordination tokens grow as N(N-1)/2; with no stop, the swarm runs until the budget gives out.',
+        note: 'Quietly abandoned by serious teams since 2025. Still showcased in framework marketing.'
+      };
+    }
+
+    // Strong defaults
+    if (s.exec === 'chain' && s.ctx === 'projected' && s.stop === 'verifier') {
+      return {
+        good: 'Sequential reasoning under bounded uncertainty. The robust default for multi-step coding, planning, multi-hop analysis.',
+        bad: 'Embarrassingly parallel work — the chain serialises what should fan out.',
+        note: 'The configuration the production literature converges on for "I want this to actually work tomorrow."'
+      };
+    }
+
+    if (s.exec === 'monolith' && s.ctx === 'full' && s.stop === 'open') {
+      return {
+        good: 'Tightly-coupled reasoning where context is load-bearing — long debugging sessions, voice-sensitive writing, exploratory work.',
+        bad: 'Long sessions where context drifts past the effective attention window. NoLiMa shows even top-tier models lose ~50% accuracy past 32K dense tokens.',
+        note: 'The classical chat experience. Cheap to build, expensive to scale.'
+      };
+    }
+
+    if (s.exec === 'dag' && s.ctx === 'filtered' && s.stop === 'verifier') {
+      return {
+        good: 'Multi-source synthesis with verification — research aggregation, structured extraction, parallel candidate generation with reconciliation.',
+        bad: 'Tasks where the workers need to know about each other (the filter strips the connective tissue).',
+        note: 'Approximates Anthropic\'s orchestrator-worker pattern. Reads as wide-fanout, narrow-execution, central reconciliation.'
+      };
+    }
+
+    if (s.exec === 'swarm' && s.ctx === 'filtered' && s.stop === 'verifier') {
+      return {
+        good: 'Embarrassingly parallel work with strong per-task isolation — N-source search, N-candidate evaluation, security review across files.',
+        bad: 'Anything coupled. The swarm wastes its decomposition budget on tasks that needed to share state.',
+        note: 'Survives because the filter and verifier together suppress the failure modes that kill open swarms.'
+      };
+    }
+
+    if (s.exec === 'monolith' && s.budget === 'low' && s.stop === 'hardcap') {
+      return {
+        good: 'High-volume, low-stakes routing — first-pass classification, cheap drafting, skipped-on-fail flows.',
+        bad: 'Anything where the cost of a wrong answer outweighs the cost of generating a right one.',
+        note: 'Often the smart move when the next stage of a pipeline can verify cheaply.'
+      };
+    }
+
+    // Generic synthesis
+    var good = [];
+    var bad = [];
+    var note = '';
+
+    if (s.exec === 'monolith') {
+      good.push('coupled reasoning');
+      bad.push('parallel exploration');
+    } else if (s.exec === 'chain') {
+      good.push('sequential pipelines');
+      bad.push('truly parallel work');
+    } else if (s.exec === 'dag') {
+      good.push('decomposable tasks with reconciliation');
+      bad.push('flat sequential reasoning');
+    } else {
+      good.push('embarrassingly parallel work');
+      bad.push('coupled state — swarms scatter shared truth');
+    }
+
+    if (s.ctx === 'full') {
+      if (s.exec !== 'monolith') {
+        bad.push('coordination tokens grow with shared context');
+      }
+    } else if (s.ctx === 'projected') {
+      good.push('controlled state hand-offs');
+    } else {
+      good.push('clean specialist focus');
+      bad.push('cross-cutting constraints get filtered out');
+    }
+
+    if (s.budget === 'low') {
+      bad.push('any reasoning depth that needs more than a few hundred tokens');
+    } else if (s.budget === 'high') {
+      good.push('depth-of-thought');
+    }
+
+    if (s.stop === 'open') {
+      bad.push('runaway loops on hard tasks');
+    } else if (s.stop === 'verifier') {
+      good.push('catching upstream errors before they propagate');
+    } else {
+      note = 'Hard cap is honest about its tradeoff: bounded cost, occasional silent failure.';
+    }
+
+    if (!note) {
+      note = 'A reasonable, unremarkable configuration. The interesting positions are usually the ones with explicit verifier loops.';
+    }
+
+    return {
+      good: good.join('; ') + '.',
+      bad: bad.join('; ') + '.',
+      note: note
+    };
+  }
+
+  // initial render
+  render();
+})();
+</script>
+</body>
+</html>
