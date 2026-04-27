@@ -54,6 +54,7 @@ desktop.ini
 .claude/*.log
 .claude/*.cache
 .claude/*.lock
+.claude/.swarm-memory.json
 
 # ------------------------------------------------------------
 # Secrets & env files
