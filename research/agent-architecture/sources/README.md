@@ -6,7 +6,7 @@ Raw working material. Each file is a cold dump from a single source before synth
 
 `YYYY-MM-DD-<source>.md`
 
-Canonical source slugs: `gemini`, `perplexity`, `claude-cold`, `grok`, `copilot`, `cursor`, `web-<framework>`.
+Canonical source slugs: `gemini`, `perplexity`, `claude-cold`, `grok`, `copilot`, `cursor`, `chatgpt`, `web-<framework>`.
 
 ## Rule
 
