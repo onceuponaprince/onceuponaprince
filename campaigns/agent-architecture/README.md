@@ -1,6 +1,6 @@
-# Agent architecture — living research
+# Agent architecture — living research campaign
 
-**Status: Episode 1 scaffolded, awaiting sources. A living, multi-episode research thread. Not a one-shot pilot — the structure is built to accrete.**
+**Status: graduated to campaign 2026-04-27. Episodes 1 and 2 synthesised. Pilot Interactive 1 (topology switcher) shipped; Interactive 2 (router-in-a-box) queued. Originally lived as `research/agent-architecture/` from 2026-04-23; preserved in git history. See `campaign.md` for the campaign's metadata + episode index.**
 
 ## What this is
 
@@ -23,7 +23,7 @@ If the claim holds, the implication is uncomfortable: most teams are committing 
 ## Structure
 
 ```
-research/agent-architecture/
+campaigns/agent-architecture/
 ├── README.md              — this file
 ├── episodes/              — one file per episode; each a standalone research question
 ├── sources/               — raw multi-model + web research dumps, named by date and source
@@ -54,14 +54,14 @@ Three outputs roll out on different cadences:
 
 ## Posture
 
-Episode 1 uses the *wait-and-fire-cold* posture: all sources fire in one parallel pass once the `ask-perplexity` skill lands, so synthesis sees the field whole rather than in halves. Later episodes may adopt different postures; the choice is recorded per episode.
+Episode 1 used the *wait-and-fire-cold* posture (all seven sources fired cold in one parallel pass). Episode 2 used the same posture but landed five-of-seven sources due to environment failures (Perplexity and Grok both blocked on Chromium launch — see source files for unblock paths). Later episodes may adopt different postures; the choice is recorded per episode.
 
 ## Relationship to Command Centre
 
-Lateral. Not inside any chapter. A sibling to `emotional-ux-pilot/`. Triggered as a new line of enquiry on 2026-04-23 during a vault session not tied to any in-progress scene.
+Originally lateral (sibling to `emotional-ux-pilot/`), now its own campaign. Triggered as a new line of enquiry on 2026-04-23. Graduated to `campaigns/` on 2026-04-27 when Episode 2's synthesis committed.
 
-Decisions made via this thread may feed specific future scenes — agent architecture for BorAI Knowledge Graph follow-on work, the webapp layer, future Yurika products. Those future scenes, when opened, can reference the relevant ADR in `decisions/` via the `spec_file` frontmatter key.
+Decisions made via this campaign may feed specific future scenes — agent architecture for BorAI Knowledge Graph follow-on work, the webapp layer, future Yurika products. Those future scenes, when opened, can reference the relevant ADR in `decisions/` via the `spec_file` frontmatter key. The Episode 3 candidate question (*should we build a v0 router for BorAI right now?*) is the most likely trigger for the first ADR.
 
-## Graduation
+## Graduation (complete)
 
-When Episode 2 is committed, this folder moves to `campaigns/agent-architecture/` and becomes its own campaign — matching the rule stated in `emotional-ux-pilot/README.md`. Until then it lives here.
+This campaign graduated from `research/agent-architecture/` to `campaigns/agent-architecture/` on 2026-04-27 when Episode 2's synthesis committed. Per the per-thread-graduation rule. The original `research/` tree is preserved in git history; current state lives here. See `campaign.md` for campaign metadata.
