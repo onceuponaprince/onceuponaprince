@@ -1,28 +1,49 @@
-# Session handoff — 2026-04-24 close · scene 2a-03 shipped + five parallel additions · next strategic step is search-quality work
+# Session handoff — 2026-04-27 close · agent-architecture Episode 1 synthesis landed · pilot.html topology switcher next
 
 Read BEFORE the standard session-open ritual. This queue carries cross-scene work the ritual (which lands on the active in-progress scene) won't surface on its own.
 
 ## TL;DR
 
-2026-04-24. Scene 2a-03 (`near-proximal-and-the-stream`) opened, built, concluded, shipped. The temporal-edge decision from 2026-04-23's retrospective is now live. Five parallel agents then landed the first round of follow-on work on the same PR. Doc refresh followed.
+2026-04-27. The lateral `research/agent-architecture/` thread shipped Episode 1 — *Context and granularity* — end to end: scaffold (already committed `dd0c358`) → 7-source cold round → synthesis. Vault commit `973e422`. Verdict: the spectrum claim holds; the routing primitive is the genuine unsolved problem. Six named candidate primitives surfaced. Coordination-cost threshold converges on 3–4 agents across the literature.
 
-1. **Scene 2a-03 shipped.** Four features + four cheap riders, atomic commits on `feat/near-proximal-stream`. Graph reingested fresh under the new schema — 3,968 nodes / 144,482 edges (**89% edge-count reduction** from 1,614,528). Zero `follows`/`precedes` edges. `near` + `proximal` + two-layer tags + progressive data stream all firing in a single end-to-end query.
-2. **PR #5 open** — https://github.com/onceuponaprince/borai.cc/pull/5. 8 commits total. 164 tests passing.
-3. **Five parallel agents landed on the same PR** after sign-off — scene-aware chunker (7 tests), per-agent `PROXIMAL_ALPHA` (3 tests), `borai-graph-tags` CLI (8 tests), reason `explain()` helper (11 tests), and the four agent skills updated in-place for the new API shape (`mode="full"` on three, shallow default on `delegate_agent`).
-4. **BorAI main pushed** — pre-push hook typecheck step now guarded with `--if-present` (`be42e6e`).
-5. **Vault main pushed** — scene file opened, captured, concluded, chapter checklist ticked, and `docs/infra/borai-graph-usage.md` refreshed for the new API.
-6. **Scene 2a-03 artifact queue**: `thread, essay, newsletter` — **drafted and committed 2026-04-24 late-day** (`1e0c604`) at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-{thread,essay,newsletter}.md`. Scene's `artifact_file` frontmatter filled. Pending external publish; `status` stays on `concluded` until each register goes up.
+The session also fully diagnosed and patched a real `ask-grok-cli` bug (selector matched the user's prompt bubble, not Grok's response). Three source patches in `~/code/ghostroute/ask-grok-cli` — one in `src/config/mod.rs` (`RESPONSE_TIMEOUT_MS` 240_000 → 900_000, plus `RESPONSE_SELECTOR` anchored on `data-testid="assistant-message"`) and one in `src/automation/response.rs` (whitespace-collapse normalisation). Binary installed to `~/.cargo/bin/ask-grok-cli` via `cargo install --path .`. **Patches are still uncommitted in ghostroute.**
 
-**Immediate next actions (mostly independent):**
+**Immediate next action:** build `research/agent-architecture/pilot.html` — Episode 1's first interactive (the topology switcher) over the four-axis routing policy (execution unit / context projection / budget / stop policy), matching `research/emotional-ux-pilot/pilot.html`'s style register.
 
-- ~~Review + merge PR #5~~ — **merged 2026-04-24 as squash commit `2f7464a`** on `onceuponaprince/borai.cc` `main`. Branch `feat/near-proximal-stream` deleted.
-- ~~Scene 2a-03 artefacts~~ — **drafted and committed** (`1e0c604`) at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-{thread,essay,newsletter}.md`. Pending external publish only.
-- **Scene 2a-02 closure** — brief saved at `docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md`. A fresh session in `~/code/` handles both trailing repo beats (fast-travel-cli first-run + ghostroute retroactive docs) in one run, optionally via parallel subagents.
+## Immediate queue
+
+### 1. pilot.html — topology switcher (interactive #1 of 5)
+
+Per the synthesis's commitment paragraph in `research/agent-architecture/episodes/01-context-and-granularity.md`. Self-contained single-file HTML, hybrid essay + interactive, matching `emotional-ux-pilot/pilot.html`'s style tokens. Switcher should manipulate the four-axis policy (not just agent count) and surface a live SVG topology diagram. Subsequent interactives in agreed order: drift-vs-context slider, same-task walkthrough, coordination-overhead visualiser, cost/quality scatter.
+
+### 2. ghostroute uncommitted patches
+
+```
+~/code/ghostroute/ask-grok-cli/src/config/mod.rs       # RESPONSE_TIMEOUT_MS + RESPONSE_SELECTOR
+~/code/ghostroute/ask-grok-cli/src/automation/response.rs  # whitespace-collapse comparison fix
+```
+
+Plus yesterday's two prior uncommitted patches (typing.rs newline normalisation, main.rs context paste — noted in `one-shots/2026-04-22_ask-grok-cli-walkie-talkie-test.md`). A clean commit pass when next in ghostroute would be:
+
+- `fix(response): structural selector + whitespace-collapse to filter user prompt bubble`
+- `fix(config): bump RESPONSE_TIMEOUT_MS to 900_000`
+- `fix(typing): normalise whitespace for CDP keymap`
+
+That ghostroute beat is also part of Scene 2a-02 closure (the *ghostroute retroactive docs* trailing beat) — could fold the patches into that session.
+
+### 3. Strategic next — Vespa-style ranking (carried)
+
+See §Strategic next step below — Vespa-inspired BM25 + RRF as the next major scene; smart chunk-collapsing + query-aware `max_results` as riders on the same PR.
+
+### 4. Scene queue (carried)
+
+- ~~Review + merge PR #5~~ — merged 2026-04-24 as squash commit `2f7464a`.
+- ~~Scene 2a-03 artefacts~~ — drafted and committed (`1e0c604`); pending external publish only.
+- **Scene 2a-02 closure** — brief at `docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md`. Fresh session in `~/code/` handles fast-travel-cli first-run + ghostroute retroactive docs, optionally via parallel subagents.
 - **Scene 2a-01** — ai-swarm hello-world round-trip. Hardware-dependent.
 - **Scene 2b-01b** — teenyweeny URL. Still unopened.
-- **New strategic scenes** — see §Strategic next step below.
 
-## Strategic next step — search quality
+## Strategic next step — search quality (carried from 2026-04-24)
 
 The retrieval layer now has honest signal (near/proximal/relates_to over 144K edges, not 1.6M). The next frontier is **ranking quality** and **token efficiency** — getting the most useful results to the caller in the smallest response.
 
@@ -30,46 +51,25 @@ The retrieval layer now has honest signal (near/proximal/relates_to over 144K ed
 
 Vespa's value in one line: *first-phase cheap ranking over all candidates, then second-phase expensive re-ranking of the top-K, with hybrid sparse+dense signals fused at the end.* Adapted to borai-graph:
 
-1. **Add BM25 (or TF-IDF) as a sparse signal** alongside cosine embeddings. Lives in the indexer — builds a per-chunk term-frequency table, persisted alongside `vectors.npy`. Cheap to query, catches keyword-heavy questions that embeddings gloss over ("what did we decide about α?" where `α` is a sparse hit).
-2. **Two-phase ranking.** First phase: cheap top-200 by BM25 + cosine sum. Second phase: expensive re-rank of that top-200 using proximal expansion + relates_to traversal. Cuts compute from "every query touches the whole graph" to "every query touches 200 candidates."
-3. **Reciprocal rank fusion (RRF)** between the signals. Standard hybrid-search move: each mechanism (seed / near / proximal / relates_to / BM25) produces its own ranking; RRF fuses them into a single ordering via `1 / (k + rank)`. Avoids tuning weights manually; generally beats weighted linear combinations in practice.
-4. **Learning-to-rank (future)**. If there's judgement data — mark which results were actually useful per query — train a small LambdaMART-style re-ranker on top of the features. Out of scope for v1; worth flagging for a Chapter 3+ scene.
+1. **Add BM25 (or TF-IDF) as a sparse signal** alongside cosine embeddings. Lives in the indexer — builds a per-chunk term-frequency table, persisted alongside `vectors.npy`.
+2. **Two-phase ranking.** First phase: cheap top-200 by BM25 + cosine sum. Second phase: expensive re-rank using proximal expansion + relates_to traversal.
+3. **Reciprocal rank fusion (RRF).** Each mechanism produces its own ranking; RRF fuses via `1 / (k + rank)`. Beats weighted linear combinations in practice.
+4. **Learning-to-rank (future).** Out of scope for v1; flag for Chapter 3+.
 
-A scene-sized first slice would be (1) + (3): BM25 + RRF. Implementation sketch: new `borai.retrieval.sparse` module for BM25, add `sparse_similarity` to `top_k_seeds`, fuse via RRF in `rank_results`. 4-6 hours including tests.
+A scene-sized first slice: (1) + (3) — BM25 + RRF. New `borai.retrieval.sparse` module for BM25, add `sparse_similarity` to `top_k_seeds`, fuse via RRF in `rank_results`. 4–6 hours including tests.
 
-### Token reduction strategies
+### Token reduction strategies (orthogonal)
 
-Orthogonal to ranking quality — once the right results are surfacing, return them in fewer tokens. Named candidates, rough cost/value:
+- **Smart chunk-collapsing.** Same-file adjacent chunks → single "spans X-Y" response. Cheap (~30 LOC). Cuts response tokens ~30% for scene queries.
+- **Sentence-level pruning inside chunks.** Return only sentences overlapping the query. Medium cost. Cuts tokens 40–60% per result on long chunks.
+- **Result deduplication by content hash.** Cheap. Variable payoff.
+- **Tag-only shallow responses.** Even-shallower mode than `shallow`. Medium cost.
+- **Query-aware result caps.** Add `max_results` separate from `token_budget`. Cheap.
+- **Semantic query-cache coalescing.** Embed query; cache keyed by embedding bucket. Medium cost, high value for repeated drafting sessions.
 
-- **Smart chunk-collapsing.** When two results come from the same file and adjacent chunks, collapse into a single "spans X-Y" response with the union of content. Today `near` hits produce two separate result rows; in practice they're one answer. Cheap (maybe 30 LOC in `rank_results`). Cuts response tokens ~30% for scene queries.
-- **Sentence-level pruning inside chunks.** Return only the sentences that actually overlap with the query, not the full chunk. Requires a small sentence-splitter (already exists via `_split_sentences` in chunker) and a scoring pass. Medium cost. Cuts tokens 40-60% per result on long chunks.
-- **Result deduplication by content hash.** If the same text appears in multiple files (scripts duplicated, specs superseded), return once with a `seen_in: [...]` list. Cheap. Variable payoff — depends on how much the corpus actually duplicates.
-- **Tag-only shallow responses.** An even-shallower mode than current `shallow`: return just `source_path[chunk]` + top 3 tags. Caller picks which to expand. Useful for "give me 50 candidates to scan" flows where the webapp wants to render a dense list. Medium cost.
-- **Query-aware result caps.** Currently `token_budget` is a hard cap on content chars. Add `max_results` as a separate cap so a short-query with 20 tiny results doesn't blow the char budget while still capping count. Cheap.
-- **Semantic query-cache coalescing.** Today the query cache keys on `hash(agent::mode::query)`. Two queries that are synonyms miss the cache. Embed the query; cache keyed by embedding bucket. Medium cost, high value for repeated drafting sessions. Worth its own scene.
-
-**My recommended next-scene shape**: Vespa-inspired BM25 + RRF as the main beat; smart chunk-collapsing + query-aware `max_results` as riders on the same PR. Token-reduction gets a second scene once ranking quality is on solid ground.
+**Recommended next-scene shape:** Vespa-inspired BM25 + RRF as the main beat; smart chunk-collapsing + query-aware `max_results` as riders. Token-reduction gets a second scene once ranking quality is on solid ground.
 
 ## State snapshots
-
-### BorAI repo (github.com/onceuponaprince/borai.cc)
-
-- `main` at `2f7464a` — PR #5 squash-merged 2026-04-24 late-day. Pre-push hook typecheck guard landed earlier on `main` (`be42e6e`).
-- ~~`feat/near-proximal-stream`~~ — merged and deleted on GitHub.
-- `feature/misled-ethos-page` at `02b7bc2` — unchanged; live production at `misled.vercel.app/`; must not merge to main.
-- `feature/ai-swarm-infra-impl` at `e5a9715` — unchanged; ready to PR after end-to-end validation.
-
-### Docker stack (running on this host)
-
-- Worktree: `~/code/BorAI-graph` on `feat/near-proximal-stream` (rebased onto `main` this session).
-- Compose file: `~/code/BorAI-graph/docker-compose.yml`.
-- Named volumes: `borai-ollama-models` (persistent, `nomic-embed-text` cached), `borai-graph-data` (fresh ingest under new schema).
-- Stack is UP with the new schema loaded — validated via end-to-end query at scene close.
-- Operations:
-  - `docker compose exec borai-graph borai-graph-stats` — graph health.
-  - `docker compose exec borai-graph borai-graph-tags --min-count 5` — tag inventory (new CLI).
-  - **After any `ops/borai-graph/` source edit:** `docker compose build --no-cache borai-graph && docker compose up -d`. `--build` alone has been hitting the cache-masks-source-edits landmine repeatedly.
-  - `docker compose down -v` wipes both volumes; `down` alone keeps them.
 
 ### Vault
 
@@ -77,102 +77,124 @@ Orthogonal to ranking quality — once the right results are surfacing, return t
 - In-progress scenes:
   - `[[02a-01-ai-swarm-hello-world]]` — hardware-dependent; untouched this session.
   - `[[02-reaching-past-claude]]` — fast-travel-cli first-run + ghostroute retroactive docs still open.
-- Concluded this session:
-  - `[[03-near-proximal-and-the-stream]]` — shipped. `status: concluded`, `date_concluded: 2026-04-24`, `artifact_format: thread, essay, newsletter`.
-- Vault HEAD: pushed to `origin/main`. Recent commits: scene-2a-03 open, Progress capture + Conclude, scene conclude + checklist, docs refresh.
-- Dirty state swept 2026-04-24 late-day into six atomic commits: `.claude/*.lock` gitignored, misled pngs compressed, `artifacts/borai-graph-ship/` published (research-paper + retrospective + twitter-thread), `one-shots/` seeded with the ask-grok-cli walkie-talkie test log, `research/agent-architecture/` seeded (README + decisions + episodes + sources), `copilot-instructions.md` dropped (was a byte-identical duplicate of `CLAUDE.md` with drift risk — not a symlink; CLAUDE.md remains authoritative). All pushed to `origin/main`.
+- Concluded prior session: `[[03-near-proximal-and-the-stream]]` — shipped 2026-04-24.
+- New on lateral track: `research/agent-architecture/` — Episode 1 *Context and granularity* synthesised today. Pilot.html scaffold next.
+- Vault HEAD: `973e422` (this session's commit). Not yet pushed.
+- Working tree dirty: this PROGRESS.md (about to be committed).
+
+### Lateral research threads
+
+- `research/emotional-ux-pilot/` — Episode 1 pilot, complete. Self-contained `pilot.html` with three interactives.
+- `research/agent-architecture/` — Episode 1 cold round + synthesis landed; pilot.html in queue (interactive #1 of 5: topology switcher).
+
+When agent-architecture earns Episode 2, it graduates to `campaigns/agent-architecture/` per the rule in `research/agent-architecture/README.md`.
+
+### BorAI repo (github.com/onceuponaprince/borai.cc)
+
+- `main` at `2f7464a` — PR #5 squash-merged 2026-04-24 late-day. Pre-push hook typecheck guard landed earlier on `main` (`be42e6e`).
+- `feature/misled-ethos-page` at `02b7bc2` — unchanged; live production at `misled.vercel.app/`; must not merge to main.
+- `feature/ai-swarm-infra-impl` at `e5a9715` — unchanged; ready to PR after end-to-end validation.
+
+### Ghostroute repo (`~/code/ghostroute`)
+
+- HEAD at `bf004a1` (`docs: integrate fast-travel-cli into root README + architecture`).
+- **Two uncommitted source patches from this session:** `ask-grok-cli/src/config/mod.rs` (timeout + selector) and `ask-grok-cli/src/automation/response.rs` (whitespace-collapse). Plus prior session's uncommitted patches on `typing.rs` and `main.rs` (newline normalisation).
+- Binary installed to `~/.cargo/bin/ask-grok-cli` from current source (so working binary depends on uncommitted patches).
+- Cookies fresh at `~/.claude/cookie-configs/grok.com-cookies.json` (refreshed 2026-04-27 00:43:01).
+
+### Docker stack
+
+- Worktree: `~/code/BorAI-graph` on `feat/near-proximal-stream` (rebased onto `main` 2026-04-24).
+- Compose file: `~/code/BorAI-graph/docker-compose.yml`.
+- Named volumes: `borai-ollama-models` (persistent), `borai-graph-data` (fresh ingest under new schema 2026-04-24).
+- Ops:
+  - `docker compose exec borai-graph borai-graph-stats` — graph health.
+  - `docker compose exec borai-graph borai-graph-tags --min-count 5` — tag inventory.
+  - **After any `ops/borai-graph/` source edit:** `docker compose build --no-cache borai-graph && docker compose up -d`.
+  - `docker compose down -v` wipes both volumes; `down` alone keeps them.
 
 ### Agent skills (not version-controlled)
 
-Four files modified in-place at `~/.claude/commands/*/SKILL.md`. Not in any git repo — edits live on disk:
+Four files modified at `~/.claude/commands/*/SKILL.md` (state from 2026-04-24):
 
-- `build-in-public-engine/SKILL.md` — added `mode='full'`; query snippet unchanged otherwise.
-- `funding-tracker/SKILL.md` — added `mode='full'`; live-validated against running stack.
-- `hackathon-radar/SKILL.md` — added `mode='full'`.
-- `delegate-agent/SKILL.md` — kept `mode='shallow'` (aligns with skill's "source paths, not content" posture); print line now emits `tags` + `expand_handle`; comment added pointing at `engine.expand(handle)` for future follow-up.
-
-## Queue (behind the strategic scenes)
-
-### Small wins (can ride alongside the next PR)
-
-- **`borai-graph-query` CLI** — the skills still invoke via a Python one-liner. A proper `borai-graph-query --agent X --mode shallow 'text'` wrapper would clean that up.
-- **Bake `nomic-embed-text` into a custom Ollama image** — saves first-boot pull for anyone cloning.
-- **Host graph_dir documentation** — skills currently hardcode `/home/onceuponaprince/borai/graph`. When the skills ship to another user, that path breaks. Env-var-first with a sensible fallback.
-
-### Medium (a scene each)
-
-- **Vespa-inspired BM25 + RRF** — see §Strategic next step.
-- **Semantic query-cache coalescing** — see §Strategic next step.
-- **Claude Code subprocess bridge for semantic edge enrichment** — original paper §7 idea; worth picking up once ranking-quality work is in.
-- **Web UI for retrieval** — paper §7. Becomes concrete once the API shape stabilises after the Vespa work.
+- `build-in-public-engine/SKILL.md` — `mode='full'` added.
+- `funding-tracker/SKILL.md` — `mode='full'` added; live-validated.
+- `hackathon-radar/SKILL.md` — `mode='full'` added.
+- `delegate-agent/SKILL.md` — kept `mode='shallow'`; print line emits `tags` + `expand_handle`.
 
 ## Cross-scene carries (from prior sessions, still open)
 
 ### Scene 2a-02
 
 - **fast-travel-cli first-run** → fresh session in `~/code/fast-travel-cli/`, starts from `.claude/PROGRESS.md` + vault spec at `docs/superpowers/specs/2026-04-23-fast-travel-cli-design.md`. Seven-commit build sequence.
-- **ghostroute retroactive docs** → fresh session in `~/code/ghostroute/`. Monorepo-of-providers shape.
+- **ghostroute retroactive docs** → fresh session in `~/code/ghostroute/`. Monorepo-of-providers shape. **Fold today's ask-grok-cli patches into this beat.**
 
 Either beat closes Scene 2a-02 independently. Both still required for the scene to conclude.
 
 ### Scene 2b-01b
 
-Still unopened. Scene 2b-01's Conclude named it as: ship the `teenyweeny.studio` URL. BorAI-side execution beat — register domain, Supabase project, Resend sending domain, Vercel link, scaffold landing per design spec at `docs/superpowers/specs/2026-04-22-teenyweeny-studio-landing-design.md`. Chapter 2b rule *landing before build* blocks Scene 2b-02 (parser) until this lands.
+Still unopened. Scene 2b-01's Conclude named it: ship the `teenyweeny.studio` URL. Register domain, Supabase project, Resend sending domain, Vercel link, scaffold landing per `docs/superpowers/specs/2026-04-22-teenyweeny-studio-landing-design.md`. Chapter 2b rule *landing before build* blocks Scene 2b-02 (parser) until this lands.
 
-### Scene 05 artifact publication (Chapter 1)
+### Scene 05 artefacts (Chapter 1)
 
-**Already drafted and committed** at `artifacts/chapter-1/`:
+Drafted and committed at `artifacts/chapter-1/`:
+- `05-orchestration-shape-inverted-thread.md`
+- `05-vault-as-user-data.md`
 
-- `05-orchestration-shape-inverted-thread.md` — 7-beat thread, opens on the orchestration inversion, lands on the decision-framework line.
-- `05-vault-as-user-data.md` — long-form essay, lands on the *structural polish without the build* pattern.
-
-Both in voice, British English. Pending external posting only — `status: shipped` flips when each goes up on its destination. The prior entry in this handoff claimed pending drafts at `artifacts/01-origin/05-two-side-projects-additional-workflow-infra-*.md`; that path is wrong and those files do not exist. Artefacts live at `artifacts/chapter-1/` under shorter titular names matching the scene's Conclude.
+Both in voice. Pending external posting only — `status: shipped` flips when each goes up.
 
 ### Scene 04 downstream
 
 - Client message at `docs/handoffs/2026-04-21-misled-client-message-draft.md` — check if sent.
-- Scene 04 artifact publication — still open.
+- Scene 04 artefact publication — still open.
 - Register `misled.london` once client signs off on the ethos page.
+
+### Scene 2a-03 artefacts — external posting
+
+Drafted at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-{thread,essay,newsletter}.md`. Pending external publish only — `status: shipped` flips when each goes up.
 
 ## Landmines (repeat offenders)
 
-- **Docker cache masks source edits.** Hit **twice** this session. `docker compose up -d --build` does NOT reliably invalidate the COPY layer. Default to `build --no-cache` when the change is in `ops/borai-graph/`. Yesterday's session hit this once; today's twice. Worth baking `--no-cache` into a helper script.
-- **BorAI pre-push hook** needs `node_modules` in the worktree. `pnpm install` before pushing; discard the `pnpm-lock.yaml` drift with `git checkout -- pnpm-lock.yaml`. Typecheck step now guarded with `--if-present` (fixed this session).
-- **Skill-list dumps.** The available-skills catalogue was re-injected as a system reminder **seven times** this session, up from five yesterday. Still logged at `docs/upstream-issues.md`. Worth genuinely pursuing the disable-locally option if it keeps growing.
-- **`/etc/gitconfig` permission denied** for `gh pr create` — prefix with `GIT_CONFIG_NOSYSTEM=1`. Known, persistent.
-- **`np.save` silently appends `.npy`** — use `.tmp.npy` suffix pattern for atomic swap. Inherited through the codebase.
+- **Docker cache masks source edits.** Default to `build --no-cache` when the change is in `ops/borai-graph/`. Worth baking into a helper script.
+- **BorAI pre-push hook** needs `node_modules` in worktree. `pnpm install` before pushing; discard `pnpm-lock.yaml` drift with `git checkout -- pnpm-lock.yaml`. Typecheck step now `--if-present`-guarded.
+- **Skill-list dumps.** Available-skills catalogue re-injected as system reminder repeatedly per session. Logged at `docs/upstream-issues.md`. Worth pursuing the disable-locally option.
+- **`/etc/gitconfig` permission denied** for `gh pr create` — prefix with `GIT_CONFIG_NOSYSTEM=1`.
+- **`np.save` silently appends `.npy`** — use `.tmp.npy` suffix pattern for atomic swap.
 - **Docker bind-mounts bind at container-create time.** Tear down with `docker compose down` before removing a bound worktree.
-- **BorAI-graph and BorAI share a git repo via worktrees.** Feature branches cut from an old `main` will miss hook fixes etc.; `git rebase origin/main` before pushing.
+- **BorAI-graph and BorAI share a git repo via worktrees.** Feature branches from old `main` miss hook fixes; `git rebase origin/main` before pushing.
 - **Vercel preview deploys fail** on `apps/misled` (pre-existing). Not a blocker.
+- **`ask-grok-cli` Stateful Memory Campfire amplifies prompt-length bugs.** Each call accretes prior session turns into the prompt; long-prompt runs grow further out of any timeout. Mitigation: wipe `.claude/.swarm-memory.json` between long-prompt runs. Proper fix would be opt-out flag in ask-grok-cli source.
 
 ## Active tooling state
 
 - **Ollama (containerised):** running, `nomic-embed-text` cached, healthy.
-- **Gemini CLI:** AUTHED (parallel rate-limited).
-- **Copilot CLI:** AUTHED (`-p --deny-tool=shell --deny-tool=write`).
-- **Cursor CLI:** AUTHED, unused.
-- **Grok:** UNAVAILABLE as of last check; not re-verified.
+- **Gemini CLI:** AUTHED. Quota-rate-limited under load — retries kick in but log noise lands in dumps.
+- **Perplexity (`ask-perplexity` skill):** AVAILABLE and tested (43 cited sources delivered cleanly in Episode 1 cold round). First call may time out at 60s; retry succeeds.
+- **ChatGPT (`ask-chatgpt` skill):** Available but the subagent fell back to `codex exec -m gpt-5.4` for Episode 1 — note that the dump is from Codex CLI, GPT-5.4 model, not the skill's own surface.
+- **Copilot CLI:** AUTHED (`-p --deny-tool=shell --deny-tool=write`). Hit weekly rate limit during Episode 1's first round; retry ~3 hours later succeeded.
+- **Cursor CLI (`cursor-agent`):** AUTHED. Required `--force --model claude-4.5-sonnet` for Episode 1 (default `auto` and `sonnet-4-thinking` failed — model list has shifted). Cursor unilaterally writes its own files unless told not to; clean up after.
+- **Grok (`ask-grok-cli`):** AVAILABLE this session via `~/.cargo/bin/ask-grok-cli` (CDP scraper at `~/code/ghostroute/ask-grok-cli`). Cookies fresh. Three patches in source uncommitted.
 - **Anthropic API key:** NOT set. Graph runs rules-only by design.
 
 ## Session-open ritual for the next session
 
 1. Read `CLAUDE.md` at vault root.
 2. Read `campaigns/command-centre/campaign.md`.
-3. If touching the graph: `cd ~/code/BorAI-graph && docker compose ps` for stack state, `docker compose exec borai-graph borai-graph-stats` for health, `docker compose exec borai-graph borai-graph-tags --min-count 10` if curious about tag layer.
+3. If touching the graph: `cd ~/code/BorAI-graph && docker compose ps` for stack state, `docker compose exec borai-graph borai-graph-stats` for health.
 4. Depending on intent:
-   - **Scene 2a-02 closure** → `cd ~/code/` then open Claude Code with *"Read `~/code/build-in-public/docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md` and execute it."* Covers both trailing repo beats (fast-travel-cli first-run + ghostroute retroactive docs) in one session, optionally via parallel subagents.
-   - **Strategic next — Vespa-style ranking** → `/set-stage` a new Scene 2a-04 (inserted ahead of the existing Scene 04 — delegate-agent integration — if that still feels right, else as Scene 2a-04b). See §Strategic next step above for the scope sketch.
+   - **pilot.html topology switcher** (interactive #1 of 5) → no scene to load; work directly in `research/agent-architecture/`. Synthesis at `episodes/01-context-and-granularity.md` is the source.
+   - **Scene 2a-02 closure** → `cd ~/code/` then *"Read `~/code/build-in-public/docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md` and execute it."* Covers fast-travel-cli first-run + ghostroute retroactive docs. **Fold the ask-grok-cli uncommitted patches into the ghostroute beat.**
+   - **Strategic next — Vespa-style ranking** → `/set-stage` a new Scene 2a-04 (or 2a-04b). See §Strategic next step.
    - **Scene 2a-01 — ai-swarm round-trip** → hardware across three machines.
    - **Scene 2b-01b** — `/set-stage` under chapter 2b.
-   - **Scene 2a-03 artefacts — external posting** → thread, essay, newsletter live at `artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-*.md`; flip scene `status: shipped` when each goes up on its destination.
-   - **Chapter 1 Scene 05 artefacts — external posting** → thread + essay at `artifacts/chapter-1/05-*.md`; same flip-on-post pattern.
-5. Greet with one line: *"PR #5 merged; scene 2a-03 concluded + artefacts drafted. Next is either 2a-02 closure (brief saved), Vespa-style ranking, or one of the open 2a/2b scenes. Pick."*
+   - **Scene 2a-03 artefacts — external posting** → flip `status: shipped` per artefact.
+   - **Chapter 1 Scene 05 artefacts — external posting** → same flip-on-post pattern.
+5. Greet with one line: *"Episode 1 of agent-architecture synthesised; pilot.html topology switcher is next. Or pick from carries: 2a-02 closure (brief saved), Vespa ranking, scene 2b-01b, artefact postings."*
 
 ## Out-of-scope but noted
 
-- ~~`copilot-instructions.md` at vault root~~ — dropped 2026-04-24 late-day (was byte-identical duplicate of `CLAUDE.md`, not a symlink; drift risk).
-- ~~`one-shots/` directory~~ — committed 2026-04-24 late-day, seeded with the ask-grok-cli walkie-talkie test log.
-- ~~`research/agent-architecture/` directory~~ — committed 2026-04-24 late-day with full living-thread scaffold (README + decisions + episodes + sources).
-- `artifacts/chapter-1/` — pre-existing from Chapter 1; contains scene 05 artefacts (thread + essay), not touched structurally.
+- ~~`copilot-instructions.md` at vault root~~ — dropped 2026-04-24.
+- ~~`one-shots/` directory~~ — committed 2026-04-24, seeded with the ask-grok-cli walkie-talkie test log.
+- ~~`research/agent-architecture/` directory~~ — scaffold committed 2026-04-24; Episode 1 cold round + synthesis committed 2026-04-27 (`973e422`).
+- `artifacts/chapter-1/` — pre-existing; contains scene 05 artefacts.
 - Old session files under `.claude/projects/` — auto-generated transcripts.
-- ~~`.claude/scheduled_tasks.lock`~~ — now covered by the `.claude/*.lock` gitignore rule.
