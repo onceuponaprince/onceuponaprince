@@ -32,7 +32,7 @@ Each episode is a research file in `episodes/`. Each opens a question; the cold 
 | # | Episode | Status | Verdict |
 |---|---|---|---|
 | 1 | [Context and granularity](episodes/01-context-and-granularity.md) | Synthesised 2026-04-23 | Claim holds. Spectrum is real, position task-contingent, framework primitives mostly exist, *router that picks per task* is the genuine open problem. |
-| 2 | [The router we cannot yet build](episodes/02-the-router-we-cannot-yet-build.md) | Synthesised 2026-04-27 | Claim holds with reframing: v0 buildable today is **rules + instrumentation, not a model**. Taxonomy and labels are the bottleneck, not the classifier. |
+| 2 | [The router we cannot yet build](episodes/02-the-router-we-cannot-yet-build.md) | Synthesised 2026-04-27, addendum 2026-04-27 evening | Verdict **sharpened** by Perplexity recovery (six-of-seven). Routing-collapse mechanism makes naive confidence fallback worse than Ep2 admitted; threshold for *should-I-build-a-router-at-all* lands at ~100–300 queries/day. Grok still blocked (escalated). |
 
 ## Pilot
 
@@ -41,16 +41,23 @@ Each episode is a research file in `episodes/`. Each opens a question; the cold 
 | # | Interactive | Episode | Status |
 |---|---|---|---|
 | 1 | Topology switcher (four-axis policy) | 1 | Shipped |
-| 2 | Router-in-a-box (rules + confidence + fallback) | 2 | Pending |
+| 2 | Router-in-a-box (rules + confidence + fallback) | 2 | Shipped |
 | 3+ | Drift/context slider, walkthrough, coordination visualiser, cost/quality scatter | TBD | Queued |
 
 ## Decisions
 
-`decisions/` holds ADRs distilled from the research. None yet — synthesis is a map of the field, not a commitment to ship anything. ADRs land when an interactive build or a real system implementation forces an architectural choice. The Episode 3 candidate question (*should we build a v0 router for BorAI right now?*) is the most likely trigger for the first ADR.
+`decisions/` holds ADRs distilled from the research. None yet — Episode 2's addendum (2026-04-27 evening) committed the Episode 3 trigger to **queued, not now**: Perplexity's 100–300 queries/day threshold lands above BorAI's current traffic, and the routing-collapse mechanism argues against deploying a learned router before rules-and-instrumentation have generated production logs. The first ADR lands when Episode 3's synthesis commits, not before.
 
 ## Sources
 
 `sources/` holds the raw multi-source dumps from each episode's cold round. Show-your-work posture: nothing rewritten, nothing summarised. The synthesis is a reading of these dumps; the dumps are the evidence the reading rests on.
+
+| Episode | Source | Date | Status |
+|---|---|---|---|
+| 1 | Gemini, Perplexity, Claude cold, Grok, Copilot, Cursor, ChatGPT | 2026-04-23 | All seven recovered |
+| 2 | Gemini, Claude cold, Copilot, Cursor, ChatGPT | 2026-04-27 | Recovered (original round) |
+| 2 | Perplexity | 2026-04-27 evening | **Recovered (addendum)** under `xvfb-run` |
+| 2 | Grok | 2026-04-27 (both attempts) | **Blocked — escalated.** Upstream regression in `~/code/ghostroute/ask-grok-cli/`. Addendum diagnoses hang at `[Timing] Input located` (synthetic-paste / response-watch). |
 
 ## Method
 

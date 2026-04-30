@@ -1,6 +1,6 @@
 # Agent architecture — living research campaign
 
-**Status: graduated to campaign 2026-04-27. Episodes 1 and 2 synthesised. Pilot Interactive 1 (topology switcher) shipped; Interactive 2 (router-in-a-box) queued. Originally lived as `research/agent-architecture/` from 2026-04-23; preserved in git history. See `campaign.md` for the campaign's metadata + episode index.**
+**Status: graduated to campaign 2026-04-27. Episodes 1 and 2 synthesised; Episode 2 addendum landed 2026-04-27 evening (six-of-seven sources, verdict sharpened). Pilot Interactive 1 (topology switcher) and Interactive 2 (router-in-a-box) both shipped. Originally lived as `research/agent-architecture/` from 2026-04-23; preserved in git history. See `campaign.md` for the campaign's metadata + episode index.**
 
 ## What this is
 
@@ -54,13 +54,13 @@ Three outputs roll out on different cadences:
 
 ## Posture
 
-Episode 1 used the *wait-and-fire-cold* posture (all seven sources fired cold in one parallel pass). Episode 2 used the same posture but landed five-of-seven sources due to environment failures (Perplexity and Grok both blocked on Chromium launch — see source files for unblock paths). Later episodes may adopt different postures; the choice is recorded per episode.
+Episode 1 used the *wait-and-fire-cold* posture (all seven sources fired cold in one parallel pass). Episode 2 used the same posture but initially landed five-of-seven sources due to Chromium launch failures. The 2026-04-27-evening addendum recovered Perplexity (six-of-seven) under `xvfb-run`; Grok remains blocked at the typing/submit stage of `ask-grok-cli` and is escalated to the user as an upstream patch in `~/code/ghostroute/`. Later episodes may adopt different postures; the choice is recorded per episode.
 
 ## Relationship to Command Centre
 
 Originally lateral (sibling to `emotional-ux-pilot/`), now its own campaign. Triggered as a new line of enquiry on 2026-04-23. Graduated to `campaigns/` on 2026-04-27 when Episode 2's synthesis committed.
 
-Decisions made via this campaign may feed specific future scenes — agent architecture for BorAI Knowledge Graph follow-on work, the webapp layer, future Yurika products. Those future scenes, when opened, can reference the relevant ADR in `decisions/` via the `spec_file` frontmatter key. The Episode 3 candidate question (*should we build a v0 router for BorAI right now?*) is the most likely trigger for the first ADR.
+Decisions made via this campaign may feed specific future scenes — agent architecture for BorAI Knowledge Graph follow-on work, the webapp layer, future Yurika products. Those future scenes, when opened, can reference the relevant ADR in `decisions/` via the `spec_file` frontmatter key. The Episode 3 candidate question (*should we build a v0 router for BorAI right now?*) is **queued** as of the Ep2 addendum — not *now*. Reasoning lives in the addendum's commitments paragraph: BorAI's current query volume sits below Perplexity's 100–300/day threshold, and the routing-collapse mechanism argues against deploying a learned router before rules-and-instrumentation have generated production logs. The first ADR lands when Episode 3's synthesis commits.
 
 ## Graduation (complete)
 

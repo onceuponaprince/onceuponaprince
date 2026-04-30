@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Agent architecture — Episode 1: Context and granularity</title>
-<meta name="description" content="An essay and live topology switcher on whether the choice of position on the agent-architecture spectrum can be made at the task level rather than the product level." />
+<title>Agent architecture — Episodes 1 &amp; 2: spectrum and router</title>
+<meta name="description" content="Two essays and two interactives on whether the choice of position on the agent-architecture spectrum can be made at the task level rather than the product level — and on what the v0 router that picks the position would actually look like." />
 <style>
   :root {
     --bg: #f6f4ef;
@@ -268,6 +268,166 @@
   .topo-stop-marker.verifier { fill: var(--good); }
   .topo-stop-marker.open { fill: var(--neutral); }
 
+  /* Router-in-a-box (Interactive 2) */
+  .router-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  @media (min-width: 720px) {
+    .router-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .feature-row {
+    border: 1px solid var(--rule);
+    padding: 10px 12px;
+    background: var(--bg);
+  }
+  .feature-row .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .feature-row .name {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    color: var(--ink);
+  }
+  .feature-row .val {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+  .feature-row .desc {
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.45;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .feature-row input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .feature-row input[type="checkbox"] {
+    accent-color: var(--accent);
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .feature-row label.toggle {
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .threshold-row {
+    border: 1px dashed var(--rule);
+    padding: 10px 12px;
+    background: var(--node-soft);
+    margin: 18px 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  @media (min-width: 720px) {
+    .threshold-row { grid-template-columns: 1fr 1fr; }
+  }
+  .router-output {
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    padding: 16px;
+    display: grid;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .router-output .decision {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .router-output .decision .badge {
+    display: inline-block;
+    margin-right: 8px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 2px 6px;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    vertical-align: middle;
+  }
+  .router-output .decision .badge.rule { color: var(--good); border-color: var(--good); }
+  .router-output .decision .badge.fallback { color: var(--bad); border-color: var(--bad); }
+  .conf-bar {
+    height: 8px;
+    background: var(--node-soft);
+    border: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .conf-bar .fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--accent);
+    transition: width 200ms ease, background 200ms ease;
+  }
+  .conf-bar.below .fill { background: var(--bad); }
+  .conf-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+  }
+  .router-output .rationale {
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .router-output .rationale code {
+    font-size: 0.88em;
+  }
+  .router-output .rationale ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+  }
+  .router-output .rationale ul li {
+    margin-bottom: 2px;
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+  .router-output .cost {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+  }
+  .preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .preset-row button {
+    background: none;
+    border: 1px solid var(--rule);
+    color: var(--ink-muted);
+    padding: 6px 10px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    cursor: pointer;
+  }
+  .preset-row button:hover { border-color: var(--accent); color: var(--ink); }
+
   footer.pilot-foot {
     margin-top: 64px;
     padding-top: 24px;
@@ -291,7 +451,7 @@
 <main class="wrap" id="top">
 
 <div class="meta">
-  <span>Command Centre · Lateral Research · Agent Architecture · Episode 1</span>
+  <span>Command Centre · Campaign · Agent Architecture · Episodes 1 &amp; 2</span>
   <button id="theme-toggle" aria-label="Toggle theme">Dark</button>
 </div>
 
@@ -319,7 +479,7 @@ The switcher below is the <em>menu</em> the spectrum offers. Move the four axes 
 <!-- ============================== -->
 
 <div class="figure" id="switcher-figure">
-  <div class="label">Interactive 1 of 5 &middot; Topology Switcher</div>
+  <div class="label">Interactive 1 of 6 &middot; Topology Switcher</div>
   <div class="title">Four axes, not one</div>
 
   <div class="switcher-controls">
@@ -391,27 +551,170 @@ What the field has not built &mdash; and what every source consulted for this ep
 The convergence under the divergence: the routing primitive is a policy that prices four things together &mdash; <strong>local difficulty</strong>, <strong>context entanglement</strong>, <strong>coordination tax</strong>, and <strong>debugging liability</strong>. The framework primitives <em>enable</em> per-task routing. What is missing is the <em>taxonomy</em> &mdash; the human design work that says <em>this kind of task benefits from dispatch, this kind doesn't</em>.
 </p>
 
-<h2>Closing</h2>
+<h2>Bridge to Episode 2</h2>
 
 <p>
 What you just played with is a <em>menu</em>. What the field still cannot reliably build is the <em>router that picks from it</em>. That is Episode 2's question: what would a working task-feature classifier look like &mdash; what features, what training data, what measurement loop? The framework primitives are ready. The taxonomy is not.
 </p>
 
 <p>
-The contrarian read that holds the whole thing together comes from Grok's pass through 2026 X discourse: <em>"the correct position changes per task &mdash; but building the router that reliably knows is the real unsolved primitive."</em> That line is the episode's load-bearing finding. The synthesis is in <a href="episodes/01-context-and-granularity.md"><code>episodes/01-context-and-granularity.md</code></a>. The seven raw source dumps are in <a href="sources/"><code>sources/</code></a>. The next four interactives &mdash; drift-vs-context slider, same-task walkthrough, coordination-overhead visualiser, cost/quality scatter &mdash; are in queue.
+The contrarian read that held Episode 1 together came from Grok's pass through 2026 X discourse: <em>"the correct position changes per task &mdash; but building the router that reliably knows is the real unsolved primitive."</em> Episode 2 took that line as its question. The synthesis is in <a href="episodes/01-context-and-granularity.md"><code>episodes/01-context-and-granularity.md</code></a>. The raw source dumps are in <a href="sources/"><code>sources/</code></a>. Read on for the answer Episode 2 returned.
+</p>
+
+<h1 style="margin-top:72px;">The router we cannot yet build &mdash; and the v0 we can.</h1>
+<p class="subtitle">Episode 2's question: could a solo founder build a working task-feature classifier today, and if so, what does the v0 cost?</p>
+
+<p>
+The cold round answered with a sharper claim than the question asked. Yes, a v0 is buildable today &mdash; but the v0 that pays off first is <em>rules plus instrumentation</em>, not a learned model. The classifier is the wrong v0. The premature optimisation is the model. The under-rated, under-discussed move is the <em>taxonomy</em>: 5&ndash;7 hand-engineered features, hand-tuned rules, a frontier-LLM fallback when confidence is low, and trace fidelity end-to-end so you can see your decisions later. Cursor's load-bearing line states the constraint plainly: <mark>"You can't benchmark your way out of the data problem."</mark>
+</p>
+
+<p>
+The interactive below is the literal shape of that v0. Six features inferable from the task statement, a rule-based scoring function, an exposed confidence threshold, and a visible fallback when the rules disagree. There is no learned model behind the panel. There is no benchmark trick. The argument the interactive makes is the argument the synthesis makes: a v0 that is honest about being rules and instrumentation will outperform a v0 that pretends to be a classifier &mdash; because the failure modes you can see are the failure modes you can fix.
+</p>
+
+<!-- ============================== -->
+<!-- INTERACTIVE 2 — Router-in-a-box -->
+<!-- ============================== -->
+
+<div class="figure" id="router-figure">
+  <div class="label">Interactive 2 of 6 &middot; Router-in-a-box</div>
+  <div class="title">Rules, confidence, fallback &mdash; nothing else.</div>
+
+  <div class="preset-row" id="router-presets">
+    <button data-preset="parallel-search">parallel: search 30 files</button>
+    <button data-preset="coupled-debug">coupled: debug session</button>
+    <button data-preset="ambiguous-fix">ambiguous: "fix this"</button>
+    <button data-preset="verifier-task">verifier: schema extraction</button>
+    <button data-preset="reset">reset</button>
+  </div>
+
+  <div class="router-grid" id="router-features">
+    <div class="feature-row" data-feature="parallel">
+      <div class="head">
+        <span class="name">parallelisability</span>
+        <span class="val" data-val>0.50</span>
+      </div>
+      <div class="desc">Explicit list structure, cardinality markers ("3 files"), conjunctive verbs without sequential markers. Strongest single feature; cleanest signal inferable from the task statement alone.</div>
+      <input type="range" min="0" max="100" value="50" />
+    </div>
+    <div class="feature-row" data-feature="tools">
+      <div class="head">
+        <span class="name">active tool count</span>
+        <span class="val" data-val>3</span>
+      </div>
+      <div class="desc">Tools active for <em>this</em> task, not the framework's catalogue. Anthropic's "Lost in the Tools" effect &mdash; selection accuracy collapses past ~30&ndash;50.</div>
+      <input type="range" min="0" max="60" value="3" />
+    </div>
+    <div class="feature-row" data-feature="noise">
+      <div class="head">
+        <span class="name">expected context noise</span>
+        <span class="val" data-val>0.30</span>
+      </div>
+      <div class="desc">Unresolved pronouns, absent file references, implicit goals, history bleed from prior sessions. The signal that justifies stripping context.</div>
+      <input type="range" min="0" max="100" value="30" />
+    </div>
+    <div class="feature-row" data-feature="verifier">
+      <div class="head">
+        <span class="name">verifier availability</span>
+        <span class="val" data-val>off</span>
+      </div>
+      <div class="desc">External oracle &mdash; unit tests, type-check, schema validation. Changes the architecture choice: narrow-execution / wide-verification becomes viable.</div>
+      <label class="toggle"><input type="checkbox" /> verifier present</label>
+    </div>
+    <div class="feature-row" data-feature="reversibility">
+      <div class="head">
+        <span class="name">reversibility</span>
+        <span class="val" data-val>0.70</span>
+      </div>
+      <div class="desc">Risk feature, not performance feature. Drives the <em>budget / stop-policy</em> axis and the confidence threshold &mdash; not the execution-unit axis directly. Lower means the router should defer more.</div>
+      <input type="range" min="0" max="100" value="70" />
+    </div>
+    <div class="feature-row" data-feature="ambiguity">
+      <div class="head">
+        <span class="name">observation deficit</span>
+        <span class="val" data-val>0.20</span>
+      </div>
+      <div class="desc">Missing artefacts, "fix this" without a target, pronoun without an antecedent. Dampens confidence and pushes ambiguous tasks to the fallback rail.</div>
+      <input type="range" min="0" max="100" value="20" />
+    </div>
+  </div>
+
+  <div class="threshold-row">
+    <div class="feature-row" data-feature="threshold" style="border:none; padding:0; background:transparent;">
+      <div class="head">
+        <span class="name">confidence threshold</span>
+        <span class="val" data-val>0.50</span>
+      </div>
+      <div class="desc">Below this, the router abstains and falls back to monolith with a low-confidence annotation. The router never tries hard; when uncertain, it defers.</div>
+      <input type="range" min="0" max="100" value="50" />
+    </div>
+    <div class="feature-row" data-feature="stakes" style="border:none; padding:0; background:transparent;">
+      <div class="head">
+        <span class="name">stakes</span>
+        <span class="val" data-val>medium</span>
+      </div>
+      <div class="desc">Stakes detection sets the router's <em>own</em> threshold &mdash; not the architecture choice. High stakes lifts the bar for autonomous routing; low stakes lets the router commit on thinner evidence.</div>
+      <input type="range" min="0" max="2" value="1" step="1" list="stakes-ticks" />
+      <datalist id="stakes-ticks"><option value="0">low</option><option value="1">medium</option><option value="2">high</option></datalist>
+    </div>
+  </div>
+
+  <div class="router-output" id="router-output">
+    <div class="decision">
+      <span class="badge rule" id="decision-badge">RULE</span><span id="decision-text">monolith, full context, open-ended</span>
+    </div>
+    <div>
+      <div class="conf-bar" id="conf-bar"><div class="fill" id="conf-fill" style="width:55%;"></div></div>
+      <div class="conf-meta">
+        <span><span id="conf-num">0.55</span> confidence &middot; threshold <span id="conf-threshold">0.50</span></span>
+        <span id="conf-state">above threshold</span>
+      </div>
+    </div>
+    <div class="rationale" id="rationale-block">
+      <div id="rationale-line">Low parallelisability and bounded tool set: the chain wins on sequential reasoning.</div>
+      <ul id="rationale-list"></ul>
+    </div>
+    <div class="cost" id="cost-line">
+      ~$0.001 per classification (Morph LLM Router benchmark) &middot; rule path is free, fallback path bills as one Haiku-class call.
+    </div>
+  </div>
+
+  <div class="caption">
+    Six features, one rule pass, one fallback. The decision panel exposes the same three things every router-in-production should expose: the picked configuration, the confidence score, and whether the rule fired or the fallback did. Compare against the configuration the topology switcher above produces &mdash; the router is just an opinionated walk through that menu.
+  </div>
+</div>
+
+<h2>What the v0 commits to</h2>
+
+<p>
+Five sources converged on the same v0 architecture: <strong>Phase 1</strong> &mdash; rule-based heuristic with 6&ndash;10 hand-tuned rules plus a frontier-LLM fallback for ambiguous cases. <strong>Phase 2</strong> &mdash; replace the frontier-LLM fallback with a BERT-class classifier trained on the rules&rarr;frontier-LLM&rarr;outcome logs. End state: rules handle ~70% of traffic at zero latency; BERT handles ~25% at &lt;50ms; frontier-LLM handles ~5% as a high-confidence fallback. The cost target Cursor surfaced from production literature is achievable: Morph LLM Router reports ~430ms classification latency, $0.001 per classification, 40&ndash;70% cost reduction at &lt;2% quality loss.
+</p>
+
+<p>
+The training-data path is where the verdict bites hardest. Production execution logs are where the real signal lives, and a solo founder doesn't have them. RouteLLM's published <code>D_arena</code> dataset was never released; the community fork preprocessed the claimed 65K samples into <strong>only 19K usable instances</strong>. Synthetic generation (~10K pairs at $0.01&ndash;0.05 each, ~$200) is the cheap viable path, but the failure modes &mdash; <em>model collapse, fidelity gaps, artifactual relationships</em> &mdash; are real. The convergent recommendation: synthetic generation plus a 200-task hand-curated validation set from the founder. Skip preference data for v0; defer to v1 once production traffic exists.
+</p>
+
+<p>
+The smallest experiment that proves a v0: a 100-task validation set, hand-curated to span the feature axes, run against monolith, granular handoff, and the router's recommendation. Score by weighted metric (success &times; cost &times; latency). The bar is sharp: not "router beats monolith" or "router beats granular", but "router beats the better of monolith-or-granular fixed baseline on a task-by-task basis." Below 5% improvement, routing overhead probably isn't worth the complexity. Above 20% would be surprising. Estimated cost: ~$150 in API plus a day of founder time.
+</p>
+
+<h2>Closing</h2>
+
+<p>
+Episode 1 said the position is task-contingent. Episode 2 says the v0 router that picks the position is rules and instrumentation, not a model. The premature optimisation is the model. The under-discussed primitive is the taxonomy. The synthesis is in <a href="episodes/02-the-router-we-cannot-yet-build.md"><code>episodes/02-the-router-we-cannot-yet-build.md</code></a>. The raw source dumps for both episodes are in <a href="sources/"><code>sources/</code></a>. The next four interactives &mdash; drift-vs-context slider, same-task walkthrough, coordination-overhead visualiser, cost/quality scatter &mdash; remain queued.
 </p>
 
 <footer class="pilot-foot">
   <p>
     <span class="tag">Living research</span>
-    <span class="tag">Episode 1 of N</span>
-    <span class="tag">Lateral track</span>
+    <span class="tag">Episodes 1 &amp; 2 of N</span>
+    <span class="tag">Campaign track</span>
   </p>
   <p>
-    A sibling to <a href="../emotional-ux-pilot/"><code>research/emotional-ux-pilot/</code></a> within the Command Centre vault. When this thread earns Episode 2, it graduates to <code>campaigns/agent-architecture/</code>.
+    Graduated from <code>research/agent-architecture/</code> to <code>campaigns/agent-architecture/</code> on 2026-04-27 when Episode 2's synthesis committed. See <a href="campaign.md"><code>campaign.md</code></a> for the campaign metadata and episode index.
   </p>
   <p style="font-size: 12px; font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; letter-spacing: 0.05em; color: var(--ink-muted);">
-    Built 2026-04-27. Self-contained: no external dependencies. View source for the full implementation.
+    Built 2026-04-27, extended 2026-04-27 with Interactive 2 after the Episode 2 addendum. Self-contained: no external dependencies. View source for the full implementation.
   </p>
 </footer>
 
@@ -763,6 +1066,258 @@ The contrarian read that holds the whole thing together comes from Grok's pass t
 
   // initial render
   render();
+
+  // ============================== //
+  // INTERACTIVE 2 — Router-in-a-box //
+  // ============================== //
+  // Six features. Hand-tuned scoring rule. Confidence + threshold.
+  // Visible fallback to monolith when confidence is below threshold.
+  // No learned model. The argument is the architecture is the argument.
+
+  var routerState = {
+    parallel: 0.50,        // 0..1
+    tools: 3,              // 0..60
+    noise: 0.30,           // 0..1
+    verifier: false,       // bool
+    reversibility: 0.70,   // 0..1
+    ambiguity: 0.20,       // 0..1
+    threshold: 0.50,       // 0..1
+    stakes: 1              // 0,1,2 (low/med/high)
+  };
+
+  var STAKES_LABEL = ['low', 'medium', 'high'];
+
+  var presets = {
+    'parallel-search':  { parallel: 0.90, tools: 6,  noise: 0.20, verifier: false, reversibility: 0.85, ambiguity: 0.10, threshold: 0.50, stakes: 1 },
+    'coupled-debug':    { parallel: 0.10, tools: 8,  noise: 0.55, verifier: false, reversibility: 0.55, ambiguity: 0.30, threshold: 0.50, stakes: 1 },
+    'ambiguous-fix':    { parallel: 0.40, tools: 4,  noise: 0.65, verifier: false, reversibility: 0.40, ambiguity: 0.85, threshold: 0.55, stakes: 2 },
+    'verifier-task':    { parallel: 0.75, tools: 3,  noise: 0.20, verifier: true,  reversibility: 0.85, ambiguity: 0.10, threshold: 0.50, stakes: 0 },
+    'reset':            { parallel: 0.50, tools: 3,  noise: 0.30, verifier: false, reversibility: 0.70, ambiguity: 0.20, threshold: 0.50, stakes: 1 }
+  };
+
+  function readNumeric(row, key, scale) {
+    var input = row.querySelector('input[type="range"]');
+    var raw = parseFloat(input.value);
+    return scale === 1 ? raw : raw / 100;
+  }
+
+  function bindRouterInputs() {
+    var rows = document.querySelectorAll('#router-features .feature-row');
+    rows.forEach(function(row){
+      var key = row.getAttribute('data-feature');
+      var scale = (key === 'tools') ? 1 : 100;
+      var input = row.querySelector('input[type="range"]');
+      var check = row.querySelector('input[type="checkbox"]');
+      if (input) {
+        input.addEventListener('input', function(){
+          routerState[key] = readNumeric(row, key, scale);
+          renderRouter();
+        });
+      }
+      if (check) {
+        check.addEventListener('change', function(){
+          routerState[key] = check.checked;
+          renderRouter();
+        });
+      }
+    });
+    var thrRow = document.querySelector('.threshold-row .feature-row[data-feature="threshold"]');
+    var stakesRow = document.querySelector('.threshold-row .feature-row[data-feature="stakes"]');
+    if (thrRow) {
+      thrRow.querySelector('input[type="range"]').addEventListener('input', function(e){
+        routerState.threshold = parseFloat(e.target.value) / 100;
+        renderRouter();
+      });
+    }
+    if (stakesRow) {
+      stakesRow.querySelector('input[type="range"]').addEventListener('input', function(e){
+        routerState.stakes = parseInt(e.target.value, 10);
+        renderRouter();
+      });
+    }
+    document.querySelectorAll('#router-presets button').forEach(function(b){
+      b.addEventListener('click', function(){
+        var p = presets[b.getAttribute('data-preset')];
+        if (!p) return;
+        Object.keys(p).forEach(function(k){ routerState[k] = p[k]; });
+        applyStateToInputs();
+        renderRouter();
+      });
+    });
+  }
+
+  function applyStateToInputs() {
+    document.querySelectorAll('#router-features .feature-row').forEach(function(row){
+      var key = row.getAttribute('data-feature');
+      var input = row.querySelector('input[type="range"]');
+      var check = row.querySelector('input[type="checkbox"]');
+      if (input) {
+        var scale = (key === 'tools') ? 1 : 100;
+        input.value = scale === 1 ? routerState[key] : Math.round(routerState[key] * 100);
+      }
+      if (check) check.checked = !!routerState[key];
+    });
+    var thr = document.querySelector('.threshold-row .feature-row[data-feature="threshold"] input[type="range"]');
+    if (thr) thr.value = Math.round(routerState.threshold * 100);
+    var stk = document.querySelector('.threshold-row .feature-row[data-feature="stakes"] input[type="range"]');
+    if (stk) stk.value = routerState.stakes;
+  }
+
+  function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+
+  // Hand-tuned scoring rule. Output: {config, confidence, rationale[]}.
+  // The rule scores how strongly the task asks for granular decomposition.
+  // Reversibility / stakes / ambiguity do NOT pick the architecture; they
+  // pick the *threshold* and the fallback annotation, per Episode 2's synthesis.
+  function ruleScore(s) {
+    var rationale = [];
+    var score = 0;
+
+    // Parallelisability is the strongest single feature.
+    score += s.parallel * 0.40;
+    if (s.parallel >= 0.7) {
+      rationale.push('parallelisability ' + s.parallel.toFixed(2) + ' &mdash; explicit list structure / cardinality / conjunctive verbs');
+    } else if (s.parallel <= 0.25) {
+      rationale.push('parallelisability ' + s.parallel.toFixed(2) + ' &mdash; tightly coupled, sequential reasoning');
+    }
+
+    // Active tool count, normalised against Lost-in-the-Tools threshold.
+    // 0..15: linear; 15..30: gentle; 30+: penalty (too many tools = swarm risk).
+    var toolNorm = clamp(s.tools / 30, 0, 1.2);
+    if (toolNorm <= 1) score += toolNorm * 0.20;
+    else { score += 0.20; rationale.push('active tools ' + s.tools + ' &mdash; near Lost-in-the-Tools threshold; expect selection drift'); }
+
+    // Expected context noise pushes toward filtered handoff.
+    score += s.noise * 0.20;
+    if (s.noise >= 0.5) rationale.push('context noise ' + s.noise.toFixed(2) + ' &mdash; strip context at the handoff boundary');
+
+    // Verifier presence makes narrow-execution / wide-verification cheap.
+    if (s.verifier) {
+      score += 0.10;
+      rationale.push('verifier present &mdash; narrow-execution / wide-verification becomes viable');
+    }
+
+    // Ambiguity dampens.
+    score -= s.ambiguity * 0.15;
+    if (s.ambiguity >= 0.6) rationale.push('observation deficit ' + s.ambiguity.toFixed(2) + ' &mdash; ambiguous goal; clarification cheaper than dispatch');
+
+    score = clamp(score, 0, 1);
+
+    // Configuration walk derived from score.
+    var config;
+    if (score >= 0.65) {
+      config = {
+        exec: s.tools >= 25 ? 'swarm' : 'dag',
+        ctx: s.noise >= 0.5 ? 'filtered handoff' : 'projected state',
+        budget: s.verifier ? 'medium' : 'high',
+        stop: s.verifier ? 'verifier loop' : (s.tools >= 25 ? 'hard cap' : 'verifier loop')
+      };
+    } else if (score >= 0.40) {
+      config = {
+        exec: 'linear chain',
+        ctx: s.noise >= 0.4 ? 'projected state' : 'projected state',
+        budget: 'medium',
+        stop: s.verifier ? 'verifier loop' : 'hard cap'
+      };
+    } else {
+      config = {
+        exec: 'monolith',
+        ctx: 'full history',
+        budget: s.tools <= 4 ? 'high' : 'medium',
+        stop: s.verifier ? 'verifier loop' : 'open-ended'
+      };
+    }
+
+    return { score: score, config: config, rationale: rationale };
+  }
+
+  // Threshold lifted by stakes and lowered by reversibility.
+  function effectiveThreshold(s) {
+    var base = s.threshold;
+    var stakesBump = (s.stakes - 1) * 0.10; // -0.10 / 0 / +0.10
+    var revBump = (s.reversibility - 0.5) * -0.10; // less reversible -> harder bar
+    return clamp(base + stakesBump + revBump, 0, 1);
+  }
+
+  function renderRouter() {
+    // mirror ranges into their .val readouts
+    document.querySelectorAll('#router-features .feature-row').forEach(function(row){
+      var key = row.getAttribute('data-feature');
+      var valEl = row.querySelector('[data-val]');
+      if (!valEl) return;
+      if (key === 'tools') valEl.textContent = String(routerState.tools);
+      else if (key === 'verifier') valEl.textContent = routerState.verifier ? 'on' : 'off';
+      else valEl.textContent = (routerState[key]).toFixed(2);
+    });
+    var thrVal = document.querySelector('.threshold-row .feature-row[data-feature="threshold"] [data-val]');
+    if (thrVal) thrVal.textContent = routerState.threshold.toFixed(2);
+    var stkVal = document.querySelector('.threshold-row .feature-row[data-feature="stakes"] [data-val]');
+    if (stkVal) stkVal.textContent = STAKES_LABEL[routerState.stakes];
+
+    var r = ruleScore(routerState);
+    var thr = effectiveThreshold(routerState);
+    var fired = (r.score >= thr);
+
+    var cfg = r.config;
+    var decisionText = cfg.exec + ', ' + cfg.ctx + ', ' + cfg.budget + ' budget, ' + cfg.stop;
+
+    var badge = document.getElementById('decision-badge');
+    var dtext = document.getElementById('decision-text');
+    var fill = document.getElementById('conf-fill');
+    var bar = document.getElementById('conf-bar');
+    var num = document.getElementById('conf-num');
+    var thrEl = document.getElementById('conf-threshold');
+    var state = document.getElementById('conf-state');
+    var line = document.getElementById('rationale-line');
+    var list = document.getElementById('rationale-list');
+    var cost = document.getElementById('cost-line');
+
+    if (fired) {
+      badge.className = 'badge rule';
+      badge.textContent = 'RULE';
+      dtext.textContent = decisionText;
+      bar.classList.remove('below');
+      state.textContent = 'above threshold';
+      cost.innerHTML = '~$0.001 per classification (Morph LLM Router benchmark) &middot; <strong>rule path fired &mdash; zero LLM call.</strong>';
+      line.innerHTML = r.rationale.length
+        ? 'Rule scored ' + r.score.toFixed(2) + ' against threshold ' + thr.toFixed(2) + '. Picked configuration on these signals:'
+        : 'Rule scored ' + r.score.toFixed(2) + ' against threshold ' + thr.toFixed(2) + '. No single feature dominated &mdash; the configuration is the rule’s default for this score band.';
+    } else {
+      badge.className = 'badge fallback';
+      badge.textContent = 'FALLBACK';
+      dtext.textContent = 'monolith, full history, medium budget, open-ended (low-confidence default)';
+      bar.classList.add('below');
+      state.textContent = 'below threshold';
+      cost.innerHTML = '~$0.001 rule cost + one Haiku-class fallback call (~$0.002&ndash;0.005). <strong>Fallback fires; rule abstains.</strong>';
+      line.innerHTML = 'Rule scored ' + r.score.toFixed(2) + ' against threshold ' + thr.toFixed(2) + '. Below threshold: the router defers. The frontier-LLM fallback would now be invoked with the task statement and the rule’s candidate configuration as a hint.';
+    }
+
+    fill.style.width = Math.round(r.score * 100) + '%';
+    num.textContent = r.score.toFixed(2);
+    thrEl.textContent = thr.toFixed(2);
+
+    list.innerHTML = '';
+    if (fired && r.rationale.length) {
+      r.rationale.forEach(function(t){
+        var li = document.createElement('li');
+        li.innerHTML = t;
+        list.appendChild(li);
+      });
+    } else if (!fired) {
+      var li = document.createElement('li');
+      li.innerHTML = 'effective threshold = ' + routerState.threshold.toFixed(2) +
+        ' + stakes adj ' + ((routerState.stakes - 1) * 0.10).toFixed(2) +
+        ' + reversibility adj ' + ((routerState.reversibility - 0.5) * -0.10).toFixed(2) +
+        ' = ' + thr.toFixed(2);
+      list.appendChild(li);
+      var li2 = document.createElement('li');
+      li2.innerHTML = 'fallback annotation logged for post-hoc taxonomy review.';
+      list.appendChild(li2);
+    }
+  }
+
+  bindRouterInputs();
+  renderRouter();
 })();
 </script>
 </body>

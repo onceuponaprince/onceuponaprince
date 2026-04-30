@@ -231,3 +231,53 @@ Target: `../pilot.html` at the root of `research/agent-architecture/`. Episode 1
 ## Graduation trigger
 
 When this episode's synthesis commits, the thread graduates from `research/agent-architecture/` to `campaigns/agent-architecture/` per the rule in `../README.md` and `~/.claude/skills/living-research/references/adr-and-graduation.md`.
+
+---
+
+## Addendum — 2026-04-27 evening (Perplexity recovered, Grok still blocked)
+
+*Delta on the original synthesis. The 5-of-7 verdict above stands as historical record; this section is the update once the Chromium re-fire ran. Original synthesis is not retro-edited.*
+
+### What unblocked, what didn't
+
+Chromium launch unblocked for **Perplexity**: `ask-perplexity-cli` ran cleanly under `xvfb-run -a -s "-screen 0 1920x1080x24"` after killing a stale `zsh until` loop that had been holding the chromiumoxide runner from a parallel job. The earlier handover note's diagnosis (display server missing, BrowserConfig flags incomplete) was half-right — the display half was true on the older session, but on this run xvfb plus a clean runner directory was sufficient. Chromiumoxide does work; the prior session's failures were a process-orchestration issue, not a chromiumoxide regression. Patches to `~/code/ghostroute/ask-perplexity-cli/src/browser/mod.rs` are not required for Perplexity. The new dump is in `../sources/2026-04-27-perplexity.md`.
+
+**Grok stayed blocked** for a different reason. `ask-grok-cli` reaches `[Timing] Input located: 8826ms` reliably under both `headless=true` and `headless=false` (with xvfb), then hangs after the "Drunk-Typist" paste step with no further output for 30+ minutes — same point at which the prior session reported `Failed to paste previous context into input field: Key not found: ≥`. Wiping `.claude/.swarm-memory.json` to remove non-ASCII characters resolves the explicit Unicode error but does not unblock the underlying typing/submit flow. The grok.com DOM has likely shifted: the input field is found, but the synthetic paste either fails silently or the response selector no longer matches. **Fix is upstream in `~/code/ghostroute/ask-grok-cli/src/automation/`, not in the vault.** This is the single open question raised back to the user. The Grok dump for 2026-04-27 keeps its prior status (`STATUS: EXTRACTION STILL FAILED`) plus a note recording today's diagnosis.
+
+### Verdict under stress test
+
+**Perplexity sharpens the verdict.** It does not weaken it. The original synthesis said *the v0 is rules + instrumentation, not a model*; Perplexity's production survey turns that from a recommendation into a documented production pattern. Three concrete sharpenings:
+
+- **The under-100–300-queries-per-day threshold.** Perplexity names it explicitly: *"Below ~100–300 high-quality LLM queries per day, the overhead of maintaining a router usually outweighs the cost savings."* Episode 1 already implied this; Episode 2 hand-waved at *"narrow task domain"*; the addendum makes the threshold a number. Solo founders below that bar should not be building a router.
+- **Routing collapse is the canonical failure, not the SPOF.** Perplexity foregrounds the *"When Routing Collapses"* paper (arXiv 2602.03478v1, also surfaced by Cursor in the original round) as the single biggest documented failure mode: *"learned routers start to over-use the strongest model as cost-budgets rise, even when weaker models are sufficient, completely undermining the cost-savings promise."* The mechanism is **objective-decision mismatch** — predicting a scalar score versus making an argmax decision. This is a sharper version of Episode 2's SPOF concern. The naive confidence-based fallback that Episode 2 recommended (low confidence → cheaper architecture) actively makes routing collapse *worse*, by ratcheting traffic toward the strong model. Interactive 2 implements the inverse: low confidence → fall back to *monolith*, not to the more expensive route.
+- **RouterBench is a real dataset; the production routers use it.** Original synthesis flagged HAL as suspect-pending-verification because only Gemini surfaced it. Perplexity replaces it with **RouterBench** (35–36k prompt-response pairs across ~11 models, 8 benchmark domains; arxiv.org/abs/2403.12031, ACL/MLSys community-maintained), which LLMRank, EquiRouter, and SCORE-style deployments all train on. This is a meaningful upgrade to the v0 training-data path: synthetic generation plus RouterBench-derived labels gets a solo founder closer to a usable preference signal than the synthetic-only recipe Episode 2 originally named.
+
+What Perplexity *does not* contradict: every framework-specific claim Episode 2 made (Anthropic Workflows subagent dispatch, OpenAI handoff filters, RouteLLM's `bert-mf` family, MasRouter's three-layer cascade) survives intact. The new sources Perplexity surfaces — *Causal LLM Routing* (NeurIPS 2025, openreview), *EquiRouter*, *LLMRank*, *SkillRouter* — are additive, not corrective.
+
+What Perplexity *does* contradict: the original synthesis listed task horizon as noise (Claude cold's call). Perplexity reports turn count and prompt length *are* the working features in production routers — *"Long-turn / multi-tool trajectories are often routed to more capable, but slower, agents."* Reframing: turn count is noise as a *predictor of architecture choice*, but a working signal as a *predictor of model tier*. The two are not the same routing decision. Interactive 2's score function uses tool count but not turn count, by design.
+
+### Grok absence — what we cannot see
+
+The contrarian-X-discourse gap remains. The original synthesis's Grok quote from Episode 1 (*"the correct position changes per task — but building the router that reliably knows is the real unsolved primitive"*) still does the load-bearing work. What is missing: 2026 X threads naming specific rip-outs (*"we removed the router"*) and anti-DSPy takes. Without those, the verdict is *confirmed/sharpened by the production blog corpus, untested against the 2026 contrarian discourse*. Cursor's Reddit-and-GitHub coverage from the original round partially fills the gap — `r/LLMDevs/1nsi2g7`, the LangGraphJS #779 silent-failure thread — but X-native voices remain absent.
+
+### Net call
+
+The Episode 2 verdict — **the v0 buildable today is rules + instrumentation, not a model. Taxonomy and labels are the bottleneck, not the classifier.** — is **sharpened**, not weakened, by the Perplexity dump. The routing-collapse mechanism makes the original "naive confidence fallback" recommendation slightly more dangerous than Episode 2 admitted; Interactive 2 ships with the inverse rule (fall back to monolith, never to the strong model on low confidence) on that basis.
+
+### Commitments paragraph (revised)
+
+The Episode 3 trigger question — *should BorAI build a v0 router right now?* — moves from **queued** to **queued (with an Episode 3 cold round to follow)**. The decision is *not* now. No ADR opens in `decisions/` from the addendum alone. The reason: Perplexity's 100–300 queries/day threshold lands above BorAI's current traffic, and the routing-collapse risk argues against deploying a learned router before the rules and instrumentation have generated production logs to validate against. BorAI ships with rules-and-instrumentation by default per the original synthesis; Episode 3 will determine whether and when to graduate to a learned classifier. The first ADR in `decisions/` lands when Episode 3's synthesis commits, not before.
+
+### Source-coverage status (revised)
+
+| Source | Status | Date |
+|---|---|---|
+| Gemini | Recovered (2026-04-27 original round) | 04-27 |
+| Perplexity | **Recovered (addendum)** | 04-27 evening |
+| Claude (cold) | Recovered (original round) | 04-27 |
+| Grok | **Still blocked** — upstream `~/code/ghostroute/ask-grok-cli/` Drunk-Typist / response-selector regression. Escalated to user. | 04-27 (both attempts) |
+| Copilot CLI | Recovered (original round) | 04-27 |
+| Cursor Agent | Recovered (original round) | 04-27 |
+| ChatGPT | Recovered (original round) | 04-27 |
+
+Five-of-seven became **six-of-seven**. The contrarian-X gap remains the single un-closed source. The verdict's load-bearing work survives the recovery without needing it.
