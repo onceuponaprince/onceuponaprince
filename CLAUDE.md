@@ -81,15 +81,17 @@ characters: ["[[slug]]"]
 spec_file: "path/to/spec.md" | null
 blockers: ["prose descriptor", ...]
 supersedes: ["[[slug]]" | "path/to/file.md"] | null
-artifact_format: thread | newsletter | video | essay | none
-artifact_file: "[[artifact-filename]]"
+artifacts:
+  - format: thread | newsletter | video | essay
+    file: "[[artifact-filename]]"
 tags: []
 ---
 ```
 
-- `spec_file` — the active design spec that drove the scene. Mirrors `artifact_file`. Null when no spec precedes the work.
-- `blockers` — external dependencies gating close. Prose descriptors, not IDs. Empty list when none.
+- `spec_file` — the active design spec that drove the scene. Null when no spec precedes the work.
+- `blockers` — external dependencies gating close. Prose descriptors, not IDs. Empty list when none. **A scene cannot move to `concluded` with non-empty blockers** — carry them to the successor scene's frontmatter or resolve them.
 - `supersedes` — older specs, scenes, or patterns this work replaces. Null when none.
+- `artifacts` — list of objects, one per artefact this scene produced. Each entry has `format` (one of the four formats; `none` is encoded as an empty list at the field level) and `file` (a wikilink, never a path). Empty list `[]` when no artefacts have been drafted yet. Multi-artefact scenes (e.g. thread + essay + newsletter from one Conclude) list each as its own entry.
 
 **Chapter / Campaign / Character:** see `templates/`.
 
@@ -161,17 +163,19 @@ The graph is a cache of prior context, not a source of truth. If a query returns
 ### Concluding a scene
 
 1. Load scene, thesis, chapter arc.
-2. Draft all seven Conclude answers from captured material.
-3. Lessons can be sober or negative. Not marketing.
-4. Present for edit.
-5. On sign-off: `status: concluded`, `date_concluded`, `artifact_format`. Update chapter checklist.
+2. Verify `blockers: []`. If blockers remain, either resolve them or carry them to the successor scene's frontmatter (typically named in the *Next scene* answer) before proceeding.
+3. Draft all seven Conclude answers from captured material.
+4. Lessons can be sober or negative. Not marketing.
+5. Present for edit.
+6. On sign-off: `status: concluded`, `date_concluded`, populate `artifacts:` with one entry per drafted format. Update chapter checklist.
 
 ### Publishing an artifact
 
-1. Create `/artifacts/<chapter>/NN-<scene-slug>.md`.
+1. Create `/artifacts/<chapter>/NN-<scene-slug>-<format>.md` (one file per format when multi-artefact).
 2. Adapt Conclude into chosen format.
 3. Preserve voice. No added optimism.
-4. On external publish: `status: shipped`, set `artifact_file`.
+4. On draft: ensure the corresponding `artifacts:` entry has its `file` wikilink set.
+5. On external publish: flip `status: shipped` (one scene per commit — see *Commit discipline* — since artefacts ship asynchronously).
 
 ### Creating a new character
 
@@ -213,6 +217,40 @@ Rules elevated from practice. Each earns its place by appearing in three or more
 - **Superseded-spec pattern.** When a spec is rewritten mid-scene, the old file stays in place under its original date-stamped name. The two files together *are* the decision.
 - **Forward-only rename.** Renames of handles, products, or characters apply to new artifacts only. Concluded scenes retain their original references as historical record.
 - **Single atomic scene commit.** One scene's work ships as one commit where possible. If splitting is necessary, split by beat, not by file.
+
+## Commit discipline
+
+The vault is markdown-only and lives in git. Commits follow the scene lifecycle. Vault verbs override the global `feat/fix/...` set when both could apply; reach for `feat/fix/refactor/test/chore` only for non-scene work (scripts, vault tooling, etc.).
+
+### Vault commit verbs
+
+- `set-stage(<chapter>/<scene-slug>):` — opening a new scene (template fill + Set Stage draft)
+- `capture(<chapter>/<scene-slug>):` — appending to an in-progress scene's *Moment-by-moment*
+- `conclude(<chapter>/<scene-slug>):` — flipping `status: concluded` (Conclude block + artefact drafts in the same commit)
+- `ship(<chapter>/<scene-slug>):` — flipping `status: shipped` after one artefact goes external
+- `pivot(<chapter>/<scene-slug>):` — adding a Pivot beat mid-scene
+- `schema:` — frontmatter schema migrations (no scene-slug; touches many files)
+- `template:` — template changes
+- `chapter(<chapter>):` / `campaign(<campaign>):` / `character(<slug>):` — file-level changes to those entities
+
+Scope uses the chapter prefix to disambiguate scene numbers across chapters: `conclude(02a/03):`, not `conclude(03):`.
+
+### Rules
+
+1. **Single atomic scene commit.** (Carries from Named patterns.) One scene's beat = one commit. Split by beat, not by file.
+2. **Conclude is one commit.** Status flip, dates, populated `artifacts:`, full Conclude block, and artefact drafts ship together. If the Conclude isn't ready to draft artefacts, it isn't ready to conclude.
+3. **Ship is one scene per commit.** Each artefact going external is its own `ship(...)` commit; artefacts ship asynchronously, so do their commits.
+4. **Capture batches.** Multiple Moment-by-moment additions during one work session may be one `capture(...)` commit. Don't atomise per checkbox.
+5. **Schema migrations stand alone.** Never bundle a frontmatter migration with a scene flip or with new content.
+6. **Template changes precede schema migrations.** Commit the `template:` change first; the `schema:` migration is the catch-up.
+7. **Blocker-clear before conclude.** Per the schema invariant, the `conclude(...)` commit must show `blockers: []`. If blockers carry to a successor, that move is a separate prior commit (or part of the successor's `set-stage(...)`).
+8. **Drive-by edits get flagged, not folded.** If you notice an unrelated issue while working a scene, surface it in the reply — don't fold it into the active commit.
+
+### Forbidden in commits
+
+- `.claude/settings.local.json` (gitignored).
+- Vault binaries (PDFs, large images) without explicit need — discuss before committing.
+- Multiple scenes' lifecycle flips in one commit (e.g. concluding 03 and shipping 02 together).
 
 ## When in doubt
 
