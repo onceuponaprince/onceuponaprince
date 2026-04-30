@@ -11,7 +11,7 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: 
+artifacts: []
 tags:
   - 
 ---
@@ -85,7 +85,7 @@ tags:
 ### Next scene
 
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+*One or more of: thread / newsletter / video / essay / none. Names the format(s); the `artifacts:` frontmatter list pairs each with its file.*
 
 ---
 
