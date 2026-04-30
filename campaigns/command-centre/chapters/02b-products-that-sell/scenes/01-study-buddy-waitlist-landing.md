@@ -10,16 +10,14 @@ characters:
   - "[[prince]]"
   - "[[resource-curator]]"
 spec_file: "docs/superpowers/specs/2026-04-22-teenyweeny-studio-landing-design.md"
-blockers:
-  - "domain registration: teenyweeny.studio owned by founder, not yet registered to project"
-  - "Supabase project creation for teenyweeny waitlist"
-  - "Resend sending-domain verification"
-  - "Vercel project link (dashboard-Git integration, per Misled pattern)"
-  - "BorAI apps/study-buddy/ landing route scaffold"
+blockers: []
 supersedes:
   - "docs/superpowers/specs/2026-04-21-study-buddy-landing-design.md"
-artifact_format: essay, thread
-artifact_file: 
+artifacts:
+  - format: thread
+    file: "[[01-study-buddy-waitlist-landing-thread]]"
+  - format: essay
+    file: "[[01-study-buddy-waitlist-landing-essay]]"
 tags:
   - chapter-2b
   - teenyweeny-studio
