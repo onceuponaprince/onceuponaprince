@@ -12,8 +12,9 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: essay
-artifact_file: "[[06-play-produced-the-narrative]]"
+artifacts:
+  - format: essay
+    file: "[[06-play-produced-the-narrative]]"
 tags:
   - chapter-close
   - weekly-synthesis

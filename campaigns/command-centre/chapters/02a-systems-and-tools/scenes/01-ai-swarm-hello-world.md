@@ -12,8 +12,7 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: 
-artifact_file: 
+artifacts: []
 tags:
   - chapter-2a
   - ai-swarm

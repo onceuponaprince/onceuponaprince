@@ -13,8 +13,9 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: essay
-artifact_file: "[[02-three-failed-deploys]]"
+artifacts:
+  - format: essay
+    file: "[[02-three-failed-deploys]]"
 tags:
   - client-work
   - landing-page

@@ -12,10 +12,11 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: thread, essay
-artifact_file:
-  - "[[04-smoke-test-the-url-thread]]"
-  - "[[04-the-backend-the-frontend-invented]]"
+artifacts:
+  - format: thread
+    file: "[[04-smoke-test-the-url-thread]]"
+  - format: essay
+    file: "[[04-the-backend-the-frontend-invented]]"
 tags:
   - client-work
   - landing-page

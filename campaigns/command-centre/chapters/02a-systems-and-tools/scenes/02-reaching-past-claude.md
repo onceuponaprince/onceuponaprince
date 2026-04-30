@@ -12,11 +12,13 @@ characters:
 spec_file: "docs/superpowers/specs/2026-04-23-fast-travel-cli-design.md"
 blockers: []
 supersedes: null
-artifact_format: [thread, essay, newsletter]
-artifact_file:
-  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-thread.md"
-  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-essay.md"
-  - "artifacts/02a-systems-and-tools/02-reaching-past-claude-newsletter.md"
+artifacts:
+  - format: thread
+    file: "[[02-reaching-past-claude-thread]]"
+  - format: essay
+    file: "[[02-reaching-past-claude-essay]]"
+  - format: newsletter
+    file: "[[02-reaching-past-claude-newsletter]]"
 tags:
   - chapter-2a
   - scrapers

@@ -12,11 +12,13 @@ characters:
 spec_file: "artifacts/borai-graph-ship/retrospective.md"
 blockers: []
 supersedes: null
-artifact_format: [thread, essay, newsletter]
-artifact_file:
-  - "artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-thread.md"
-  - "artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-essay.md"
-  - "artifacts/02a-systems-and-tools/03-near-proximal-and-the-stream-newsletter.md"
+artifacts:
+  - format: thread
+    file: "[[03-near-proximal-and-the-stream-thread]]"
+  - format: essay
+    file: "[[03-near-proximal-and-the-stream-essay]]"
+  - format: newsletter
+    file: "[[03-near-proximal-and-the-stream-newsletter]]"
 tags:
   - chapter-2a
   - borai-graph

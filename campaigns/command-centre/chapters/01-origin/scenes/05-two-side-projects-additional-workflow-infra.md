@@ -11,10 +11,11 @@ characters:
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: thread, essay
-artifact_file:
-  - "[[05-orchestration-shape-inverted-thread]]"
-  - "[[05-vault-as-user-data]]"
+artifacts:
+  - format: thread
+    file: "[[05-orchestration-shape-inverted-thread]]"
+  - format: essay
+    file: "[[05-vault-as-user-data]]"
 tags:
   - side-project
   - infra

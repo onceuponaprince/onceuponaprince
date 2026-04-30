@@ -4,16 +4,17 @@ chapter: "01-origin"
 scene: 01
 title: "Onboarding yourself into the command centre"
 status: concluded
-date_opened: 
-date_concluded: 
+date_opened: 2026-04-17
+date_concluded: 2026-04-17
 characters:
   - "[[solo-thesis-holder]]"
   - "[[prince]]"
 spec_file: null
 blockers: []
 supersedes: null
-artifact_format: essay
-artifact_file: "[[01-build-should-feel-like-play]]"
+artifacts:
+  - format: essay
+    file: "[[01-build-should-feel-like-play]]"
 tags:
   - meta-scene
   - chapter-1
