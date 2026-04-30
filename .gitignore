@@ -145,6 +145,11 @@ campaigns/agency/
 # then rename on conclude. The pattern below ignores underscored files.
 # **/_*.md
 
+# --- Local brainstorming notes (not for git history) ---
+# Session-analysis files exist for future brainstorming, not as
+# canonical record. Pattern keeps them local across all dated runs.
+docs/superpowers/session-analysis-*.md
+
 # ============================================================
 # Future additions
 # ============================================================
