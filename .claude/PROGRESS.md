@@ -1,14 +1,28 @@
-# Session handoff — 2026-04-27 close · agent-architecture Episode 1 synthesis landed · pilot.html topology switcher next
+# Session handoff — 2026-04-30 close · vault schema + commit discipline rationalised · pushed to origin/main
 
 Read BEFORE the standard session-open ritual. This queue carries cross-scene work the ritual (which lands on the active in-progress scene) won't surface on its own.
 
 ## TL;DR
 
-2026-04-27. The lateral `research/agent-architecture/` thread shipped Episode 1 — *Context and granularity* — end to end: scaffold (already committed `dd0c358`) → 7-source cold round → synthesis. Vault commit `973e422`. Verdict: the spectrum claim holds; the routing primitive is the genuine unsolved problem. Six named candidate primitives surfaced. Coordination-cost threshold converges on 3–4 agents across the literature.
+2026-04-30. Vault-wide schema + commit-rules pass. Four commits today (`60541d3` template, `2523258` docs(claude-md), `b078176` schema, `0933aa4` conclude(02b/01) backfill) plus 10 prior unpushed commits all synced to `origin/main`. Vault HEAD: `0933aa4`. Working tree level with origin (modulo unrelated dirty files in `agent-architecture/` and `docs/superpowers/` from in-flight work — flagged, not folded).
 
-The session also fully diagnosed and patched a real `ask-grok-cli` bug (selector matched the user's prompt bubble, not Grok's response). Three source patches in `~/code/ghostroute/ask-grok-cli` — one in `src/config/mod.rs` (`RESPONSE_TIMEOUT_MS` 240_000 → 900_000, plus `RESPONSE_SELECTOR` anchored on `data-testid="assistant-message"`) and one in `src/automation/response.rs` (whitespace-collapse normalisation). Binary installed to `~/.cargo/bin/ask-grok-cli` via `cargo install --path .`. **Patches are still uncommitted in ghostroute.**
+Three pillars of today's pass:
 
-**Immediate next action:** build `research/agent-architecture/pilot.html` — Episode 1's first interactive (the topology switcher) over the four-axis routing policy (execution unit / context projection / budget / stop policy), matching `research/emotional-ux-pilot/pilot.html`'s style register.
+1. **Frontmatter schema collapsed.** `artifact_format` + `artifact_file` (drifted into three syntactic forms across ten scenes) replaced with single `artifacts:` list of `{format, file}` objects. All 10 scenes migrated. 02a/02 + 02a/03 path-form artefact files rewritten as wikilinks. 01/01 dates backfilled to 2026-04-17.
+
+2. **Blocker-clear-before-conclude invariant.** New rule: `status: concluded` requires `blockers: []`. 02b/01 was retroactively in violation — five blockers on a concluded scene. Cleared frontmatter (the Conclude block already named Scene 2b-01b as inheritor). Drafted the essay + thread artefacts that 02b/01 had been concluded without — *Design authority lives in the asset register* (essay) and a seven-tweet superseded-spec compression (thread).
+
+3. **Commit discipline section added to CLAUDE.md.** Vault verbs (`set-stage`, `capture`, `conclude`, `ship`, `pivot`, `schema`, `template`, `chapter`, `campaign`, `character`) override the global `feat/fix` set. Eight rules. All four of today's commits authored under the new rules.
+
+Caught up from intermediate sessions (commits between 2026-04-27 and today, identified via the unpushed log):
+
+- ✓ pilot.html topology switcher built (`608834e`)
+- ✓ `agent-architecture/` graduated from `research/` to `campaigns/` (`a7b26ea`)
+- ✓ Episode 2 — *the router we cannot yet build* — 5-of-7-source cold round landed (`cda5063`)
+- ✓ fast-travel-cli Phase 2 spec (`06f8946`)
+- ✓ borai-spore design + monorepo migration plan + superpowers feature list
+
+**Immediate next action:** open. Recommend Scene 2b-01b (teenyweeny URL ship) since 02b/01's blockers now legibly point there. Alternatively, agent-architecture Episode 2 synthesis if the cold round is ripe.
 
 ## Immediate queue
 
