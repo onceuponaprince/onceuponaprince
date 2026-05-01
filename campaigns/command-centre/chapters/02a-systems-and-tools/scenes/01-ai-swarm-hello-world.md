@@ -79,11 +79,32 @@ The hardware is available tonight. The code + tests + tutorials are ready. The P
 
 ### Moment-by-moment capture
 
-- [ ] Scene opened, Set Stage signed off.
+- [x] Scene opened, Set Stage signed off (2026-04-21).
+- [x] Ollama installed on the MBP via homebrew per the original plan (2026-04-21 → 2026-05-01).
+- [x] Decision taken to containerise the LLM runner across all three machines rather than continue native Ollama installs per OS (2026-05-01). See Pivot below.
+- [ ] Docker + Ollama image running on Ryzen (Coder), `qwen2.5-coder:7b` pulled inside container, :11434 reachable on LAN.
+- [ ] Docker + Ollama image running on MBP (Reviewer), `llama3.2:3b` pulled inside container, :11434 reachable on LAN.
+- [ ] Reachability verified from Orchestrator: `curl $CODER_URL/api/tags`, `curl $REVIEWER_URL/api/tags`.
+- [ ] Round-trip: `uv run python main.py "write a python function that adds two numbers"` completes; output file written.
+- [ ] PR opened from `feature/ai-swarm-infra-impl` to `main` (drafted), merged on approval.
 
 ### What's changing?
 
-- 
+The setup path. The original plan was three OS-specific Ollama installs (homebrew on macOS, scoop on Windows, curl-install on Linux), each with its own firewall ritual and `OLLAMA_HOST` configuration. After installing on the MBP, the cost of maintaining three setup playbooks across three drift surfaces became visible. Containerising the LLM runner — same Docker image, same exposed port, same model-pull commands inside the container — collapses the variance.
+
+The thesis beat is unaffected. Orchestration tempo remains the universalisable pattern; the hardware was always incidental. If anything the docker-first path makes the scene's eventual artefact stronger: *one repeatable container image* is more legible to the audience than *three OS-specific setup posts.*
+
+---
+
+## Pivot — 2026-05-01
+
+**Trigger.** First setup pass on the MBP (native Ollama via homebrew, per Set Stage's plan) surfaced the cost of three different OS-level installs: macOS `launchd` plist, Windows service, Linux `systemd`, each with its own firewall and `OLLAMA_HOST` ritual. Three operating systems, three setup playbooks, three drift surfaces. Containerising the runner once and shipping the same image to all three machines collapses that variance into one playbook.
+
+**Old → New.** Native Ollama on each machine → Docker container running Ollama on each machine. Same image, same `OLLAMA_HOST=0.0.0.0:11434`, same `ollama pull` commands inside the container. Host-OS responsibility shrinks to: Docker installed, port :11434 exposed on LAN.
+
+**Carries forward.** Orchestrator / Coder / Reviewer roles. Model choices (`qwen2.5-coder:7b` on Ryzen, `llama3.2:3b` on MBP). Home-LAN subnet topology. The `feature/ai-swarm-infra-impl` branch and its tested-in-isolation Python code. The five-bullet goal for the session — adjusted only in *how* it gets met, not *what* gets met. The thesis beat (orchestration tempo as the universal pattern).
+
+**Supersedes.** The three OS-specific bootstrap tutorials (Windows-Coder, macOS-Reviewer, Linux-Orchestrator) as the canonical setup path — they remain valid as native fallbacks but are no longer the recommended route. The "Ollama + homebrew / scoop / curl-install" sub-passages of Set Stage's State of the world.
 
 ---
 
