@@ -18,11 +18,15 @@ Episode 2 hand-waved at *"narrow task domain"* as the contraindication for routi
 
 Below confidence threshold, the router falls back to **monolith**, not to the more expensive route. Stakes and reversibility lift the threshold; they do not flip the fallback target. Cursor's load-bearing line still stands: *"You can't benchmark your way out of the data problem."*
 
-6/ Grok stayed blocked — for a different reason than first diagnosed.
+6/ Grok recovered five days later, after eight composing fixes — plus four more this week.
 
-Original session: chromiumoxide handshake fails. False. Chromium launches cleanly under xvfb. The hang is *after* `[Timing] Input located`, in the synthetic-paste / response-watch loop. Grok's web UI shifted between Episode 1 (working) and Episode 2 (failing). Fix is upstream in `~/code/ghostroute/ask-grok-cli/`, not in the vault.
+`~/code/ghostroute/ask-grok-cli/` shipped through eight layered bugs (Unicode keymap, stale input selector, missing chromium hardening, polluted memory, single-cookie SSO break, paste without keydown, prompt-echo capture, bullet-content drop) plus four further today (probe-on-timeout, details-aware innerText, project-scoped memory, probe extraction). Grok dump is on file. Full essay: `artifacts/02a-systems-and-tools/04-debugging-grok-cli-essay`.
 
-7/ Episode 3 trigger: queued, not now.
+7/ Web-framework primaries (Sources 8+) sharpened the v1 framing.
+
+Five sources read directly — RouteLLM repo + paper, LangGraph graph API, DSPy production guide, Anthropic's *Building Effective Agents* essay, Vellum's failure-routing post — not via an LLM. Verdict held at the primitive level: LangGraph's `conditional_edges` *is* rules-as-code in the framework's own grammar. The sharpening: when teams reach for learned routing they reach for **opaque-packaged-classifier-with-threshold** (RouteLLM-shaped: `model="router-mf-0.5"`), not custom-features. Episode 2's hand-tuned-features-feeding-a-small-classifier v1 framing has no shipping examples.
+
+8/ Episode 3 trigger: queued, not now.
 
 The candidate question — *should BorAI build a v0 router right now?* — moves to **queued**. BorAI's traffic sits below Perplexity's 100–300/day threshold, and routing collapse argues against deploying a learned router before rules-and-instrumentation have generated logs to validate against. No ADR opens from the addendum alone. First ADR lands when Episode 3 commits.
 
