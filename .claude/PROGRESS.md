@@ -1,169 +1,177 @@
-# Session handoff — 2026-05-01 close · ai-swarm pivot landed · ep2 substrate plan locked · 26-task graph rebuilt
+# Session handoff — 2026-05-02 reconciliation · ep2 substrate plan needs a structural call · task graph rebuilt
 
-Read BEFORE the standard session-open ritual. This queue carries cross-scene work the ritual (which lands on the active in-progress scene) won't surface on its own.
+Read BEFORE the standard session-open ritual. This file replaces the 2026-05-01 task graph after a substrate-reality audit found three structural drift points.
 
 ## TL;DR
 
-2026-05-01. Four commits today: emotional-ux graduation (`745d8d8`), agent-architecture ep2 addendum dispatch (`0c4eec9`), superpowers docs (`90ff8a8`), and the ai-swarm pivot beat (`e242616`). Vault HEAD: `e242616`, ahead of origin/main by 4 commits — push was not part of this session's scope.
+2026-05-02. Four commits today: `dd130d1` (warmth-stripper test fixture, mine), then `afe561a` + `3aacaca` + `a3d76ab` (chapter-02a restructure + two new in-progress scenes, from a parallel session that landed during this reconciliation). Vault pushed to `origin/main` mid-session — HEAD now ahead of remote by the parallel session's three commits + this PROGRESS update. Two prior 2026-05-02 commits also already synced (`82958b5` ep2 addendum trio refresh, `ade9ea2` web-framework primaries).
 
-Three pillars of today's pass:
+The session's load-bearing work was **reconciliation, not implementation.** The 2026-05-01 task graph carried three claims that no longer hold:
 
-1. **emotional-ux graduated.** `research/emotional-ux-pilot/` → `campaigns/emotional-ux/` per the per-thread-graduation rule. Episode 2 self-concluded with a *null-by-non-execution* verdict — hypothesis stands, surface does not. Pre-registration locked, taxonomy locked, three artefacts drafted under `ep2/artefacts/`. Campaign.md frame says "graduates ahead of verdict" — technically inaccurate (ep2 has a verdict, just null), founder accepts the inaccuracy rather than fold a fix-up commit.
+1. **`spore` is no longer Phase 0.** The 15-crate Rust workspace is scaffolded at v0.1a (scaffold + providers + skill loader). The 42KB design spec is locked at `~/code/borai/docs/superpowers/specs/2026-04-27-borai-spore-design.md`. PROGRESS task `#21` (spec) is done; `#22`–`#24` are mid-implementation, not greenfield.
+2. **`study-buddy` is misframed as an ep2 substrate.** The scaffold under `~/code/borai/apps/study-buddy/` builds a vault-import → flashcards/quizzes pipeline (a Resource Curator), not a multi-turn LLM-mediated session. There is no chat surface in the product as currently designed. Tasks `#27`–`#32` plan against a product that doesn't exist in this shape.
+3. **ep2's null verdict was hardware-caused, not substrate-deferred.** The "null-by-non-execution" framing in `ep2/episode.md` is post-hoc rationalisation — laptop crashes interrupted the run. The hypothesis was testable; the hardware did not cooperate. (Saved to memory: `project_emotional_ux_ep2_null_was_hardware.md`.)
 
-2. **ai-swarm scene 02a-01 pivoted.** Native Ollama per OS → Docker container running Ollama on each machine. Same image, same `OLLAMA_HOST=0.0.0.0:11434`, same `ollama pull` commands inside the container. Three OS-specific bootstrap tutorials remain valid as native fallbacks but are no longer the canonical path. Scene stays `status: in-progress`; pivot beat committed at `e242616`.
+The combination of (2) and (3) means **the two-substrate convergence test in PROGRESS task `#5` may not be the right plan.** It needs a founder call before further build-out.
 
-3. **Episode 2 substrate plan locked.** Founder's call (5.3.c + 5a.i+ii + 5b.ii): build BOTH `agents/spore/` (TUI substrate) AND `apps/study-buddy/` (real-product substrate, not minimum-for-ep2) deliberately for ep2's pre-registered protocol. Warmth-stripper extracted as a shared dependency so both surfaces converge on identical transformation rules — agreement vs divergence between them only carries signal if the strip is held constant.
+## What's actually true (state as of 2026-05-02)
 
-## Task graph (26 tasks, no cycles)
+### emotional-ux campaign
 
-To resume: this graph is authoritative. `TaskList` returns the same shape. Cross-thread blockers correctly modelled — pick any task with no `blocked by` annotation to start.
+- `campaigns/emotional-ux/` — graduated from `research/` on 2026-04-30. `research/` directory empty.
+- `ep2/warmth-stripper.js` — built, surface-agnostic JS module. **Lives in the vault, not yet in a place either substrate can import.**
+- `ep2/warmth-stripper.test.js` — committed today (`dd130d1`). 10 tests pin both register-only stripping (5 mechanical pairs) and load-bearing preservation (4 pairs sourced from vault material + 1 audit trail test). Run via `node --test campaigns/emotional-ux/ep2/warmth-stripper.test.js` from the vault root.
+- `ep2/taxonomy.md`, `ep2/instrumentation-spec.md`, `ep2/pre-registration.md` — all locked. Pre-registration discipline holds: predictions land before data.
+- `ep2/episode.md` — M7 verdict reads "null-by-non-execution / deferred-by-substrate." This framing is *post-hoc*; the actual cause was hardware interruption. The taxonomy + stripper + pre-registration are intact, but the episode file's reasoning doesn't reflect that.
+- Three artefact drafts (`ep2/artefacts/{essay,newsletter,thread}.md`) — drafted under the post-hoc framing. Will need a re-read before any external publication, since the framing they argue for isn't the truth of what happened.
 
-### Completed (today)
+### agent-architecture campaign
 
-- `#1` Commit 2 — agent-architecture ep2 addendum dispatch (`0c4eec9`)
-- `#2` Add `session-analysis-*` gitignore pattern
-- `#3` Commit 3 — superpowers docs (feature-list + ghostroute prior art) (`90ff8a8`)
+- Episode 2 addendum dispatch landed `0c4eec9` (2026-05-01). Trio refreshed `82958b5` (2026-05-02). Three artefacts staged at `artifacts/agent-architecture/02-addendum-{essay,newsletter,thread}.md`.
+- Web-framework primary sources added in `ade9ea2` (2026-05-02).
+- `pilot.html` topology switcher (carried from 2026-04-30) — still pending.
 
-### Docker pipeline → ship scene
+### spore (`~/code/borai/agents/spore/`)
+
+- 15-crate Rust workspace, v0.1a status.
+- Phase 12 fills out the dispatcher per Cargo.toml comments. Spore-server, spore-client are explicitly Plan 2c. Spore-telemetry is Plan 2b.
+- spore-tui has `lib.rs` + `mod app, mod input, mod render` skeleton. "Polish lands v0.2."
+- spore-session has `lib.rs` + `mod store, mod memory, mod claude_md`. "v0.2 promotes session storage to SQLite."
+- The TUI multi-turn loop is *partially scaffolded*, not running. Building a session a user can sit inside for 5+ turns is the gating work for any ep2 run on spore.
+
+### study-buddy (`~/code/borai/apps/study-buddy/`)
+
+- Scaffold for `VaultImporter.tsx` + `importer.ts` + `parse.ts` + `storage.ts`. README explicit: "scaffold, not runnable. Next.js shell deferred to a future scene."
+- Product is **client-side pipeline** (JSZip → gray-matter → localforage → flashcards/quizzes). **No LLM session at the user-facing level.**
+- Original design spec (`~/code/borai/docs/superpowers/specs/2026-04-21-study-buddy-landing-design.md`) is for a landing page. Catalogued under chapter 02b-products-that-sell, not as a research substrate.
+- **Implication:** running the ep2 ablation here would require adding a chat-with-vault feature that isn't part of the product as currently scoped. Either the product changes, or study-buddy isn't the right second substrate.
+
+## The substrate decision the founder needs to make
+
+PROGRESS 2026-05-01 said *"build BOTH `agents/spore/` and `apps/study-buddy/` deliberately for ep2's pre-registered protocol. Warmth-stripper extracted as a shared dependency so both surfaces converge on identical transformation rules — agreement vs divergence between them only carries signal if the strip is held constant."*
+
+That plan rests on study-buddy having a chat surface. It doesn't. Three coherent paths forward — pick one before further substrate work:
+
+**Path A — Single-substrate: spore only.** Drop the two-substrate convergence test. Run ep2 on spore once `spore-tui` + `spore-providers` + `spore-session` carry a multi-turn loop. Loses the agreement/divergence signal between substrates; gains a faster path to a real verdict. Honest answer if hardware stability is the binding constraint.
+
+**Path B — Reframe study-buddy.** Add a "chat with your vault" feature to study-buddy as a product feature, not just an ep2 substrate. Increases scope. Justified if the chat-with-vault feature is independently desirable. Decision is product-strategic, not research-driven.
+
+**Path C — Pick a different second substrate.** `apps/talk-with-flavour/` and `apps/misled/` are landing pages, not session surfaces. The `build-in-public-engine` skill is single-shot. Neither natural fit. A new third-party surface (e.g. shadowing an open-source chat app) is out-of-scope per ep2-dispatch.
+
+**Recommendation: Path A, defer the convergence question to Episode 3.** The hardware-crash context makes substrate redundancy attractive in principle, but the right time to add a second substrate is *after* the first run produces a verdict — not before. Pre-registration was for ep2 as it stands, not for a synthetic between-surface comparison.
+
+The founder makes the call. This file is the brief.
+
+## Reconciled task graph (rebuilt 2026-05-02)
+
+### Done since 2026-05-01
+
+- `#6` Dispatch agent-architecture ep2 addendum artefacts — refreshed `82958b5`. External publication status pending; artefacts staged at `artifacts/agent-architecture/02-addendum-*.md`.
+- `#20` Build warmth-stripper module — exists at `campaigns/emotional-ux/ep2/warmth-stripper.js`, locked since 2026-04-30. **Note:** module lives in the vault. For spore (Rust) to use it, needs a port or shell-out. For study-buddy (TS) to use it, needs an ESM relocation.
+- `#21` Read/finalize spore TUI design spec — spec exists at `~/code/borai/docs/superpowers/specs/2026-04-27-borai-spore-design.md` (42KB) + sub-spec on routing (58KB).
+- New: warmth-stripper test fixture pinning conservative behaviour (`dd130d1`).
+
+### Reframed (waiting on Path A/B/C decision)
+
+- `#22` Spore TUI core — multi-turn loop, prompt/response history. Crate scaffold exists; loop implementation pending. *Independent of substrate decision — useful for spore even if ep2 runs elsewhere.*
+- `#23` Wire LLM calls into spore — spore-providers crate exists; integration pending.
+- `#24` Instrument session events in spore per `ep2/instrumentation-spec.md`. Spore-telemetry crate is Plan 2b.
+- `#25` Integrate warmth-stripper as variant toggle in spore — needs Rust port or JS shell-out decision.
+- `#26` Run ep2 on spore — gated on `#22`–`#25` and on Path-decision.
+
+### Drop pending Path-decision
+
+- `#27` Spec study-buddy as a real product (chat surface) — *only if Path B chosen*. Currently designed as Resource Curator without chat.
+- `#28` Build study-buddy frontend — *only if Path B chosen*.
+- `#29` Build study-buddy backend — *only if Path B chosen*.
+- `#30` Instrument study-buddy session events — *only if Path B chosen*.
+- `#31` Integrate stripper in study-buddy — *only if Path B chosen*.
+- `#32` Run ep2 on study-buddy — *only if Path B chosen*.
+
+### ai-swarm pipeline (carried, hardware-day)
 
 ```
-#15 Ryzen docker (qwen2.5-coder:7b)  ──┐
-#16 MBP docker (llama3.2:3b)         ──┼──> #17 Verify LAN ──> #18 Round-trip ──┬──> #13 PR ────┐
-                                                                                 └──> #19 Update tutorials ──┴──> #14 Conclude scene ──> #4 Close-out rollup
+#15 Ryzen docker  ──┐
+#16 MBP docker    ──┼──> #17 LAN ──> #18 Round-trip ──┬──> #13 PR ────┐
+                                                       └──> #19 Tutorials ──┴──> #14 Conclude → #4 Close-out
 ```
 
 - `#15` [pending] Docker + Ollama on Ryzen (Coder) — qwen2.5-coder:7b
 - `#16` [pending] Docker + Ollama on MBP (Reviewer) — llama3.2:3b
 - `#17` [pending] Verify LAN reachability — Coder + Reviewer from Orchestrator [blocked by #15, #16]
-- `#18` [pending] First end-to-end round-trip — orchestrator dispatches to Coder and Reviewer [blocked by #17]
-- `#19` [pending] Update bootstrap tutorials — docker-first canonical, native as fallback [blocked by #18]
+- `#18` [pending] First end-to-end round-trip [blocked by #17]
+- `#19` [pending] Update bootstrap tutorials — docker-first canonical [blocked by #18]
 - `#13` [pending] Open + merge PR — feature/ai-swarm-infra-impl → main [blocked by #18]
-- `#14` [pending] Conclude scene 02a-01 — write five Conclude answers + artefact [blocked by #19, #13]
-- `#4`  [pending] ai-swarm scene 02a-01 — close out scene (rollup) [blocked by #14]
+- `#14` [pending] Conclude scene 02a-01 [blocked by #19, #13]
+- `#4` [pending] ai-swarm scene 02a-01 close-out rollup [blocked by #14]
 
-### Substrate-build → ep2 resolution
+**Hardware-stability flag:** the same crashes that interrupted the ep2 run will likely interrupt these. Defer until hardware is stable.
 
-Shared dependency `#20` (warmth-stripper) feeds both family's stripper-toggle steps so the transformation rules stay identical across surfaces.
+### Chapter 02a restructure (2026-05-02 parallel-session work)
 
-```
-                                           ┌──> #25 stripper toggle (also <- #20) ──> #26 ep2 run on spore ──┐
-#21 spore spec ──> #22 core ──> #23 LLM ──> #24 instrument ──┘                                                 │
-                                                                                                               ├──> #5 Resolve ep2
-                                                                                                               │
-#27 study-buddy spec ──┬──> #28 frontend ──┐                                                                  │
-                       └──> #29 backend ───┴──> #30 instrument ──> #31 stripper toggle (also <- #20) ──> #32 ep2 run on study-buddy ──┘
+Three commits landed during this reconciliation session (`afe561a`, `3aacaca`, `a3d76ab`) that I did not make. Chapter 02a was restructured to insert two new scenes:
 
-#20 warmth-stripper (no blockers) ─────────────────────────────────────────────────────────────────────┘ (feeds #25 + #31)
-```
+- `02a-04-borai-graph-ship-retroactive.md` — `status: in-progress`. Retroactive scene to house `artifacts/borai-graph-ship/` (research-paper, twitter-thread, retrospective) shipped 2026-04-23 outside the scene lifecycle.
+- `02a-05-claude-code-edge-bridge.md` — `status: in-progress`. Hybrid scene picking up three open beats from the borai-graph-ship retrospective: custom Ollama image (rider), `borai-graph-query` CLI (rider), host-side bridge (central beat).
 
-- `#20` [pending] Build warmth-stripper module per taxonomy.md transformation rules
-- `#21` [pending] Read/finalize spore TUI design spec — multi-turn LLM-mediated TUI
-- `#22` [pending] Build spore TUI core — multi-turn loop, prompt/response history [blocked by #21]
-- `#23` [pending] Wire LLM calls into spore — model dispatch + history threading [blocked by #22]
-- `#24` [pending] Instrument session events in spore per ep2 instrumentation-spec.md [blocked by #23]
-- `#25` [pending] Integrate warmth-stripper as variant toggle in spore [blocked by #24, #20]
-- `#26` [pending] Run ep2 on spore — n≥30 sessions per arm, all five primitives [blocked by #25]
-- `#27` [pending] Spec study-buddy as a real product — multi-turn study session surface
-- `#28` [pending] Build study-buddy frontend — Next.js + Tailwind per BorAI stack [blocked by #27]
-- `#29` [pending] Build study-buddy backend — LLM-mediated multi-turn session API [blocked by #27]
-- `#30` [pending] Instrument session events in study-buddy per ep2 instrumentation-spec.md [blocked by #28, #29]
-- `#31` [pending] Integrate warmth-stripper as variant toggle in study-buddy [blocked by #30, #20]
-- `#32` [pending] Run ep2 on study-buddy — n≥30 sessions per arm, all five primitives [blocked by #31]
-- `#5`  [pending] Resolve emotional-ux ep2 — both spore and study-buddy substrates run pre-reg [blocked by #26, #32]
+Previously-planned scenes shifted: scrapers→delegate-agent (04→06), two-layer orchestration pattern (05→07), Command Centre webapp MVP (06+→08+). `02a-02`'s "Unblocks Scene 04" pointer updated to "Scene 06"; `02a-06`'s "Scene 05 flagged as dead" disambiguated to "Chapter 1 Scene 05 flagged as dead".
 
-### Downstream (no graph slot)
+**Two scenes are now simultaneously in-progress in chapter 02a** (alongside the pre-existing `02a-01-ai-swarm-hello-world`). Per CLAUDE.md scene workflow, "If there are zero or more than one [in-progress scenes], ask which" — next session-open should expect to disambiguate.
 
-- `#6` [pending] Dispatch agent-architecture ep2 addendum artefacts (downstream)
+### Carried from 2026-04-30 (scenes / artefacts)
 
-### Unblocked next session — pick any of these
+- `pilot.html` topology switcher (interactive #1 of 5) for `campaigns/agent-architecture/`. Self-contained single-file HTML matching `campaigns/emotional-ux/pilot.html` style tokens.
+- Scene 2a-02 closure brief at `docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md`.
+- Scene 2b-01b — teenyweeny URL ship. Still unopened.
+- Scene 04 client message + 04 artefact + misled.london registration.
+- Scene 05 / 2a-03 artefact external posts — `status: shipped` flips when each goes up.
 
-- `#6`  Dispatch agent-architecture ep2 addendum artefacts
-- `#15` Docker + Ollama on Ryzen — needs hardware
-- `#16` Docker + Ollama on MBP — needs hardware
-- `#20` Build warmth-stripper — pure code, no surface dep
-- `#21` Read/finalize spore TUI design spec — pure design
-- `#27` Spec study-buddy as a real product — pure design
+### Documentation drift
 
-Highest-leverage unblocked task is `#21` (spore spec): unblocks the longest downstream chain (5 tasks), and `agents/spore/` may already have design notes worth reading before drafting fresh.
+- `ep2/episode.md` carries the post-hoc "deferred-by-substrate" framing. The hardware-crash context isn't in the file. Either rewrite the M7 section or leave it and let the next episode supersede.
+- `ep2/artefacts/*.md` (essay, newsletter, thread) argue the post-hoc framing as the load-bearing claim. Re-read before publishing.
+- `campaigns/emotional-ux/campaign.md` — "graduates ahead of verdict" line still inaccurate; founder accepted in 2026-05-01.
 
-## Working tree state at close
+## Best next steps (ordered)
 
-```
- M campaigns/agent-architecture/sources/2026-04-27-grok.md
-?? campaigns/agent-architecture/sources/2026-04-27-grok-failed-attempts.md
-```
+**1. Make the Path A/B/C call on ep2 substrate.** Reading time: ~5 minutes (this file). Decision blocks roughly half the task graph below.
 
-Drive-by: looks like a forward-only rename in progress — original grok source split into a "failed attempts" companion file with a fresh grok.md being rewritten. Unrelated to today's commits. Resume by inspecting both files to decide whether this is a clean split commit or whether the rewrite is mid-thought.
+**2. Audit `ep2/artefacts/*.md` against the hardware-crash truth.** If publishing externally, the framing has to change. If not publishing (artefacts wait for Episode 3), leave them and note the deferral.
 
-Vault HEAD `e242616` ahead of `origin/main` by 4 commits — push deferred.
+**3. If Path A: continue spore implementation.** Tasks `#22` (TUI loop), `#23` (LLM wiring), `#24` (instrumentation) are the load-bearing chain. None are greenfield — the scaffold + spec carry most of the design weight.
 
-## Recent commits (for context)
+**4. Relocate warmth-stripper out of the vault.** The JS module belongs in `~/code/borai/` somewhere both surfaces (Rust + TS) can reach. Cleanest: a `packages/warmth-stripper/` workspace package. Or a Rust port as `crates/spore-warmth/` if Path A locks in spore-only.
 
-```
-e242616 pivot(02a/01): containerise LLM runner across all three machines
-90ff8a8 docs(superpowers): ghostroute prior-art + feature-list update
-0c4eec9 docs(campaigns/agent-architecture): episode 02 addendum dispatch
-745d8d8 docs(campaigns/emotional-ux): graduate from research/ — ep2 dispatched
-d4c00e9 docs(progress): 2026-04-30 close — vault schema + commit discipline rationalised
-0933aa4 conclude(02b/01): backfill artefact drafts and migrate frontmatter
-```
+**5. Defer hardware-day work (`#15`/`#16`).** Same instability that crashed ep2 will crash Docker pulls. Stable hardware first.
 
-## Cross-scene carries (from 2026-04-30, still open)
-
-These are not in the task graph. They live here because they predate the rebuild and require human judgement to schedule.
-
-### pilot.html — topology switcher (interactive #1 of 5)
-
-Per the synthesis's commitment paragraph in `campaigns/agent-architecture/episodes/01-context-and-granularity.md` (graduated this session — path may have changed; verify). Self-contained single-file HTML, hybrid essay + interactive, matching `campaigns/emotional-ux/pilot.html`'s style tokens. Switcher should manipulate the four-axis policy (not just agent count) and surface a live SVG topology diagram.
-
-### ghostroute uncommitted patches
-
-```
-~/code/ghostroute/ask-grok-cli/src/config/mod.rs       # RESPONSE_TIMEOUT_MS + RESPONSE_SELECTOR
-~/code/ghostroute/ask-grok-cli/src/automation/response.rs  # whitespace-collapse comparison fix
-```
-
-Plus prior session's two uncommitted patches (`typing.rs` newline normalisation, `main.rs` context paste). Clean three-commit pass when next in ghostroute. Could fold into Scene 2a-02's *ghostroute retroactive docs* trailing beat.
-
-### Strategic next — Vespa-style ranking
-
-See `2026-04-30 PROGRESS` git history for full detail. Headline: BM25 + RRF as the next major scene; smart chunk-collapsing + query-aware `max_results` as riders.
-
-### Scenes carrying
-
-- **Scene 2a-02 closure** — brief at `docs/handoffs/2026-04-24-scene-2a-02-closure-brief.md`. Fast-travel-cli first-run + ghostroute retroactive docs. Either beat closes the scene independently; both required.
-- **Scene 2b-01b** — teenyweeny URL ship. Still unopened. Chapter 2b *landing before build* rule blocks Scene 2b-02 until this lands.
-- **Scene 04 client message + 04 artefact + misled.london registration** — open.
-- **Scene 05 / 2a-03 artefact external posts** — `status: shipped` flips when each goes up.
+**6. Schedule a 2-week check-in agent** (via `/schedule`) to re-evaluate substrate state after the founder's call lands. Likely candidates by then: spore session loop running, warmth-stripper relocated, hardware stability resolved.
 
 ## Active tooling state (carried)
 
-- **Ollama (containerised in BorAI-graph stack):** running, `nomic-embed-text` cached, healthy. Note: this is *not yet* the home-cluster Ollama — that's what tasks #15/#16 set up.
+- **Ollama (containerised in BorAI-graph stack):** running, `nomic-embed-text` cached, healthy.
 - **Gemini CLI:** AUTHED. Quota-rate-limited under load.
-- **Perplexity / ChatGPT / Copilot CLI / Cursor / Grok skills:** see 2026-04-30 PROGRESS for state — none touched today.
+- **Perplexity / ChatGPT / Copilot CLI / Cursor / Grok skills:** see 2026-04-30 PROGRESS for state.
 - **Anthropic API key:** NOT set. Graph runs rules-only by design.
 
-## Landmines (repeat offenders, carried)
+## Landmines (carried, full list in 2026-04-30 PROGRESS git history)
 
-Trimmed list — full set in 2026-04-30 PROGRESS git history.
-
-- **Docker cache masks source edits.** Default to `build --no-cache` when the change is in `ops/borai-graph/`.
+- **Docker cache masks source edits.** Default to `build --no-cache` in `ops/borai-graph/`.
 - **BorAI pre-push hook** needs `node_modules` in worktree.
 - **Skill-list dumps re-injected per session** as system reminders. Logged at `docs/upstream-issues.md`.
 - **`/etc/gitconfig` permission denied** for `gh pr create` — prefix with `GIT_CONFIG_NOSYSTEM=1`.
-- **Vault git status shows R + ?? for the same path** when a rename is staged and the original path gets a fresh untracked file. That's today's grok state — not a corruption.
+- **Vault git status shows R + ?? for the same path** when a rename is staged and the original path gets a fresh untracked file.
+- **Hardware crashes interrupted the ep2 run.** Likely affects any multi-hour task. Bias toward short, resumable work units until resolved.
 
 ## Session-open ritual for the next session
 
 1. Read `CLAUDE.md` at vault root.
-2. Read this file (`PROGRESS.md`) — task graph above is authoritative.
+2. Read this file (`PROGRESS.md`).
 3. Read `campaigns/command-centre/campaign.md`.
-4. Run `TaskList` to confirm graph state matches the snapshot here.
-5. Greet with one line naming the chosen unblocked task (recommend `#21` spore spec unless hardware-day, in which case `#15` + `#16` in parallel).
-6. If touching the graph: `cd ~/code/BorAI-graph && docker compose ps` for stack state.
+4. **First decision: Path A / B / C on ep2 substrate.** Don't proceed past this without it.
+5. Greet with one line naming the chosen path and the next concrete task.
 
 ## Out-of-scope but noted
 
-- The grok rename in working tree — flagged not folded.
-- Push of 4 unsynced commits to `origin/main` — deferred.
-- The campaign.md "graduates ahead of verdict" line — founder accepts the inaccuracy.
+- Push of working tree to `origin/main` — done this session, HEAD synchronised at `dd130d1`.
+- The campaign.md "graduates ahead of verdict" line — founder accepted the inaccuracy 2026-05-01.
+- The grok rename in working tree (carried from 2026-05-01) — still pending; clean tree as of this session's commit.
