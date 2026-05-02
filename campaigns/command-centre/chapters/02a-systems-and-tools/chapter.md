@@ -36,11 +36,13 @@ Chapter 1 tested the method with paying-client work anchoring it. Chapter 2a rem
 ## Scenes
 
 - [ ] **01 — ai-swarm hello-world** — Single Coder→Reviewer round-trip across the home cluster. Opens on orchestrator code + tutorials already committed on `feature/ai-swarm-infra-impl`; closes when the first end-to-end run completes.
-- [x] **02 — reaching-past-claude** — `fast-travel-cli` (Gemini, standalone Rust binary, live build) and `ghostroute` (monorepo of providers — Grok documented, Perplexity scaffolded, more to come) shipped as the context-hygiene layer. Unblocks Scene 04.
+- [x] **02 — reaching-past-claude** — `fast-travel-cli` (Gemini, standalone Rust binary, live build) and `ghostroute` (monorepo of providers — Grok documented, Perplexity scaffolded, more to come) shipped as the context-hygiene layer. Unblocks Scene 06.
 - [x] **03 — near-proximal-and-the-stream** — borai-graph edge model split into stored `near` (d=1) and computed `proximal` (d>1 with blended relevance). Adds a two-layer tag system (author YAML + reserved-prefix indexer-minted) and a progressive data-stream retrieval mode. Cheap indexer riders ship in the same PR. Runs parallel to Scene 02.
-- [ ] **04 — Scrapers into delegate-agent** — Integrates `fast-travel-cli` and `ghostroute` into delegate-agent routing. Unblocks the delegation path Scene 05 flagged as dead.
-- [ ] **05 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 04/05 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`.
-- [ ] **06+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build.
+- [ ] **04 — borai-graph-ship retroactive** — Files the orphaned `artifacts/borai-graph-ship/` set (research-paper, retrospective, twitter-thread) shipped 2026-04-23 into the scene structure. Reconstructs Set Stage from the artefacts; Conclude same-day.
+- [ ] **05 — claude-code edge bridge** — Hybrid: a custom Ollama image with `nomic-embed-text` baked in, a `borai-graph-query` CLI entry point, and a host-side Claude Code subprocess bridge for semantic edge enrichment via `host.docker.internal`. Bridge is the central beat; CLI + image ship as riders.
+- [ ] **06 — Scrapers into delegate-agent** — Integrates `fast-travel-cli` and `ghostroute` into delegate-agent routing. Unblocks the delegation path Chapter 1 Scene 05 flagged as dead. *(was 04)*
+- [ ] **07 — Two-layer orchestration pattern** — Scene on the fractal-dispatch pattern the Scene 06 work itself demonstrated. Raw material in `docs/handoffs/2026-04-21-two-task-force-dispatch-close.md`. *(was 05)*
+- [ ] **08+ — Command Centre webapp MVP** — Set Stage + Conclude only, per `campaign.md`. Chapter 2a's climax. Exact scene count TBD during build. *(was 06+)*
 
 ## Climax
 
