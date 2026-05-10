@@ -3,16 +3,18 @@ campaign: "[[command-centre]]"
 chapter: "02a-systems-and-tools"
 scene: "01b"
 title: "ai-swarm hardening"
-status: in-progress
+status: concluded
 date_opened: 2026-05-10
-date_concluded: 
+date_concluded: 2026-05-10
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
 spec_file: null
 blockers: []
 supersedes: null
-artifacts: []
+artifacts:
+  - format: essay
+    file: "[[01b-ai-swarm-hardening-essay]]"
 tags:
   - chapter-2a
   - ai-swarm
@@ -147,22 +149,41 @@ The verification asymmetry is also worth noting. Tier 1.1's bad-URL case verifie
 
 ## Conclude
 
-*Filled at end of session.*
-
 ### How is now different from the start?
+
+The substrate hardened. Scene 01 closed with a working pipeline that surprised in eight failure modes; 01b closes with eight of twelve gap items shipped: pre-flight probe surfaces failures in seconds rather than minutes, `keep_alive` eliminates the cold-load between back-to-back development runs, the Reviewer persona forbids the rewrite-and-break failure mode that hit the Django prompt, retry tolerates transient runner crashes without raising, test coverage now spans every module (`config`, `network_client`, `personas`, `swarm_logging`), the orchestrator runs from `docker compose run --rm`, every run leaves a JSONL audit trail with elapsed timings, and long generations stream tokens to stdout in real time. Thirty-one tests green workspace-wide.
 
 ### What are the consequences?
 
+The pipeline is now calmly trustable rather than friable. The audit trail in particular shifts the failure-mode story from anecdote to data — `logs/swarm-{ts}.jsonl` files compound across runs into a real artefact about how the substrate behaves. The docker layer collapses the LAN-routing problem that took months to design into a one-line `host` network config in `docker-compose.yml`.
+
+A second consequence: the Tier 3 items have a clearer shape now that Tier 1+2 are in. Multi-round refinement needs a stable probe + warm `keep_alive` to be worth running. Model routing needs the persona system to be stable. The HTTP API needs the structured logging to feed it. The extension layer in 01c sits on the hardening layer 01b just shipped.
+
 ### What did we learn?
+
+Three observations earn their place in the artefact:
+
+1. **Gap analysis isn't gap inventory.** Tier 2.5 expected three modules to need test coverage; only two did. Walking the actual code rather than relying on the recalled list corrected the record in one capture rather than chasing a ghost gap. Future gap analyses should re-walk the code before scoping.
+
+2. **The transient/deterministic distinction is the policy's atom.** Retry doesn't try to guess what's transient — it carries an explicit substring list. RAM gates and subscription gates are not in the list and never should be; retrying them compounds the problem. Adding a new transient failure mode is one constant edit. The atom of the policy is the substring list; everything else is mechanism around it.
+
+3. **Streaming was a quality-of-correctness change, not just UX.** Keeping `stream: False` made mid-generation failures invisible — they only surfaced when the eventual full response came back wrong. Switching to streaming made the same retry policy *more* correct because failures now surface at the chunk level. The UX win was the secondary effect.
 
 ### Progress to thesis
 
+Build should feel like play. The hardening work was the kind of work that usually feels like filing taxes — coverage, dockerisation, logging, streaming — and yet the scene's structure (tier-grouped goals with a closing condition that doesn't require all twelve) kept the cognitive shape playful. Each Tier item shipped as its own small win; the compound was a substrate that earns its place. The artefact essay can speak honestly about the hardening because the hardening was honestly done.
+
 ### Progress to goal
+
+Chapter 2a's webapp climax is two scenes closer. 01b closed Tier 1+2; 01c will close Tier 3 including the HTTP API precondition for the webapp. After 01c, the chapter's 08+ webapp scene has no remaining substrate debt to budget against. The arc tightens.
 
 ### Next scene
 
+**Scene 2a-01c — `ai-swarm extensions`.** Tier 3 items carry: multi-round refinement (3.9), model routing per task (3.10), LAN bearer-token auth (3.11), HTTP API for the webapp (3.12). The HTTP API is functionally a 2a-08+ webapp precondition; the other three are quality extensions sitting on the now-stable substrate. 01c's Set Stage will name the dependency relationship explicitly.
+
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+
+**Essay** — *How the substrate hardened.* The three *What did we learn?* observations need the worked-example length to land, particularly the transient/deterministic distinction. Pairs naturally with Scene 01's eventual essay as a chapter-internal diptych: *how the substrate landed* + *how the substrate hardened*.
 
 ---
 
