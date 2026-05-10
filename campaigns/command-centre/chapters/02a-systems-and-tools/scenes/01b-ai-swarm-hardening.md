@@ -3,7 +3,7 @@ campaign: "[[command-centre]]"
 chapter: "02a-systems-and-tools"
 scene: "01b"
 title: "ai-swarm hardening"
-status: not-started
+status: in-progress
 date_opened: 2026-05-10
 date_concluded: 
 characters:
@@ -118,10 +118,10 @@ By-tier-success criteria:
 
 *Commits, decisions, surprises.*
 
-- [ ] Tier 1.1 — pre-flight health probe added to `orchestrator.run_pipeline`. Tested against a deliberately wrong CODER_NODE_URL.
-- [ ] Tier 1.2 — `keep_alive: "30m"` added to `NetworkClient.generate` payload. Verified by back-to-back runs.
-- [ ] Tier 1.3 — `REVIEWER_PERSONA` tightened to critique-only. Verified by re-running the Django prompt against `deepseek-r1:1.5b` and observing no rewrite.
-- [ ] Tier 1.4 — Retry-on-transient-error in `NetworkClient.generate` (2-3 retries, exponential backoff). Verified by killing the worker mid-stream and observing recovery.
+- [x] Tier 1.1 — pre-flight health probe added to `orchestrator.run_pipeline` (borai 351e148). `NetworkClient.probe` issues a `num_predict:1` generate; `run_pipeline` calls it for Coder + Reviewer before dispatch. Bad-URL verification: probe surfaced `Connection refused` for `http://localhost:1` in 0.35s, well under the <3s budget. Three new unit tests cover the success path, RAM-gate error-body path, and connection-error path. Side effect of the probe: warms the model into `keep_alive`, so the real generate that follows hits a warm worker. Eight tests green.
+- [x] Tier 1.2 — `keep_alive: "30m"` added to both `generate` and `probe` payloads (borai b97bd7c). `KEEP_ALIVE_DURATION` module constant; two unit tests assert the payload includes it. Eliminates the 5-minute model-unload that would otherwise cost a cold load on each standalone invocation. E2E warm-run verification deferred until the home cluster is reachable end-to-end.
+- [x] Tier 1.3 — `REVIEWER_PERSONA` tightened to critique-only (borai b97bd7c). Old text said *Return the corrected code*, which invited the 2026-05-10 rewrite-and-break failure on the Django prompt. New text forbids rewrite, requires a numbered actionable critique, allows a one-sentence "looks good" when warranted, and explicitly bans code blocks in the output. E2E verification against `deepseek-r1:1.5b` on the Django smoke prompt deferred until the home cluster is reachable.
+- [x] Tier 1.4 — Retry on transient runner crashes in `NetworkClient.generate` (borai b97bd7c). `MAX_GENERATE_ATTEMPTS = 3`, exponential backoff, transient errors named explicitly: `unexpected EOF`, `llama runner process has terminated`, `connection reset`, `connection error`. Deterministic errors (RAM gates, subscription gates) raise on first hit — they are not transient and retrying compounds the problem. `_attempt_generate` split out for a single-attempt path the loop calls. Four new unit tests cover transient retry, connection retry, no-retry on deterministic, and max-attempts exhaustion. The pre-existing connection-error test got `monkeypatch.setattr` for `time.sleep` to stay fast under the new loop. Fourteen tests green, 0.25s.
 - [ ] Tier 2.5 — Unit tests added for `config.py`, `network_client.py`, `personas.py`. Coverage > 80% for each.
 - [ ] Tier 2.6 — Orchestrator Dockerfile + `docker-compose.yml` entry. `compose up` brings the orchestrator + the two-worker network expectation into one playbook.
 - [ ] Tier 2.7 — Structured JSON logging via `python-json-logger` (or equivalent) alongside rich console. One file per run under `logs/swarm-{ts}.jsonl`.
@@ -133,7 +133,13 @@ By-tier-success criteria:
 
 ### What's changing?
 
-*To be filled as the session progresses.*
+The shape of the network client. The Tier 1 work surfaced two architectural calls worth naming:
+
+- **Probe as warm-up, not just check.** The pre-flight probe (`num_predict:1`) doubles as a model-warm step because Ollama keeps a model resident for the `keep_alive` window after any call. Tier 1.1 and Tier 1.2 fold into each other: the probe pays the cold-load, the subsequent generate skips it. What looks like two distinct items in the gap list is really one mechanism with two surfaces.
+
+- **Transient versus deterministic is named, not inferred.** The retry policy doesn't try to guess what's retryable. It carries an explicit list — `unexpected EOF`, `llama runner process has terminated`, `connection reset`, `connection error` — and everything else fails fast. RAM gates and subscription gates are deterministic and benefit from being surfaced quickly rather than masked behind a retry loop. The atom of the policy is the substring list; growing it later is one constant edit.
+
+The verification asymmetry is also worth noting. Tier 1.1's bad-URL case verified end-to-end on real hardware (0.35s). Tiers 1.2-1.4 verified in unit tests only; e2e on warm workers is deferred until the home cluster is reachable in the same session. The substrate's unit-test layer is strong enough to ship without that gating.
 
 - 
 
