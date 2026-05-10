@@ -3,16 +3,18 @@ campaign: "[[command-centre]]"
 chapter: "02a-systems-and-tools"
 scene: "01c"
 title: "ai-swarm extensions"
-status: in-progress
+status: concluded
 date_opened: 2026-05-10
-date_concluded: 
+date_concluded: 2026-05-10
 characters:
   - "[[prince]]"
   - "[[solo-thesis-holder]]"
 spec_file: null
 blockers: []
 supersedes: null
-artifacts: []
+artifacts:
+  - format: essay
+    file: "[[01c-ai-swarm-extensions-essay]]"
 tags:
   - chapter-2a
   - ai-swarm
@@ -149,22 +151,45 @@ The token lives in `.env` on the orchestrator and in the proxy config on each wo
 
 ## Conclude
 
-*Filled at end of session.*
-
 ### How is now different from the start?
+
+The substrate's surface area extended. 01b closed the substrate hardening; 01c added four extensions on top — multi-round refinement, model routing, LAN auth (orchestrator side), and the FastAPI wrapper that the chapter's webapp climax needs. All twelve gap items from the original Scene 01 session are closed. 51 tests green workspace-wide.
 
 ### What are the consequences?
 
+The chapter's substrate debt is fully cleared. Scenes 04, 05, 06, 07 can proceed against a calmly-trustable + extension-capable substrate. The webapp scene (08+) has its precondition (HTTP API) in place. The remaining cluster work is operational deployment — Ollama-in-docker on the workers per the 01 Pivot, worker-side auth proxy from 01c — rather than substrate work.
+
+A second consequence: the routing layer (3.10) hints at a richer next-order question — should the routing be smarter (LLM-based intent detection, embeddings)? The current substring heuristic is a deliberate floor; whether it gets a ceiling is a future scene's decision.
+
 ### What did we learn?
+
+Three observations, each about choosing the smallest workable protocol:
+
+1. **Approval as a one-word protocol.** Multi-round refinement could have specified an exit signal as JSON envelope or structured token; it shipped as `startswith("Approved.")`. Ceremony pays off when contributors diverge — when both ends are the same author, the protocol can be cheap.
+
+2. **Routing without embeddings.** Model selection ships as a fixed keyword map, not as semantic similarity. The map is a file that's debuggable in one read, editable in one keystroke. There is a real cost to choosing the *smart* abstraction when the *stupid but correct* one is in front of you.
+
+3. **Auth as a two-place change with clean separation.** The orchestrator side ships in code with full unit coverage; the worker side ships as documented proxy recipes that the user deploys. The separation maps to where the changes naturally live — code-on-orchestrator-host, config-on-each-worker — and resists artificial bundling.
+
+The three share the same shape: choose the smallest workable mechanism, name its atom, let everything else be process around it. *Cheap protocols compound.*
 
 ### Progress to thesis
 
+Build should feel like play. The extensions work was conceptual rather than diagnostic — new mechanism on top of, rather than fix mechanism in. The play register holds in conceptual work too: small, named atoms (the substring map, the approval prefix, the bearer token) compound into substrate that has real shape rather than features that have feature names.
+
 ### Progress to goal
+
+Chapter 2a's webapp climax is opened. After 01c, the chapter has zero remaining substrate debt. The 08+ scene can be set-staged against a working HTTP API endpoint that the webapp can call without re-architecting. 2a-04 (`borai-graph ship retroactive`) and 2a-05 (`claude-code edge bridge`) remain open infrastructure scenes but they do not gate on 01c.
 
 ### Next scene
 
+The chapter has no enforced next. Three open infrastructure scenes — 04, 05, 06 — sit at `status: not-started`; 04 + 05 are filing-the-orphaned-work scenes, 06 is scrapers-into-delegate-agent integration. The natural next is **2a-04** since the borai-graph artefact set has been waiting longest. After 04 + 05, the spine work resumes with 06 + 07 + 08+ in sequence.
+
+Outside the chapter, the home cluster needs Ollama-in-docker on the workers (the Pivot's remaining canonical-state work) and the worker-side auth proxy (the 3.11 user-side deploy) — both operational, neither blocking new scene work.
+
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+
+**Essay** — *Cheap protocols compound.* The three observations share a single cross-pattern claim that thread compression would lose. Essay carries the worked examples + the abstraction-cost argument together. Pairs with 01b's *How the substrate hardened* and Scene 01's eventual *How the substrate landed* as a three-part chapter-internal series on substrate work.
 
 ---
 
