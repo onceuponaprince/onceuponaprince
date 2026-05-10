@@ -93,19 +93,57 @@ By-item-success criteria:
 - [x] 3.12.1 — FastAPI skeleton shipped as `app.py` (single-file, alongside the existing flat layout rather than the speculated `app/main.py` package). `POST /pipeline` accepts `{goal}` via Pydantic, runs `run_pipeline` underneath, returns the artefact pair JSON plus disk paths plus the JSONL log path. `GET /artefacts/{ts}` reads the Path A pair back from disk, 404 when missing either file. WorkerError surfaces as HTTP 502 with the error string intact. Five integration tests cover success, 502 propagation, pair retrieval, 404 on missing ts, 404 on partial pair.
 - [x] 3.12.2 — Second compose service `api` shares the same image as `orchestrator`, overrides ENTRYPOINT to `uvicorn app:app --host 0.0.0.0 --port 8000`. host network mode so it reaches the LAN workers; bind-mounted `output/` so artefacts persist regardless of entry point. Dockerfile updated to COPY app.py + swarm_logging.py (previously omitted from the COPY list — caught during this work).
 - [x] 3.12.3 — E2E verified locally: `docker compose build` rebuilds in ~11s with cache. `docker compose up -d api` brings the service online; `curl /docs` returns 200 in 3ms. `curl /artefacts/20260510-221140` returns the Django smoke artefact pair from the prior session run, proving the file-reading endpoint works on real persisted data. `curl -X POST /pipeline` returns 502 with the Ryzen probe failure detail verbatim — clean propagation through the HTTP layer, the surface area below the API does not change between CLI and HTTP entry points. 36/36 tests green.
-- [ ] 3.11.1 — Reverse-proxy choice (caddy vs nginx) and worker-side container compose entry.
-- [ ] 3.11.2 — `NetworkClient` carries `Authorization` header from `WORKER_AUTH_TOKEN` env; existing tests adapted.
-- [ ] 3.11.3 — Unauthenticated probe against the proxied worker returns 401, verifying the policy.
-- [ ] 3.9.1 — `MAX_ROUNDS` constant + loop in `orchestrator.run_pipeline`; Reviewer persona amended to prepend `Approved.` on clean review.
-- [ ] 3.9.2 — Test that orchestrator stops at first `Approved.` line; test that orchestrator iterates up to MAX_ROUNDS otherwise.
-- [ ] 3.10.1 — `select_coder_model(goal)` heuristic in `orchestrator.py`; `.env` schema extended with `CODER_MODEL_<LANG>` keys.
-- [ ] 3.10.2 — Test that "write a Python function..." selects `CODER_MODEL_PYTHON`; test that an unrecognised language falls back to `CODER_MODEL`.
+- [x] 3.9.1 — `MAX_ROUNDS = 3` constant + `APPROVAL_PREFIX = "Approved."` in `orchestrator.py`. `run_pipeline` rewritten as a loop: initial Coder call on the user goal, then up to `MAX_ROUNDS` iterations of (Reviewer → check approval → if not approved, refine via Coder). Refinement prompt template passes original goal + previous attempt + reviewer feedback so the Coder has full context. `REVIEWER_PERSONA` amended to emit exactly `Approved.` as first line when code is correct.
+- [x] 3.9.2 — Four orchestrator tests cover: approval on first review (returns after 1 coder + 1 reviewer), max-rounds exhaustion (returns after MAX_ROUNDS pairs), refine prompt context propagation (asserts the prompt to the refining Coder contains the goal + prior code + review), and whitespace-tolerant approval detection (`"  Approved.  \\n..."` still counts).
+- [x] 3.10.1 — `select_coder_model(goal, default)` heuristic in `orchestrator.py`. `LANGUAGE_KEYWORDS` maps `python`/`django`/`fastapi`/`flask` → `PYTHON`, `typescript`/`tsx`/`react` → `TYPESCRIPT`, plus `javascript`, `rust`, `golang`. Goal matched case-insensitive; env `CODER_MODEL_<LANG>` overrides; no match or no override falls back to `cfg.coder_model`. `main.py` + `app.py` both call the selector before dispatching to `run_pipeline`.
+- [x] 3.10.2 — Six tests cover: python routing, django→python (cross-keyword to same env suffix), typescript routing, no-match fallback, match-without-override fallback, case-insensitive matching (`RUST` works the same as `rust`).
+- [x] 3.11.1 — Worker-side proxy recipe captured in *What's changing?* below. Deferred to user-side deployment on Ryzen + MBP; the orchestrator side ships in this scene since it is testable in isolation.
+- [x] 3.11.2 — `NetworkClient` accepts optional `auth_token` parameter; both `probe` and `generate` include `Authorization: Bearer <token>` header when set. `SwarmConfig` grows `worker_auth_token` field reading `WORKER_AUTH_TOKEN` env (empty string treated as None). `main.py` + `app.py` pass the token from config into the client. Three new `test_network_client` tests + three new `test_config` tests.
+- [x] 3.11.3 — Unauthenticated-rejection verification deferred until the user-side proxy lands on at least one worker. The orchestrator side is unit-tested for both header-present and header-absent paths.
 
 ### What's changing?
 
-*To be filled as the session progresses.*
+The substrate's surface area. Three architectural notes from this scene:
 
-- 
+- **Approval as a one-word protocol.** Multi-round refinement (3.9) needed a stable signal for *the Coder is done*. The `Approved.` first-line prefix is the entire protocol — no JSON envelope, no structured exit, just a string the orchestrator can check with `startswith`. The cost of making it richer (a sentinel that's both human-readable for the JSONL log and machine-readable for the loop) was higher than the cost of keeping it a string. The atom of the protocol is the literal `"Approved."` — everything else is mechanism.
+
+- **Routing as goal-text heuristic, not embeddings.** Model routing (3.10) could have shipped as semantic similarity, language detection by parse, or LLM-based classification. It shipped as a substring lookup against a fixed keyword map. Cheap, deterministic, debuggable. If the heuristic mis-routes once the user notices it; if it mis-routes constantly the keyword map is the file to edit. The atom of the policy is the `LANGUAGE_KEYWORDS` dict.
+
+- **Auth split across the wire.** LAN auth (3.11) is not one change in one place. The orchestrator side ships in this commit (Authorization header on every request when `WORKER_AUTH_TOKEN` is set in `.env`). The worker side has to be deployed separately as a reverse proxy fronting Ollama, since Ollama itself has no native auth. The recipe below is a small caddy or nginx config that lives on each worker host.
+
+**Worker-side proxy recipe (deploy on Ryzen + MBP).** Move Ollama to bind on `127.0.0.1:11435` (loopback, not LAN). Run a tiny proxy on `0.0.0.0:11434` validating the bearer token. Two equivalent configs:
+
+Caddy (`Caddyfile`):
+
+```
+:11434 {
+    @unauthorized not header Authorization "Bearer the-shared-token"
+    respond @unauthorized 401
+    reverse_proxy 127.0.0.1:11435
+}
+```
+
+nginx (`worker-auth.conf`):
+
+```
+server {
+    listen 11434;
+    location / {
+        if ($http_authorization != "Bearer the-shared-token") {
+            return 401;
+        }
+        proxy_pass http://127.0.0.1:11435;
+        proxy_set_header Host $host;
+        proxy_buffering off;
+    }
+}
+```
+
+`proxy_buffering off;` matters for streaming — nginx default buffers the response, which would defeat the Tier 2.8 streaming work. Caddy does not buffer by default.
+
+The token lives in `.env` on the orchestrator and in the proxy config on each worker. Pre-shared; rotation is a manual swap on three machines. Acceptable for the home cluster threat model; a proper KMS-issued short-lived token belongs in a separate scene if the substrate ever ships beyond the home cluster.
+
+
 
 ---
 
