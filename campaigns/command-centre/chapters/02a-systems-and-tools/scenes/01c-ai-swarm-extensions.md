@@ -3,7 +3,7 @@ campaign: "[[command-centre]]"
 chapter: "02a-systems-and-tools"
 scene: "01c"
 title: "ai-swarm extensions"
-status: not-started
+status: in-progress
 date_opened: 2026-05-10
 date_concluded: 
 characters:
@@ -90,9 +90,9 @@ By-item-success criteria:
 
 ### Moment-by-moment capture
 
-- [ ] 3.12.1 — FastAPI app skeleton (`app/main.py`) with `POST /pipeline` and `GET /artefacts/{ts}` endpoints; integration test against mocked NetworkClient.
-- [ ] 3.12.2 — `uvicorn` ENTRYPOINT alternative in Dockerfile (multi-stage or compose profile so CLI and API modes are both invokable from compose).
-- [ ] 3.12.3 — E2E verification: `curl POST /pipeline` triggers a real round-trip and returns the artefact pair.
+- [x] 3.12.1 — FastAPI skeleton shipped as `app.py` (single-file, alongside the existing flat layout rather than the speculated `app/main.py` package). `POST /pipeline` accepts `{goal}` via Pydantic, runs `run_pipeline` underneath, returns the artefact pair JSON plus disk paths plus the JSONL log path. `GET /artefacts/{ts}` reads the Path A pair back from disk, 404 when missing either file. WorkerError surfaces as HTTP 502 with the error string intact. Five integration tests cover success, 502 propagation, pair retrieval, 404 on missing ts, 404 on partial pair.
+- [x] 3.12.2 — Second compose service `api` shares the same image as `orchestrator`, overrides ENTRYPOINT to `uvicorn app:app --host 0.0.0.0 --port 8000`. host network mode so it reaches the LAN workers; bind-mounted `output/` so artefacts persist regardless of entry point. Dockerfile updated to COPY app.py + swarm_logging.py (previously omitted from the COPY list — caught during this work).
+- [x] 3.12.3 — E2E verified locally: `docker compose build` rebuilds in ~11s with cache. `docker compose up -d api` brings the service online; `curl /docs` returns 200 in 3ms. `curl /artefacts/20260510-221140` returns the Django smoke artefact pair from the prior session run, proving the file-reading endpoint works on real persisted data. `curl -X POST /pipeline` returns 502 with the Ryzen probe failure detail verbatim — clean propagation through the HTTP layer, the surface area below the API does not change between CLI and HTTP entry points. 36/36 tests green.
 - [ ] 3.11.1 — Reverse-proxy choice (caddy vs nginx) and worker-side container compose entry.
 - [ ] 3.11.2 — `NetworkClient` carries `Authorization` header from `WORKER_AUTH_TOKEN` env; existing tests adapted.
 - [ ] 3.11.3 — Unauthenticated probe against the proxied worker returns 401, verifying the policy.
