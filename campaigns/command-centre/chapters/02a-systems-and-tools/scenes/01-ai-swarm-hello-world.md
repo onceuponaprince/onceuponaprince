@@ -82,17 +82,24 @@ The hardware is available tonight. The code + tests + tutorials are ready. The P
 - [x] Scene opened, Set Stage signed off (2026-04-21).
 - [x] Ollama installed on the MBP via homebrew per the original plan (2026-04-21 → 2026-05-01).
 - [x] Decision taken to containerise the LLM runner across all three machines rather than continue native Ollama installs per OS (2026-05-01). See Pivot below.
-- [ ] Docker + Ollama image running on Ryzen (Coder), `qwen2.5-coder:7b` pulled inside container, :11434 reachable on LAN.
-- [ ] Docker + Ollama image running on MBP (Reviewer), `llama3.2:3b` pulled inside container, :11434 reachable on LAN.
-- [ ] Reachability verified from Orchestrator: `curl $CODER_URL/api/tags`, `curl $REVIEWER_URL/api/tags`.
-- [ ] Round-trip: `uv run python main.py "write a python function that adds two numbers"` completes; output file written.
-- [ ] PR opened from `feature/ai-swarm-infra-impl` to `main` (drafted), merged on approval.
+- [x] Docker installed on the Ryzen and on the MBP between 2026-05-01 and 2026-05-10. Host-level prerequisite for the Pivot's canonical state is now in place on both workers.
+- [ ] Docker + Ollama image running on Ryzen (Coder), model pulled inside container, :11434 reachable on LAN.
+- [ ] Docker + Ollama image running on MBP (Reviewer), model pulled inside container, :11434 reachable on LAN.
+- [x] Native-Ollama fallback path taken on 2026-05-10 to unblock the round-trip ahead of the docker-runner rebuild. The two `Docker + Ollama image running` checkboxes stay open — the Pivot's canonical state hasn't moved, only this session's route around it.
+- [x] Reachability verified from Orchestrator: `curl $CODER_URL/api/tags` returns the Ryzen catalogue; `curl $REVIEWER_URL/api/tags` returns the MBP catalogue. Ryzen ICMP is silently dropped by Windows firewall while TCP/HTTP on :11434 passes — a layer-3-versus-layer-4 surprise worth naming.
+- [x] Model selection diverged from Set Stage's `qwen2.5-coder:7b` + `llama3.2:3b`. Three RAM gates and one subscription gate later, settled on `ministral-3:3b` (Coder, Ryzen) + `deepseek-r1:1.5b` (Reviewer, MBP, after the 7b variant failed Ollama's hard upfront RAM check at 4.3 GiB-needs vs 1.2 GiB-available). The 2019 Intel MBP genuinely cannot host a usable local Reviewer above ~1.8B without app-shutdown discipline — that is the hardware ceiling, not a configuration issue.
+- [x] Path A artifact persistence shipped this session: `orchestrator.run_pipeline` now returns `tuple[str, str]`, `main` writes a paired `swarm-{ts}-coder.txt` + `swarm-{ts}-reviewer.txt`. The Coder's raw output is preserved alongside the Reviewer's critique rather than overwritten. Tests updated to assert the pair. 5/5 green.
+- [x] Round-trip: three smoke prompts (fibonacci with memoisation, CSV threshold-filter, Django REST `/login` with JWT) ran end-to-end. Six artefact files in `output/`. Cold-load on the first prompt cost 4:55; warm runs settled at 1:21–1:46. The pipeline is alive.
+- [x] Honest assessment of output quality: the Coder's output is usable on all three prompts. The Reviewer's output is usable on prompt 1 (fib), passable on prompt 2 (CSV), and *broken* on prompt 3 (Django) — `deepseek-r1:1.5b` confidently rewrote the working code into something that imports `AllowAny` from the wrong module and references `AbstractUser.objects.get` as if it were a manager. Format of review preserved, capability for review not. Captured as a feedback memory for future model selection.
+- [x] PR-step reconciled with reality: `feature/ai-swarm-infra-impl` merged off-stage earlier in the chapter's life. Tonight's Path A increment (paired coder + reviewer artefact files) lands directly on `main` as `feat(ai-swarm-infra): persist coder and reviewer artifacts`. The "PR from feature branch" ritual the scene anticipated did not survive the chapter's actual git history; the substance — code merged, tests green — did.
 
 ### What's changing?
 
 The setup path. The original plan was three OS-specific Ollama installs (homebrew on macOS, scoop on Windows, curl-install on Linux), each with its own firewall ritual and `OLLAMA_HOST` configuration. After installing on the MBP, the cost of maintaining three setup playbooks across three drift surfaces became visible. Containerising the LLM runner — same Docker image, same exposed port, same model-pull commands inside the container — collapses the variance.
 
 The thesis beat is unaffected. Orchestration tempo remains the universalisable pattern; the hardware was always incidental. If anything the docker-first path makes the scene's eventual artefact stronger: *one repeatable container image* is more legible to the audience than *three OS-specific setup posts.*
+
+What the 2026-05-10 session added is a second, narrower observation: model selection on RAM-constrained hardware is its own kind of orchestration. The session burned through five model candidates before the pipeline closed — two RAM-gated 9B-class models, two subscription-gated cloud passthroughs, and the eventual 3B / 1.5B local pair. Ollama gates *upfront* on resident-RAM rather than swap-thrashing through inference, which is the right behaviour but means *pulled* and *callable* are not the same state. The scene's artefact should name that distinction. It is the kind of thing the audience will only learn by hitting it themselves; surfacing it is what earns the post its read.
 
 ---
 
@@ -110,22 +117,43 @@ The thesis beat is unaffected. Orchestration tempo remains the universalisable p
 
 ## Conclude
 
-*Filled at end of session.*
+*Draft — for founder edit before status flip.*
 
 ### How is now different from the start?
 
+The pipeline exists in motion rather than in proof. Three machines on the home LAN now dispatch a prompt, return code, review code, and persist both artefacts to disk in roughly ninety seconds when warm. The configuration is captured in `.env`; the Path A pair (`swarm-{ts}-coder.txt` + `swarm-{ts}-reviewer.txt`) lands in `output/`; the surrounding test suite still goes green. None of that was running on 2026-04-21 when the scene opened. The orchestration tempo of the home cluster is a fact rather than a claim.
+
 ### What are the consequences?
+
+Subsequent 2a scenes rest on a real substrate. The Grok scraper, the delegate-agent integration, the Command Centre webapp — each had been planning against *`ai-swarm-infra` exists, somewhere*. They now plan against an endpoint that responds.
+
+A second consequence: the model-selection surface is now load-bearing. The pipeline runs, but it runs on `ministral-3:3b` + `deepseek-r1:1.5b` rather than the Set Stage's planned `qwen2.5-coder:7b` + `llama3.2:3b`, because Ollama's resident-RAM check refused the heavier choices. The hardware ceiling — 16 GB on each worker, of which 1.3 to 3.6 GiB was free after OS overhead — is a real constraint the chapter will need to budget around rather than wish away.
 
 ### What did we learn?
 
+Three observations earn their place in the artefact:
+
+1. **Pulled is not callable.** Ollama gates inference on resident-RAM upfront and refuses cleanly rather than swap-thrashing. The check is honest but means a successful `ollama pull` tells you nothing about runtime feasibility. The scene burned through five model candidates before the pipeline closed — two RAM-gated, two subscription-gated, one that worked.
+
+2. **Cloud passthroughs are gated invisibly.** Models tagged `:cloud` in `/api/tags` are *visible* but not necessarily *callable*. `kimi-k2.6:cloud` and `deepseek-v4-pro:cloud` both returned `model requires a subscription` only on the first generate call, not on tag enumeration. The `/api/tags` endpoint is a catalogue, not a capability list.
+
+3. **Small distilled R1 models fabricate confident broken code.** `deepseek-r1:1.5b` in the Reviewer role produced a structurally plausible Django REST view that imports `AllowAny` from the wrong module and treats `AbstractUser` as a manager. The format of code review survived the distillation; the capability did not. The Reviewer persona will need either a larger model or a critique-only constraint to be load-bearing.
+
 ### Progress to thesis
+
+Build should feel like play. Tonight's session was play — five model candidates, two cache-truncation rabbit holes, one ICMP-but-not-TCP surprise from Windows firewall, three smoke prompts producing six artefact files. The narrative writes itself because the dispatch-and-fail-and-retry loop *is* a narrative. The thesis says play should write the story; this scene's debugging trace is exactly the kind of story that wouldn't exist under a hidden-success build process.
 
 ### Progress to goal
 
+Chapter 2a's climax (webapp MVP) is now one substrate closer. Every subsequent 2a scene presumed this scene's success; the presumption is no longer a debt. The chapter arc remains in shape.
+
 ### Next scene
 
+Scene 2a-04 (`borai-graph ship retroactive`) is the next open infrastructure scene; 2a-05 (`claude-code edge bridge`) follows. Both can proceed against a working swarm. A near-term follow-up inside this scene's substrate — pre-flight health probe, `keep_alive` on the generate payload, Reviewer persona tightening, retry on transient runner crashes — is captured as Tier 1 gaps in the session's parallel gap analysis; whether to address them inside this scene or open a sibling scene is a founder call.
+
 ### Artifact format
-*Thread / newsletter / video / essay / none.*
+
+**Essay.** The model-gating debugging trace plus the orchestration-tempo thesis beat together carry more substance than a thread can compress without losing the *pulled is not callable* / *visible is not callable* distinctions that earn the post its read. Thread is the natural fallback if audience response on the essay tells us we over-spent.
 
 ---
 
