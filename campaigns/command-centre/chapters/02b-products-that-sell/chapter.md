@@ -19,12 +19,17 @@ tags:
 
 ## Arc
 
-From catalogue to commerce. Scene 05 produced a full catalogue for study-buddy — a spec, an architectural analysis of four alternatives, a decision framework with four behavioural signals. Chapter 2b is the catalogue meeting the market. Scenes follow the commercial journey:
+From catalogue to commerce. Scene 05 produced a full catalogue for study-buddy — a spec, an architectural analysis of four alternatives, a decision framework with four behavioural signals. Chapter 2b opened by trying to make that catalogue meet the market through teenyweeny.studio.
+
+The chapter now has a second product track. marrk.space has moved into BorAI as a separate durable user-facing vault product: capture, vaults, graph-style tagging, backend persistence, permissions, bots, browser extension, deterministic vault chat, diagnostics, analytics, and beta deployment scaffolding. This does not replace study-buddy/teenyweeny. It gives the chapter a parallel commercial question: *can BorAI's vault substrate become a product people return to?*
+
+Scenes follow the commercial journey:
 
 1. **Landing + waitlist** — promises the product before the product exists; captures commercial intent.
-2. **Parser + flashcard renderer** — the MVP the landing promised.
-3. **Pricing + commercial packaging** — catalogue's Option I (free, OSS only) vs Option II (free core + custom-branded players for curators). Decision made and argued.
-4. **First sale attempt** — chapter climax.
+2. **Parser + flashcard renderer** — the MVP teenyweeny promised.
+2b. **marrk.space as BorAI vault wedge** — a separate product lane: AI memory vault for everything you save, with BorAI as substrate.
+4. **Pricing + commercial packaging** — catalogue's Option I (free, OSS only) vs Option II (free core + custom-branded players for curators), plus marrk.space's later credit-led agent monetisation track once beta value is proven.
+5. **First sale attempt** — chapter climax.
 
 The first sale is this chapter's **climax**.
 
@@ -35,9 +40,10 @@ Chapter 1 tested whether the method produces publishable narrative. Chapter 2b t
 ## Scenes
 
 - [x] **01 — teenyweeny.studio waitlist landing** — Landing page + waitlist capture on a real domain, before any product build. Classic BIP sequence; matches founder's *landing before build* framing. (Project handle pivoted from `study-buddy` to `teenyweeny.studio` mid-scene on 2026-04-22 — see scene capture for the register and palette consequences.)
-- [ ] **02 — Parser + flashcard renderer** — The MVP the landing promised. Day 1-30 of the catalogue's 90-day timeline. Runtime-import architecture per Scene 05's commitment (*vault as user data, not system data*).
-- [ ] **03 — Pricing and commercial packaging** — Catalogue's Option I or Option II, chosen and defended. Scene produces the pricing page + the argument for the choice.
-- [ ] **04 — First sale attempt** — Chapter 2b's climax. Thesis test: does the method produce commerce?
+- [ ] **02 — Parser + flashcard renderer** — The MVP teenyweeny promised. Day 1-30 of the catalogue's 90-day timeline. Runtime-import architecture per Scene 05's commitment (*vault as user data, not system data*).
+- [ ] **02b — marrk.space borai vault wedge** — marrk.space is migrated into `~/code/borai/apps/marrk-space` as a separate durable user-facing vault product. Commercial proof narrows around the beta loop: capture saved material, search it, synthesise it, and return.
+- [ ] **04 — Pricing and commercial packaging** — Catalogue's Option I or Option II, chosen and defended, with marrk.space's credit-led agent monetisation kept behind beta validation.
+- [ ] **05 — First sale attempt** — Chapter 2b's climax. Thesis test: does the method produce commerce?
 
 ## Climax
 
