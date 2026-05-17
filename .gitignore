@@ -55,6 +55,12 @@ desktop.ini
 .claude/*.cache
 .claude/*.lock
 .claude/.swarm-memory.json
+.claude/feeds.db
+
+# Research run working dirs — generated intermediates (dossiers,
+# fanout JSON dumps, pycache). The deliverable .md is tracked; the
+# .run-* working dir is not.
+research/.run-*/
 
 # ------------------------------------------------------------
 # Secrets & env files
