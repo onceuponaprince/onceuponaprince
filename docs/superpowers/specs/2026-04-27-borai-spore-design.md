@@ -316,6 +316,26 @@ A skill file with no native extensions parses identically to a Claude Code skill
 
 When `capabilities` is set in frontmatter, the permission resolver consults it: a skill that declared only `[read]` cannot trigger a `Bash` tool call without an explicit user override. This is a v0.1 hardening that Claude Code does not have.
 
+### 7.4 Character registry and shared skill resources
+
+Characters are promoted from static vault markdown into runtime workspace operators in the character registry. The registry loads character descriptors from global, workspace, and vault scopes, resolves their required skills through the existing `SkillRegistry`, and reuses already-loaded skill resources by workspace + skill + content hash.
+
+If two workspace characters require the same skill, Spore should share the parsed skill descriptor, body hash, scripts, assets, and prompt-pack reference rather than reload and reprompt the skill body. This keeps character spawning cheap and makes prompt/context governance explicit.
+
+The character registry sits beside the node registry:
+
+- Node registry: what compute/tool node can perform the work.
+- Skill registry: what reusable procedural knowledge exists.
+- Character registry: what workspace role should perform the work, with which resolved skills and permissions.
+
+Programmatic creation is handled by a character template generator. It queries the skill registry first, returns deterministic explanations for suggested skills, emits explicit skill gaps when no installed skill fits, and can opt into web discovery or the `skill-creator` workflow to draft new skills. A character can only depend on a new skill after it is written, discovered, and validated through the normal skill registry.
+
+Documentation split:
+
+- Implementation contract: `~/code/borai/docs/superpowers/specs/2026-05-14-character-registry-design.md`.
+- Build-in-public engine interpretation: `2026-05-14-character-registry-design.md` in this directory.
+- Narrative receipt: the next Scene 2a-08 should cover the two-layer orchestration pattern once the registry is visible in workflow.
+
 ---
 
 ## 8. Vault integration
